@@ -1,0 +1,251 @@
+package org.kmp.simfan.screen.profile.akunbank
+
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.*
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.ui.tooling.preview.Preview
+import simfan.composeapp.generated.resources.*
+
+@Composable
+fun AkunBankScreen(
+    onBackClick: () -> Unit,
+    onTambahAkunClick: () -> Unit,
+    onSimpanClick: () -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color(0xFFF5F6FA)) // bg_secondary
+    ) {
+        // 🔹 AppBar
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Color.White)
+                .padding(horizontal = 16.dp, vertical = 16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            IconButton(onClick = onBackClick) {
+                Icon(
+                    painter = painterResource(Res.drawable.ic_arrow_back),
+                    contentDescription = "Kembali",
+                    tint = Color.Black,
+                    modifier = Modifier.size(24.dp)
+                )
+            }
+
+            Spacer(modifier = Modifier.width(12.dp))
+
+            Text(
+                text = "Akun Bank",
+                fontSize = 20.sp,
+                color = Color.Black
+            )
+        }
+
+        // 🔹 Konten scrollable
+        Column(
+            modifier = Modifier
+                .weight(1f)
+                .verticalScroll(rememberScrollState())
+                .padding(horizontal = 16.dp, vertical = 12.dp)
+        ) {
+            // Bagian judul & deskripsi
+            Text(
+                text = "Akun Bank",
+                fontSize = 18.sp,
+                color = Color.Black
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(
+                text = "Rekening utama yang digunakan untuk pencairan dana hasil deposito dan cashback. Pastikan data sesuai untuk proses transfer otomatis.",
+                fontSize = 12.sp,
+                color = Color(0xFF999999),
+                lineHeight = 16.sp
+            )
+
+            // 🔹 Tambah akun bank card
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 14.dp),
+                shape = RoundedCornerShape(12.dp),
+                elevation = CardDefaults.cardElevation(2.dp),
+                colors = CardDefaults.cardColors(containerColor = Color.White)
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(12.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        painter = painterResource(Res.drawable.tambahakun),
+                        contentDescription = "Tambah Akun Bank",
+                        tint = Color(0xFF023FFC),
+                        modifier = Modifier.size(35.dp)
+                    )
+                    Spacer(modifier = Modifier.width(12.dp))
+                    Text(
+                        text = "Tambah Akun Bank",
+                        fontSize = 13.sp,
+                        color = Color(0xFF181D27),
+                        modifier = Modifier.weight(1f)
+                    )
+                    Icon(
+                        painter = painterResource(Res.drawable.tambah),
+                        contentDescription = "Tambah",
+                        tint = Color(0xFFABABAB),
+                        modifier = Modifier.size(16.dp)
+                    )
+                }
+            }
+
+            Divider(
+                color = Color(0xFFE0E0E0),
+                thickness = 1.dp,
+                modifier = Modifier
+                    .padding(vertical = 16.dp)
+                    .fillMaxWidth()
+            )
+
+            // 🔹 Akun Bank Utama
+            Text("Akun Bank Utama", fontSize = 14.sp, color = Color.Black)
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(
+                "Rekening utama yang digunakan untuk pencairan dana hasil deposito dan cashback.",
+                fontSize = 12.sp,
+                color = Color(0xFF999999),
+                lineHeight = 16.sp
+            )
+
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 16.dp),
+                shape = RoundedCornerShape(12.dp),
+                elevation = CardDefaults.cardElevation(0.dp),
+                colors = CardDefaults.cardColors(containerColor = Color.Transparent)
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(Color.White, shape = RoundedCornerShape(12.dp))
+                        .padding(12.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Image(
+                        painter = painterResource(Res.drawable.logo_bca),
+                        contentDescription = "Logo Bank",
+                        modifier = Modifier
+                            .width(59.dp)
+                            .height(33.dp),
+                        contentScale = ContentScale.Fit
+                    )
+                    Spacer(modifier = Modifier.width(12.dp))
+                    Column {
+                        Text("Bank BCA", fontSize = 13.sp, color = Color.Black)
+                        Text(
+                            "726347818910",
+                            fontSize = 12.sp,
+                            color = Color(0xFF999999),
+                            modifier = Modifier.padding(top = 2.dp)
+                        )
+                    }
+                }
+            }
+
+            Divider(
+                color = Color(0xFFE0E0E0),
+                thickness = 1.dp,
+                modifier = Modifier
+                    .padding(vertical = 16.dp)
+                    .fillMaxWidth()
+            )
+
+            // 🔹 Akun Bank Lainnya
+            Text("Akun Bank Lainnya", fontSize = 14.sp, color = Color.Black)
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(
+                "Rekening tambahan yang dapat digunakan untuk pencairan alternatif atau kebutuhan transaksi lainnya.",
+                fontSize = 12.sp,
+                color = Color(0xFF999999),
+                lineHeight = 16.sp
+            )
+
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 14.dp, bottom = 14.dp),
+                shape = RoundedCornerShape(12.dp),
+                elevation = CardDefaults.cardElevation(4.dp),
+                colors = CardDefaults.cardColors(containerColor = Color.White)
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(12.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Image(
+                        painter = painterResource(Res.drawable.logo_bca),
+                        contentDescription = "Logo Bank",
+                        modifier = Modifier
+                            .width(59.dp)
+                            .height(33.dp),
+                        contentScale = ContentScale.Fit
+                    )
+                    Spacer(modifier = Modifier.width(12.dp))
+                    Column {
+                        Text("Bank BCA", fontSize = 13.sp, color = Color.Black)
+                        Text(
+                            "726347818910",
+                            fontSize = 12.sp,
+                            color = Color(0xFF999999),
+                            modifier = Modifier.padding(top = 2.dp)
+                        )
+                    }
+                }
+            }
+        }
+
+        // 🔹 Tombol simpan di bawah
+        Surface(
+            shadowElevation = 8.dp,
+            color = Color.White
+        ) {
+            Button(
+                onClick = onSimpanClick,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                shape = RoundedCornerShape(8.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF023FFC))
+            ) {
+                Text("Simpan", fontSize = 16.sp, color = Color.White)
+            }
+        }
+    }
+}
+
+@Preview()
+@Composable
+fun AkunBankScreenPreview() {
+    AkunBankScreen(
+        onBackClick = {},
+        onTambahAkunClick = {},
+        onSimpanClick = {}
+    )
+}

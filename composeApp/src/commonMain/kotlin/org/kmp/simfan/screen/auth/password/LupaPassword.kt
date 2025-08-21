@@ -1,0 +1,172 @@
+package org.kmp.simfan.screen.auth.password
+
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import org.jetbrains.compose.resources.painterResource
+import simfan.composeapp.generated.resources.Res
+import simfan.composeapp.generated.resources.arrow_back
+import org.jetbrains.compose.ui.tooling.preview.Preview
+
+@Composable
+fun LupaPasswordScreen(
+    onBackClick: () -> Unit = {},
+    onNextClick: (String) -> Unit = {}
+) {
+    var selectedOption by remember { mutableStateOf("SMS") }
+    val scrollState = rememberScrollState()
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color(0xFFF6F6F6)) // bg_secondary
+    ) {
+        // AppBar
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Color.White)
+                .padding(horizontal = 16.dp, vertical = 16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            IconButton(onClick = onBackClick) {
+                Icon(
+                    painter = painterResource(Res.drawable.arrow_back),
+                    contentDescription = "Kembali",
+                    tint = Color.Black,
+                    modifier = Modifier.size(24.dp)
+                )
+            }
+            Spacer(modifier = Modifier.width(12.dp))
+            Text(
+                text = "Lupa Password",
+                fontSize = 20.sp,
+                fontWeight = FontWeight.SemiBold,
+                color = Color.Black
+            )
+        }
+
+        // Konten scrollable
+        Column(
+            modifier = Modifier
+                .weight(1f)
+                .verticalScroll(scrollState)
+                .padding(horizontal = 16.dp, vertical = 24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = "Jangan khawatir, hanya beberapa\nlangkah saja",
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Medium,
+                color = Color.Black,
+                modifier = Modifier.padding(bottom = 8.dp),
+                lineHeight = 22.sp
+            )
+
+            Text(
+                text = "Pilih metode di bawah ini untuk memulihkan kata sandi Anda",
+                fontSize = 13.sp,
+                color = Color(0xFF6B7280),
+                modifier = Modifier.padding(bottom = 40.dp),
+                lineHeight = 18.sp
+            )
+
+            // Opsi via SMS
+            OptionCard(
+                title = "Via SMS",
+                description = "kode akan dikirim ke **** **** *512",
+                selected = selectedOption == "SMS",
+                onClick = { selectedOption = "SMS" }
+            )
+
+            // Opsi via Email
+            OptionCard(
+                title = "Via Email",
+                description = "kode akan dikirim ke *****vktr",
+                selected = selectedOption == "Email",
+                onClick = { selectedOption = "Email" }
+            )
+        }
+
+        // Tombol bawah
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Color.White)
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Button(
+                onClick = { onNextClick(selectedOption) },
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(24.dp),
+                elevation = ButtonDefaults.buttonElevation(6.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF668CFF))
+            ) {
+                Text(
+                    text = "Lanjut",
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    color = Color.White
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun OptionCard(
+    title: String,
+    description: String,
+    selected: Boolean,
+    onClick: () -> Unit
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(Color.White, shape = RoundedCornerShape(12.dp))
+            .clickable { onClick() }
+            .padding(16.dp)
+            .padding(vertical = 12.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        RadioButton(
+            selected = selected,
+            onClick = onClick,
+            colors = RadioButtonDefaults.colors(
+                selectedColor = Color(0xFF212121),
+                unselectedColor = Color(0xFF212121)
+            )
+        )
+        Column(modifier = Modifier.padding(start = 12.dp)) {
+            Text(
+                text = title,
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Medium,
+                color = Color(0xFF212121)
+            )
+            Text(
+                text = description,
+                fontSize = 14.sp,
+                color = Color(0xFF797979)
+            )
+        }
+    }
+}
+
+@Preview()
+@Composable
+fun LupaPasswordPreview() {
+    LupaPasswordScreen()
+}
