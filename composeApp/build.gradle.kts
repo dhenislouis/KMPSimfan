@@ -33,7 +33,6 @@ kotlin {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
 //            implementation("com.airbnb.android:lottie:6.4.0")
-
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -44,6 +43,9 @@ kotlin {
             implementation(compose.components.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
+            implementation("androidx.compose.material:material-icons-extended:1.7.0")
+            implementation(project.dependencies.platform("androidx.compose:compose-bom:2024.08.00"))
+            implementation("androidx.compose.material:material-icons-core")
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

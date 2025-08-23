@@ -12,6 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.jetbrains.compose.resources.painterResource
@@ -30,17 +31,18 @@ fun LupaPasswordScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFF6F6F6)) // bg_secondary
+            .background(Color(0xFFF6F6F6))
     ) {
-        // AppBar
-        Row(
+        Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(Color.White)
-                .padding(horizontal = 16.dp, vertical = 16.dp),
-            verticalAlignment = Alignment.CenterVertically
+//                .padding(horizontal = 16.dp, vertical = 16.dp)
         ) {
-            IconButton(onClick = onBackClick) {
+            IconButton(
+                onClick = onBackClick,
+                modifier = Modifier.align(Alignment.CenterStart)
+            ) {
                 Icon(
                     painter = painterResource(Res.drawable.arrow_back),
                     contentDescription = "Kembali",
@@ -48,16 +50,24 @@ fun LupaPasswordScreen(
                     modifier = Modifier.size(24.dp)
                 )
             }
-            Spacer(modifier = Modifier.width(12.dp))
+
             Text(
                 text = "Lupa Password",
                 fontSize = 20.sp,
                 fontWeight = FontWeight.SemiBold,
-                color = Color.Black
+                color = Color.Black,
+                modifier = Modifier.align(Alignment.Center)
             )
+
+            IconButton(
+                onClick = {},
+                enabled = false,
+                modifier = Modifier
+                    .align(Alignment.CenterEnd)
+                    .size(48.dp)
+            ) {}
         }
 
-        // Konten scrollable
         Column(
             modifier = Modifier
                 .weight(1f)
@@ -70,9 +80,13 @@ fun LupaPasswordScreen(
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Medium,
                 color = Color.Black,
-                modifier = Modifier.padding(bottom = 8.dp),
-                lineHeight = 22.sp
+                modifier = Modifier
+                    .fillMaxWidth()   // supaya textAlign bisa bekerja penuh
+                    .padding(bottom = 8.dp),
+                lineHeight = 22.sp,
+                textAlign = TextAlign.Center
             )
+
 
             Text(
                 text = "Pilih metode di bawah ini untuk memulihkan kata sandi Anda",
@@ -82,7 +96,6 @@ fun LupaPasswordScreen(
                 lineHeight = 18.sp
             )
 
-            // Opsi via SMS
             OptionCard(
                 title = "Via SMS",
                 description = "kode akan dikirim ke **** **** *512",
@@ -90,7 +103,6 @@ fun LupaPasswordScreen(
                 onClick = { selectedOption = "SMS" }
             )
 
-            // Opsi via Email
             OptionCard(
                 title = "Via Email",
                 description = "kode akan dikirim ke *****vktr",
@@ -99,7 +111,6 @@ fun LupaPasswordScreen(
             )
         }
 
-        // Tombol bawah
         Column(
             modifier = Modifier
                 .fillMaxWidth()

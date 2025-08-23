@@ -23,26 +23,48 @@ import simfan.composeapp.generated.resources.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PanduanFotoKTPScreen() {
+fun PanduanFotoKTPScreen(
+    onBackClick: () -> Unit = {}
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(Color(0xFFF4F4F4))
     ) {
-        // 🔹 AppBar
-        TopAppBar(
-            title = { Text("Panduan Foto KTP", fontWeight = FontWeight.SemiBold) },
-            navigationIcon = {
-                IconButton(onClick = { /* TODO: Back */ }) {
-                    Icon(
-                        painter = painterResource(Res.drawable.ic_arrow_back),
-                        contentDescription = "Back",
-                        tint = Color.Black
-                    )
-                }
-            },
-            colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.White)
-        )
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Color.White)
+//                .padding(horizontal = 16.dp, vertical = 16.dp)
+        ) {
+            IconButton(
+                onClick = onBackClick,
+                modifier = Modifier.align(Alignment.CenterStart)
+            ) {
+                Icon(
+                    painter = painterResource(Res.drawable.arrow_back),
+                    contentDescription = "Kembali",
+                    tint = Color.Black,
+                    modifier = Modifier.size(18.dp)
+                )
+            }
+
+            Text(
+                text = "Panduan Foto KTP",
+                fontSize = 20.sp,
+                fontWeight = FontWeight.SemiBold,
+                color = Color.Black,
+                modifier = Modifier.align(Alignment.Center)
+            )
+
+            IconButton(
+                onClick = {},
+                enabled = false,
+                modifier = Modifier
+                    .align(Alignment.CenterEnd)
+                    .size(48.dp)
+            ) {}
+        }
 
         // 🔹 Konten scroll
         Column(
@@ -79,7 +101,7 @@ fun PanduanFotoKTPScreen() {
                         contentAlignment = Alignment.Center
                     ) {
                         Icon(
-                            painter = painterResource(Res.drawable.close),
+                            painter = painterResource(Res.drawable.check),
                             contentDescription = "Check",
                             tint = Color.White,
                             modifier = Modifier.size(16.dp)

@@ -22,8 +22,8 @@ import androidx.compose.ui.unit.sp
 import org.jetbrains.compose.resources.painterResource
 import simfan.composeapp.generated.resources.Res
 import simfan.composeapp.generated.resources.arrow_back
-import simfan.composeapp.generated.resources.ic_eye_off
-import simfan.composeapp.generated.resources.ic_eye_on
+import simfan.composeapp.generated.resources.eye_off
+import simfan.composeapp.generated.resources.eye_on
 
 @Composable
 fun UbahPasswordScreen(
@@ -41,37 +41,42 @@ fun UbahPasswordScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFF5F6FA)) // bg_secondary
+            .background(Color(0xFFF5F6FA))
     ) {
-        // 🔹 AppBar
-        Row(
+        Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(Color.White)
-                .padding(horizontal = 16.dp, vertical = 16.dp)
-                .padding(top = 16.dp),
-            verticalAlignment = Alignment.CenterVertically
         ) {
-            IconButton(onClick = onBackClick) {
+            IconButton(
+                onClick = onBackClick,
+                modifier = Modifier.align(Alignment.CenterStart)
+            ) {
                 Icon(
                     painter = painterResource(Res.drawable.arrow_back),
                     contentDescription = "Kembali",
                     tint = Color.Black,
-                    modifier = Modifier.size(24.dp)
+                    modifier = Modifier.size(18.dp)
                 )
             }
-
-            Spacer(modifier = Modifier.width(12.dp))
 
             Text(
                 text = "Ubah Kata Sandi",
                 fontSize = 20.sp,
+                fontWeight = FontWeight.SemiBold,
                 color = Color.Black,
-                fontWeight = FontWeight.SemiBold
+                modifier = Modifier.align(Alignment.Center)
             )
+
+            IconButton(
+                onClick = {},
+                enabled = false,
+                modifier = Modifier
+                    .align(Alignment.CenterEnd)
+                    .size(48.dp)
+            ) {}
         }
 
-        // 🔹 Konten Scrollable
         Column(
             modifier = Modifier
                 .weight(1f)
@@ -79,7 +84,6 @@ fun UbahPasswordScreen(
                 .padding(horizontal = 24.dp, vertical = 35.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // Password Lama
             UbahPasswordInputField(
                 label = "Kata Sandi Lama",
                 value = oldPassword,
@@ -91,7 +95,6 @@ fun UbahPasswordScreen(
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            // Password Baru
             UbahPasswordInputField(
                 label = "Kata Sandi Baru",
                 value = newPassword,
@@ -103,7 +106,6 @@ fun UbahPasswordScreen(
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            // Konfirmasi Password Baru
             UbahPasswordInputField(
                 label = "Konfirmasi Kata Sandi Baru",
                 value = confirmPassword,
@@ -115,7 +117,6 @@ fun UbahPasswordScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Card Info
             Card(
                 shape = RoundedCornerShape(8.dp),
                 colors = CardDefaults.cardColors(containerColor = Color(0xFFF5F6FA)),
@@ -132,7 +133,6 @@ fun UbahPasswordScreen(
             }
         }
 
-        // 🔹 Tombol Simpan
         Column(
             modifier = Modifier
                 .background(Color.White)
@@ -188,7 +188,7 @@ private fun UbahPasswordInputField(
             trailingIcon = {
                 Icon(
                     painter = painterResource(
-                        if (visible) Res.drawable.ic_eye_on else Res.drawable.ic_eye_off
+                        if (visible) Res.drawable.eye_on else Res.drawable.eye_off
                     ),
                     contentDescription = "Toggle Password Visibility",
                     modifier = Modifier

@@ -27,7 +27,7 @@ import simfan.composeapp.generated.resources.*
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DataPribadiScreen(
-    onBack: () -> Unit = {},
+    onBackClick: () -> Unit = {},
     onAjukanPerubahan: () -> Unit = {}
 ) {
     var expanded by remember { mutableStateOf(false) }
@@ -38,20 +38,39 @@ fun DataPribadiScreen(
             .fillMaxSize()
             .background(Color(0xFFF4F4F4))
     ) {
-        // 🔹 AppBar
-        TopAppBar(
-            title = { Text("Data Pribadi", fontWeight = FontWeight.SemiBold, fontSize = 20.sp) },
-            navigationIcon = {
-                IconButton(onClick = onBack) {
-                    Icon(
-                        painter = painterResource(Res.drawable.ic_arrow_back),
-                        contentDescription = "Back",
-                        tint = Color.Black
-                    )
-                }
-            },
-            colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.White)
-        )
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Color.White)
+        ) {
+            IconButton(
+                onClick = onBackClick,
+                modifier = Modifier.align(Alignment.CenterStart)
+            ) {
+                Icon(
+                    painter = painterResource(Res.drawable.arrow_back),
+                    contentDescription = "Kembali",
+                    tint = Color.Black,
+                    modifier = Modifier.size(18.dp)
+                )
+            }
+
+            Text(
+                text = "Data Pribadi",
+                fontSize = 20.sp,
+                fontWeight = FontWeight.SemiBold,
+                color = Color.Black,
+                modifier = Modifier.align(Alignment.Center)
+            )
+
+            IconButton(
+                onClick = {},
+                enabled = false,
+                modifier = Modifier
+                    .align(Alignment.CenterEnd)
+                    .size(48.dp)
+            ) {}
+        }
 
         // 🔹 Scroll Content
         Column(
@@ -96,7 +115,7 @@ fun DataPribadiScreen(
                                 contentDescription = "Toggle",
                                 tint = Color.Black,
                                 modifier = Modifier
-                                    .size(24.dp)
+                                    .size(18.dp)
                                     .rotate(rotation) // 🔹 Animasi rotasi
                             )
                         }

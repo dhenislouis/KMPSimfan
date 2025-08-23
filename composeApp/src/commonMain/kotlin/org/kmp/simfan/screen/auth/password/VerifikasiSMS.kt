@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.jetbrains.compose.resources.painterResource
@@ -34,34 +35,43 @@ fun VerifikasiSMSScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFF6F6F6)) // bg_secondary
+            .background(Color(0xFFF6F6F6))
     ) {
-        // AppBar
-        Row(
+        Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(Color.White)
-                .padding(horizontal = 16.dp, vertical = 16.dp),
-            verticalAlignment = Alignment.CenterVertically
         ) {
-            IconButton(onClick = onBackClick) {
+            IconButton(
+                onClick = onBackClick,
+                modifier = Modifier.align(Alignment.CenterStart)
+            ) {
                 Icon(
                     painter = painterResource(Res.drawable.arrow_back),
                     contentDescription = "Kembali",
                     tint = Color.Black,
-                    modifier = Modifier.size(24.dp)
+                    modifier = Modifier.size(18.dp)
                 )
             }
-            Spacer(modifier = Modifier.width(12.dp))
+
             Text(
                 text = "Verifikasi",
                 fontSize = 20.sp,
                 fontWeight = FontWeight.SemiBold,
-                color = Color.Black
+                color = Color.Black,
+                modifier = Modifier.align(Alignment.Center)
             )
+
+            IconButton(
+                onClick = {},
+                enabled = false,
+                modifier = Modifier
+                    .align(Alignment.CenterEnd)
+                    .size(48.dp)
+            ) {}
         }
 
-        // Konten
+
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -81,12 +91,12 @@ fun VerifikasiSMSScreen(
                 fontSize = 13.sp,
                 color = Color(0xFF6B7280),
                 lineHeight = 18.sp,
+                textAlign = TextAlign.Center,
                 modifier = Modifier
+                    .fillMaxWidth()
                     .padding(bottom = 55.dp)
-                    .align(Alignment.CenterHorizontally)
             )
 
-            // Input 4 digit kode
             Row(
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
                 verticalAlignment = Alignment.CenterVertically,
@@ -100,7 +110,6 @@ fun VerifikasiSMSScreen(
                 SMSDigitTextField(digit4) { digit4 = it }
             }
 
-            // Kirim ulang kode
             Text(
                 text = "Kirim Ulang Kode Saya",
                 fontSize = 13.sp,
@@ -110,7 +119,6 @@ fun VerifikasiSMSScreen(
                     .padding(bottom = 16.dp)
             )
 
-            // Tombol lanjut
             Button(
                 onClick = {
                     val code = digit1 + digit2 + digit3 + digit4

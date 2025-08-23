@@ -20,8 +20,8 @@ import androidx.compose.ui.unit.sp
 import org.jetbrains.compose.resources.painterResource
 import simfan.composeapp.generated.resources.Res
 import simfan.composeapp.generated.resources.arrow_back
-import simfan.composeapp.generated.resources.ic_eye_off
-import simfan.composeapp.generated.resources.ic_eye_on
+import simfan.composeapp.generated.resources.eye_off
+import simfan.composeapp.generated.resources.eye_on
 
 @Composable
 fun NewPasswordScreen(
@@ -36,18 +36,18 @@ fun NewPasswordScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFF5F6FA)) // bg_secondary
+            .background(Color(0xFFF5F6FA))
     ) {
-        // 🔹 AppBar
-        Row(
+        Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(Color.White)
-                .padding(horizontal = 16.dp, vertical = 16.dp)
-                .padding(top = 16.dp),
-            verticalAlignment = Alignment.CenterVertically
+//                .padding(horizontal = 16.dp, vertical = 16.dp)
         ) {
-            IconButton(onClick = onBackClick) {
+            IconButton(
+                onClick = onBackClick,
+                modifier = Modifier.align(Alignment.CenterStart)
+            ) {
                 Icon(
                     painter = painterResource(Res.drawable.arrow_back),
                     contentDescription = "Kembali",
@@ -56,17 +56,23 @@ fun NewPasswordScreen(
                 )
             }
 
-            Spacer(modifier = Modifier.width(12.dp))
-
             Text(
-                text = "Verifikasi",
+                text = "Ubah Kata Sandi",
                 fontSize = 20.sp,
+                fontWeight = FontWeight.SemiBold,
                 color = Color.Black,
-                fontWeight = FontWeight.SemiBold
+                modifier = Modifier.align(Alignment.Center)
             )
+
+            IconButton(
+                onClick = {},
+                enabled = false,
+                modifier = Modifier
+                    .align(Alignment.CenterEnd)
+                    .size(48.dp)
+            ) {}
         }
 
-        // 🔹 Konten
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -81,7 +87,6 @@ fun NewPasswordScreen(
                 modifier = Modifier.padding(bottom = 24.dp)
             )
 
-            // Input Password Baru
             PasswordInputField(
                 label = "Password Baru",
                 value = password,
@@ -93,7 +98,6 @@ fun NewPasswordScreen(
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            // Input Konfirmasi Password
             PasswordInputField(
                 label = "Konfirmasi Kata Sandi Baru",
                 value = confirmPassword,
@@ -105,7 +109,6 @@ fun NewPasswordScreen(
 
             Spacer(modifier = Modifier.height(35.dp))
 
-            // Tombol Konfirmasi
             Button(
                 onClick = onConfirmClick,
                 modifier = Modifier
@@ -155,7 +158,7 @@ fun PasswordInputField(
             trailingIcon = {
                 Icon(
                     painter = painterResource(
-                        if (visible) Res.drawable.ic_eye_on else Res.drawable.ic_eye_off
+                        if (visible) Res.drawable.eye_on else Res.drawable.eye_off
                     ),
                     contentDescription = "Toggle Password Visibility",
                     modifier = Modifier

@@ -33,16 +33,26 @@ fun RegisterScreen(
 ) {
     val scrollState = rememberScrollState()
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .verticalScroll(scrollState)
-    ) {
-        RegisterAppBar(onBackClick = onBackClick)
-        RegisterContent(
-            onRegisterClick = onRegisterClick,
-            onGoogleLoginClick = onGoogleLoginClick
+    // Gunakan MaterialTheme dengan light scheme
+    MaterialTheme(
+        colorScheme = lightColorScheme(
+            background = Color(0xFFF6F6F6),
+            surface = Color.White,
+            onSurface = Color.Black
         )
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(scrollState)
+                .background(MaterialTheme.colorScheme.background)
+        ) {
+            RegisterAppBar(onBackClick = onBackClick)
+            RegisterContent(
+                onRegisterClick = onRegisterClick,
+                onGoogleLoginClick = onGoogleLoginClick
+            )
+        }
     }
 }
 
@@ -50,16 +60,17 @@ fun RegisterScreen(
 fun RegisterAppBar(
     onBackClick: () -> Unit
 ) {
-    Row(
+    Box(
         modifier = Modifier
             .fillMaxWidth()
             .background(Color.White)
-            .padding(horizontal = 16.dp, vertical = 16.dp)
-            .padding(top = 24.dp),
-        verticalAlignment = Alignment.CenterVertically
+            .padding(vertical = 12.dp)
     ) {
         // Tombol Back
-        IconButton(onClick = onBackClick) {
+        IconButton(
+            onClick = onBackClick,
+            modifier = Modifier.align(Alignment.CenterStart)
+        ) {
             Icon(
                 painter = painterResource(Res.drawable.arrow_back),
                 contentDescription = "Kembali",
@@ -68,23 +79,20 @@ fun RegisterAppBar(
             )
         }
 
-        Spacer(modifier = Modifier.width(12.dp))
-
-        // Title & Subtitle
+        // Title & Subtitle di tengah
         Column(
-            modifier = Modifier.weight(1f),
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.align(Alignment.Center)
         ) {
             Text(
                 text = "Buat Akun Baru",
-                fontSize = 24.sp,
+                fontSize = 20.sp,
                 color = Color.Black,
                 fontWeight = FontWeight.Bold
             )
-
             Text(
                 text = "Silahkan daftar dengan akun Anda",
-                fontSize = 14.sp,
+                fontSize = 13.sp,
                 color = Color(0xFF7F909F),
                 modifier = Modifier.padding(top = 2.dp)
             )
@@ -112,7 +120,6 @@ fun RegisterContent(
             .fillMaxWidth()
             .padding(16.dp)
     ) {
-        // Input Nama
         InputNama(
             label = "Nama Lengkap",
             value = name,
@@ -120,7 +127,6 @@ fun RegisterContent(
             placeholder = "Masukkan Nama Lengkap"
         )
 
-        // Input Nomor HP
         InputNoHp(
             label = "Nomor Handphone",
             value = phone,
@@ -128,7 +134,6 @@ fun RegisterContent(
             placeholder = "Masukkan nomor handphone"
         )
 
-        // Input Email
         InputEmail(
             label = "Email",
             value = email,
@@ -136,7 +141,6 @@ fun RegisterContent(
             placeholder = "Masukkan email"
         )
 
-        // Input Password
         PasswordField(
             label = "Password",
             value = password,
@@ -146,7 +150,6 @@ fun RegisterContent(
             onToggleVisibility = { passwordVisible = !passwordVisible }
         )
 
-        // Input Konfirmasi Password
         PasswordField(
             label = "Konfirmasi Password",
             value = confirmPassword,
@@ -156,7 +159,6 @@ fun RegisterContent(
             onToggleVisibility = { confirmPasswordVisible = !confirmPasswordVisible }
         )
 
-        // Input Referal
         InputReferal(
             label = "Kode Referal",
             value = referal,
@@ -178,7 +180,8 @@ fun RegisterContent(
             Text(
                 text = "Ingatkan Saya",
                 fontSize = 12.sp,
-                color = Color(0xFF999999)
+                color = Color(0xFF999999),
+                modifier = Modifier.padding(start = 6.dp)
             )
         }
 
@@ -209,7 +212,7 @@ fun RegisterContent(
         ) {
             Divider(modifier = Modifier.weight(1f), color = Color(0xFFE0E0E0))
             Text(
-                text = "Masuk dengan",
+                text = "atau",
                 fontSize = 10.sp,
                 color = Color(0xFF999999),
                 modifier = Modifier.padding(horizontal = 12.dp)
@@ -232,19 +235,20 @@ fun RegisterContent(
             Icon(
                 painter = painterResource(Res.drawable.ic_google),
                 contentDescription = "Google",
-                modifier = Modifier.size(32.dp),
+                modifier = Modifier.size(28.dp),
                 tint = Color.Unspecified
             )
             Text(
-                text = "Masuk dengan Email",
-                fontSize = 12.sp,
-                color = Color(0xFF999999),
+                text = "Masuk dengan Google",
+                fontSize = 13.sp,
+                color = Color(0xFF444444),
                 modifier = Modifier.padding(start = 12.dp)
             )
         }
     }
 }
 
+// Input Components
 @Composable
 fun InputNama(label: String, value: String, onValueChange: (String) -> Unit, placeholder: String) {
     OutlinedTextField(
@@ -328,7 +332,7 @@ fun PasswordField(
     )
 }
 
-@Preview()
+@Preview
 @Composable
 fun RegisterPreview() {
     RegisterScreen()

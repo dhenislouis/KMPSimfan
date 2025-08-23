@@ -19,7 +19,7 @@ import simfan.composeapp.generated.resources.*
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SyaratKetentuanScreen(
-    onBack: () -> Unit = {}
+    onBackClick: () -> Unit = {}
 ) {
     val syaratList = listOf(
         "1. Definisi" to "Deposito adalah produk simpanan berjangka dengan suku bunga tetap, di mana dana nasabah akan disimpan dalam jangka waktu tertentu dan tidak dapat ditarik sebelum jatuh tempo, kecuali atas persetujuan khusus.",
@@ -37,20 +37,39 @@ fun SyaratKetentuanScreen(
             .fillMaxSize()
             .background(Color(0xFFF4F4F4))
     ) {
-        // 🔹 AppBar
-        TopAppBar(
-            title = { Text("Syarat & Ketentuan", fontWeight = FontWeight.SemiBold) },
-            navigationIcon = {
-                IconButton(onClick = onBack) {
-                    Icon(
-                        painter = painterResource(Res.drawable.ic_arrow_back),
-                        contentDescription = "Back",
-                        tint = Color.Black
-                    )
-                }
-            },
-            colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.White)
-        )
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Color.White)
+        ) {
+            IconButton(
+                onClick = onBackClick,
+                modifier = Modifier.align(Alignment.CenterStart)
+            ) {
+                Icon(
+                    painter = painterResource(Res.drawable.arrow_back),
+                    contentDescription = "Kembali",
+                    tint = Color.Black,
+                    modifier = Modifier.size(18.dp)
+                )
+            }
+
+            Text(
+                text = "Syarat & Ketentuan",
+                fontSize = 20.sp,
+                fontWeight = FontWeight.SemiBold,
+                color = Color.Black,
+                modifier = Modifier.align(Alignment.Center)
+            )
+
+            IconButton(
+                onClick = {},
+                enabled = false,
+                modifier = Modifier
+                    .align(Alignment.CenterEnd)
+                    .size(48.dp)
+            ) {}
+        }
 
         // 🔹 List isi
         LazyColumn(

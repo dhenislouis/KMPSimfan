@@ -37,15 +37,15 @@ fun LoginScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White)
+            .background(Color(0xFFF6F6F6))
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(Color.White)
-                .padding(horizontal = 16.dp, vertical = 16.dp)
-                .padding(top = 24.dp),
-            verticalAlignment = Alignment.CenterVertically
+//                .padding(horizontal = 16.dp, vertical = 16.dp)
+                .padding(top = 8.dp, bottom = 8.dp)
+//            verticalAlignment = Alignment.CenterVertically
         ) {
             IconButton(onClick = onBackClick) {
                 Icon(
@@ -179,7 +179,7 @@ fun LoginContent(
         Button(
             onClick = onLoginClick,
             modifier = Modifier
-                .fillMaxWidth(0.8f)
+                .fillMaxWidth()
                 .align(Alignment.CenterHorizontally),
             shape = RoundedCornerShape(24.dp),
             elevation = ButtonDefaults.buttonElevation(6.dp),

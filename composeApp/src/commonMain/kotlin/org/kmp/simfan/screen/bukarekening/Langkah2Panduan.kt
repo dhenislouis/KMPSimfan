@@ -13,10 +13,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.kmp.simfan.core.Button1
 import simfan.composeapp.generated.resources.*
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -29,21 +31,32 @@ fun Langkah2PanduanScreen(
         topBar = {
             TopAppBar(
                 title = {
-                    Text(
-                        "Panduan Verifikasi Wajah",
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight.SemiBold,
-                        color = Color.Black
-                    )
+                    Box(
+                        modifier = Modifier.fillMaxWidth(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            "Panduan Verifikasi Wajah",
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.SemiBold,
+                            color = Color.Black,
+                            textAlign = TextAlign.Center
+                        )
+                    }
                 },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(
-                            painter = painterResource(Res.drawable.ic_arrow_back),
+                            painter = painterResource(Res.drawable.arrow_back),
                             contentDescription = "Kembali",
-                            tint = Color.Black
+                            tint = Color.Black,
+                            modifier = Modifier.size(18.dp)
                         )
                     }
+                },
+                actions = {
+                    // Spacer untuk menyeimbangkan ikon kiri
+                    Spacer(Modifier.size(48.dp))
                 },
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.White)
             )
@@ -61,7 +74,7 @@ fun Langkah2PanduanScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(48.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF003FFC))
+                    colors = ButtonDefaults.buttonColors(containerColor = Button1)
                 ) {
                     Text(
                         "Scan Wajah",
