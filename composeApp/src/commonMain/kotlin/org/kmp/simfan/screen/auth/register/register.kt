@@ -19,21 +19,29 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import cafe.adriel.voyager.core.screen.Screen
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import simfan.composeapp.generated.resources.Res
 import simfan.composeapp.generated.resources.arrow_back
 import simfan.composeapp.generated.resources.ic_google
 
+// 🚀 Voyager Screen
+object RegisterScreen : Screen {
+    @Composable
+    override fun Content() {
+        RegisterScreenUI()
+    }
+}
+
 @Composable
-fun RegisterScreen(
+fun RegisterScreenUI(
     onBackClick: () -> Unit = {},
     onRegisterClick: () -> Unit = {},
     onGoogleLoginClick: () -> Unit = {}
 ) {
     val scrollState = rememberScrollState()
 
-    // Gunakan MaterialTheme dengan light scheme
     MaterialTheme(
         colorScheme = lightColorScheme(
             background = Color(0xFFF6F6F6),
@@ -66,7 +74,6 @@ fun RegisterAppBar(
             .background(Color.White)
             .padding(vertical = 12.dp)
     ) {
-        // Tombol Back
         IconButton(
             onClick = onBackClick,
             modifier = Modifier.align(Alignment.CenterStart)
@@ -79,23 +86,12 @@ fun RegisterAppBar(
             )
         }
 
-        // Title & Subtitle di tengah
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.align(Alignment.Center)
         ) {
-            Text(
-                text = "Buat Akun Baru",
-                fontSize = 20.sp,
-                color = Color.Black,
-                fontWeight = FontWeight.Bold
-            )
-            Text(
-                text = "Silahkan daftar dengan akun Anda",
-                fontSize = 13.sp,
-                color = Color(0xFF7F909F),
-                modifier = Modifier.padding(top = 2.dp)
-            )
+            Text("Buat Akun Baru", fontSize = 20.sp, color = Color.Black, fontWeight = FontWeight.Bold)
+            Text("Silahkan daftar dengan akun Anda", fontSize = 13.sp, color = Color(0xFF7F909F))
         }
     }
 }
@@ -116,117 +112,54 @@ fun RegisterContent(
     var acceptTerms by remember { mutableStateOf(false) }
 
     Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp)
+        modifier = Modifier.fillMaxWidth().padding(16.dp)
     ) {
-        InputNama(
-            label = "Nama Lengkap",
-            value = name,
-            onValueChange = { name = it },
-            placeholder = "Masukkan Nama Lengkap"
-        )
+        InputNama("Nama Lengkap", name, { name = it }, "Masukkan Nama Lengkap")
+        InputNoHp("Nomor Handphone", phone, { phone = it }, "Masukkan nomor handphone")
+        InputEmail("Email", email, { email = it }, "Masukkan email")
 
-        InputNoHp(
-            label = "Nomor Handphone",
-            value = phone,
-            onValueChange = { phone = it },
-            placeholder = "Masukkan nomor handphone"
-        )
-
-        InputEmail(
-            label = "Email",
-            value = email,
-            onValueChange = { email = it },
-            placeholder = "Masukkan email"
-        )
-
-        PasswordField(
-            label = "Password",
-            value = password,
-            onValueChange = { password = it },
-            placeholder = "Password",
-            visible = passwordVisible,
-            onToggleVisibility = { passwordVisible = !passwordVisible }
-        )
-
-        PasswordField(
-            label = "Konfirmasi Password",
-            value = confirmPassword,
-            onValueChange = { confirmPassword = it },
-            placeholder = "Konfirmasi Password",
-            visible = confirmPasswordVisible,
-            onToggleVisibility = { confirmPasswordVisible = !confirmPasswordVisible }
-        )
-
-        InputReferal(
-            label = "Kode Referal",
-            value = referal,
-            onValueChange = { referal = it },
-            placeholder = "Masukkan Kode Referal"
-        )
-
-        // Checkbox
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 20.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Checkbox(
-                checked = acceptTerms,
-                onCheckedChange = { acceptTerms = it }
-            )
-            Text(
-                text = "Ingatkan Saya",
-                fontSize = 12.sp,
-                color = Color(0xFF999999),
-                modifier = Modifier.padding(start = 6.dp)
-            )
+        PasswordField("Password", password, { password = it }, "Password", passwordVisible) {
+            passwordVisible = !passwordVisible
+        }
+        PasswordField("Konfirmasi Password", confirmPassword, { confirmPassword = it }, "Konfirmasi Password", confirmPasswordVisible) {
+            confirmPasswordVisible = !confirmPasswordVisible
         }
 
-        // Tombol Register
+        InputReferal("Kode Referal", referal, { referal = it }, "Masukkan Kode Referal")
+
+        Row(
+            modifier = Modifier.fillMaxWidth().padding(bottom = 20.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Checkbox(checked = acceptTerms, onCheckedChange = { acceptTerms = it })
+            Text("Ingatkan Saya", fontSize = 12.sp, color = Color(0xFF999999), modifier = Modifier.padding(start = 6.dp))
+        }
+
         Button(
             onClick = onRegisterClick,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 8.dp),
+            modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
             shape = RoundedCornerShape(24.dp),
             elevation = ButtonDefaults.buttonElevation(6.dp),
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF668CFF))
         ) {
-            Text(
-                text = "Buat Akun",
-                fontSize = 16.sp,
-                color = Color.White,
-                fontWeight = FontWeight.SemiBold
-            )
+            Text("Buat Akun", fontSize = 16.sp, color = Color.White, fontWeight = FontWeight.SemiBold)
         }
 
-        // Divider
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 16.dp),
+            modifier = Modifier.fillMaxWidth().padding(vertical = 16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Divider(modifier = Modifier.weight(1f), color = Color(0xFFE0E0E0))
-            Text(
-                text = "atau",
-                fontSize = 10.sp,
-                color = Color(0xFF999999),
-                modifier = Modifier.padding(horizontal = 12.dp)
-            )
+            Text("atau", fontSize = 10.sp, color = Color(0xFF999999), modifier = Modifier.padding(horizontal = 12.dp))
             Divider(modifier = Modifier.weight(1f), color = Color(0xFFE0E0E0))
         }
 
-        // Tombol Google
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(48.dp)
-                .background(Color.White, shape = RoundedCornerShape(12.dp))
-                .border(1.dp, Color(0xFFE0E0E0), shape = RoundedCornerShape(12.dp))
+                .background(Color.White, RoundedCornerShape(12.dp))
+                .border(1.dp, Color(0xFFE0E0E0), RoundedCornerShape(12.dp))
                 .clickable { onGoogleLoginClick() }
                 .padding(horizontal = 16.dp),
             verticalAlignment = Alignment.CenterVertically,
@@ -238,12 +171,7 @@ fun RegisterContent(
                 modifier = Modifier.size(28.dp),
                 tint = Color.Unspecified
             )
-            Text(
-                text = "Masuk dengan Google",
-                fontSize = 13.sp,
-                color = Color(0xFF444444),
-                modifier = Modifier.padding(start = 12.dp)
-            )
+            Text("Masuk dengan Google", fontSize = 13.sp, color = Color(0xFF444444), modifier = Modifier.padding(start = 12.dp))
         }
     }
 }
@@ -251,56 +179,22 @@ fun RegisterContent(
 // Input Components
 @Composable
 fun InputNama(label: String, value: String, onValueChange: (String) -> Unit, placeholder: String) {
-    OutlinedTextField(
-        value = value,
-        onValueChange = onValueChange,
-        label = { Text(label) },
-        placeholder = { Text(placeholder) },
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 8.dp)
-    )
+    OutlinedTextField(value = value, onValueChange = onValueChange, label = { Text(label) }, placeholder = { Text(placeholder) }, modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp))
 }
 
 @Composable
 fun InputNoHp(label: String, value: String, onValueChange: (String) -> Unit, placeholder: String) {
-    OutlinedTextField(
-        value = value,
-        onValueChange = onValueChange,
-        label = { Text(label) },
-        placeholder = { Text(placeholder) },
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 8.dp)
-    )
+    OutlinedTextField(value = value, onValueChange = onValueChange, label = { Text(label) }, placeholder = { Text(placeholder) }, keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone), modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp))
 }
 
 @Composable
 fun InputEmail(label: String, value: String, onValueChange: (String) -> Unit, placeholder: String) {
-    OutlinedTextField(
-        value = value,
-        onValueChange = onValueChange,
-        label = { Text(label) },
-        placeholder = { Text(placeholder) },
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 8.dp)
-    )
+    OutlinedTextField(value = value, onValueChange = onValueChange, label = { Text(label) }, placeholder = { Text(placeholder) }, keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email), modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp))
 }
 
 @Composable
 fun InputReferal(label: String, value: String, onValueChange: (String) -> Unit, placeholder: String) {
-    OutlinedTextField(
-        value = value,
-        onValueChange = onValueChange,
-        label = { Text(label) },
-        placeholder = { Text(placeholder) },
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 8.dp)
-    )
+    OutlinedTextField(value = value, onValueChange = onValueChange, label = { Text(label) }, placeholder = { Text(placeholder) }, modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp))
 }
 
 @Composable
@@ -317,16 +211,11 @@ fun PasswordField(
         onValueChange = onValueChange,
         label = { Text(label) },
         placeholder = { Text(placeholder) },
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 8.dp),
+        modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
         visualTransformation = if (visible) VisualTransformation.None else PasswordVisualTransformation(),
         trailingIcon = {
             val iconText = if (visible) "🙈" else "👁"
-            Text(
-                text = iconText,
-                modifier = Modifier.clickable { onToggleVisibility() }
-            )
+            Text(text = iconText, modifier = Modifier.clickable { onToggleVisibility() })
         },
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
     )
@@ -335,5 +224,5 @@ fun PasswordField(
 @Preview
 @Composable
 fun RegisterPreview() {
-    RegisterScreen()
+    RegisterScreenUI()
 }

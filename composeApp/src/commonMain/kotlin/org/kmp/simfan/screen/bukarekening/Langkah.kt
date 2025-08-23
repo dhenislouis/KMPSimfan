@@ -68,7 +68,6 @@ fun LangkahScreen(
                     .padding(horizontal = 24.dp, vertical = 20.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                // 🔹 Teks persetujuan
                 Column(
                     modifier = Modifier.fillMaxWidth()
                 ) {
@@ -103,7 +102,6 @@ fun LangkahScreen(
 
                 Spacer(modifier = Modifier.height(18.dp))
 
-                // 🔹 Tombol Lanjut
                 Button(
                     onClick = onLanjut,
                     modifier = Modifier

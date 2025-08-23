@@ -28,7 +28,7 @@ fun NotificationScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFF5F6FA)) // bg_secondary
+            .background(Color(0xFFF5F6FA))
     ) {
         Box(
             modifier = Modifier
@@ -65,7 +65,6 @@ fun NotificationScreen(
             ) {}
         }
 
-        // 🔹 List Notifikasi (scrollable)
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -109,11 +108,10 @@ fun NotificationCard(
                 .padding(vertical = 15.dp, horizontal = 10.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // Ikon bulat
             Box(
                 modifier = Modifier
                     .size(48.dp)
-                    .background(Color(0xFFEFF3FF), shape = CircleShape), // bg_notifikasi_icon
+                    .background(Color(0xFFEFF3FF), shape = CircleShape),
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
@@ -124,7 +122,6 @@ fun NotificationCard(
                 )
             }
 
-            // Konten teks
             Column(
                 modifier = Modifier
                     .weight(1f)

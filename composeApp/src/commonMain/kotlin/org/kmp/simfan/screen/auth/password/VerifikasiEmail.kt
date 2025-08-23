@@ -15,14 +15,33 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import cafe.adriel.voyager.core.screen.Screen
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import simfan.composeapp.generated.resources.Res
 import simfan.composeapp.generated.resources.arrow_back
 
+// 🚀 Voyager Screen
+data class VerifikasiEmailScreen(
+    val email: String
+) : Screen {
+
+    @Composable
+    override fun Content() {
+        VerifikasiEmailScreenUI(
+            email = email,
+            onBackClick = { /* navigator.pop() nanti */ },
+            onResendClick = { /* TODO: Resend logic */ },
+            onVerifyClick = { code ->
+                // TODO: handle verification code
+            }
+        )
+    }
+}
+
 @Composable
-fun VerifikasiEmailScreen(
-    email: String = "ayucinta@gmail.com",
+fun VerifikasiEmailScreenUI(
+    email: String,
     onBackClick: () -> Unit = {},
     onResendClick: () -> Unit = {},
     onVerifyClick: (String) -> Unit = {}
@@ -35,13 +54,13 @@ fun VerifikasiEmailScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFF6F6F6)) // bg_secondary
+            .background(Color(0xFFF6F6F6))
     ) {
+        // AppBar
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(Color.White)
-//                .padding(horizontal = 16.dp, vertical = 16.dp)
         ) {
             IconButton(
                 onClick = onBackClick,
@@ -62,17 +81,9 @@ fun VerifikasiEmailScreen(
                 color = Color.Black,
                 modifier = Modifier.align(Alignment.Center)
             )
-
-            IconButton(
-                onClick = {},
-                enabled = false,
-                modifier = Modifier
-                    .align(Alignment.CenterEnd)
-                    .size(48.dp)
-            ) {}
         }
 
-
+        // Body
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -98,6 +109,7 @@ fun VerifikasiEmailScreen(
                     .padding(bottom = 55.dp)
             )
 
+            // Input 4 digit
             Row(
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
                 verticalAlignment = Alignment.CenterVertically,
@@ -120,6 +132,7 @@ fun VerifikasiEmailScreen(
                     .padding(bottom = 16.dp)
             )
 
+            // Tombol Lanjut
             Button(
                 onClick = {
                     val code = digit1 + digit2 + digit3 + digit4
@@ -158,15 +171,14 @@ fun EmailDigitTextField(
             fontSize = 20.sp,
             fontWeight = FontWeight.Bold
         ),
-        modifier = Modifier
-            .size(56.dp),
+        modifier = Modifier.size(56.dp),
         shape = RoundedCornerShape(8.dp),
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
     )
 }
 
-@Preview()
+@Preview
 @Composable
 fun VerifikasiEmailPreview() {
-    VerifikasiEmailScreen()
+    VerifikasiEmailScreenUI(email = "ayucinta@gmail.com")
 }

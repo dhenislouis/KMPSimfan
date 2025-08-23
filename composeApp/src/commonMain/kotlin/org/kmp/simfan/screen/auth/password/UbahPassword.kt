@@ -1,6 +1,5 @@
 package org.kmp.simfan.screen.auth.password
 
-import org.jetbrains.compose.ui.tooling.preview.Preview
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -19,14 +18,27 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import cafe.adriel.voyager.core.screen.Screen
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.ui.tooling.preview.Preview
 import simfan.composeapp.generated.resources.Res
 import simfan.composeapp.generated.resources.arrow_back
 import simfan.composeapp.generated.resources.eye_off
 import simfan.composeapp.generated.resources.eye_on
 
+// 🚀 Voyager Screen
+object UbahPasswordScreen : Screen {
+    @Composable
+    override fun Content() {
+        UbahPasswordUI(
+            onBackClick = { /* navigator.pop() */ },
+            onSaveClick = { /* TODO: handle save */ }
+        )
+    }
+}
+
 @Composable
-fun UbahPasswordScreen(
+fun UbahPasswordUI(
     onBackClick: () -> Unit,
     onSaveClick: () -> Unit
 ) {
@@ -43,6 +55,7 @@ fun UbahPasswordScreen(
             .fillMaxSize()
             .background(Color(0xFFF5F6FA))
     ) {
+        // AppBar
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -67,16 +80,9 @@ fun UbahPasswordScreen(
                 color = Color.Black,
                 modifier = Modifier.align(Alignment.Center)
             )
-
-            IconButton(
-                onClick = {},
-                enabled = false,
-                modifier = Modifier
-                    .align(Alignment.CenterEnd)
-                    .size(48.dp)
-            ) {}
         }
 
+        // Body
         Column(
             modifier = Modifier
                 .weight(1f)
@@ -133,6 +139,7 @@ fun UbahPasswordScreen(
             }
         }
 
+        // Footer
         Column(
             modifier = Modifier
                 .background(Color.White)
@@ -202,10 +209,10 @@ private fun UbahPasswordInputField(
     }
 }
 
-@Preview()
+@Preview
 @Composable
-fun UbahPasswordScreenPreview() {
-    UbahPasswordScreen(
+fun UbahPasswordPreview() {
+    UbahPasswordUI(
         onBackClick = {},
         onSaveClick = {}
     )

@@ -64,7 +64,6 @@ fun PromoScreen(
             ) {}
         }
 
-        // 🔹 Header
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -91,7 +90,6 @@ fun PromoScreen(
             }
         }
 
-        // 🔹 Konten scrollable
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -126,7 +124,6 @@ fun PromoCard(
                 .fillMaxWidth()
                 .padding(12.dp)
         ) {
-            // Banner
             Image(
                 painter = painterResource(Res.drawable.banner_promo),
                 contentDescription = "Promo Image",

@@ -33,7 +33,7 @@ fun DetailScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFF3F4F6)) // bg_secondary
+            .background(Color(0xFFF3F4F6))
     ) {
         Box(
             modifier = Modifier
@@ -70,14 +70,13 @@ fun DetailScreen(
             ) {}
         }
 
-        // 🔹 Konten Scrollable
+
         Column(
             modifier = Modifier
                 .weight(1f)
                 .verticalScroll(rememberScrollState())
                 .padding(horizontal = 16.dp, vertical = 18.dp)
         ) {
-            // Section Minimum Penempatan
             Card(
                 shape = RoundedCornerShape(16.dp),
                 modifier = Modifier
@@ -131,7 +130,7 @@ fun DetailScreen(
                 }
             }
 
-            // Section ARO
+
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -163,7 +162,7 @@ fun DetailScreen(
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            // Section Card Detail Produk
+
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -175,7 +174,6 @@ fun DetailScreen(
                 )
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
-                    // Atas
                     Row(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
@@ -211,7 +209,7 @@ fun DetailScreen(
                 }
             }
 
-            // Section Produk Lainnya
+
             Text(
                 text = "Produk Lainnya",
                 fontWeight = FontWeight.Bold,
@@ -258,7 +256,6 @@ fun DetailScreen(
             }
         }
 
-        // 🔹 Tombol Bottom
         Box(
             modifier = Modifier
                 .background(Color.White)

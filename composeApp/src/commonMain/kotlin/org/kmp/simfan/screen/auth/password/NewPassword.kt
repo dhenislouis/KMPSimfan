@@ -1,6 +1,5 @@
 package org.kmp.simfan.screen.auth.password
 
-import org.jetbrains.compose.ui.tooling.preview.Preview
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -17,14 +16,28 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import cafe.adriel.voyager.core.screen.Screen
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.ui.tooling.preview.Preview
 import simfan.composeapp.generated.resources.Res
 import simfan.composeapp.generated.resources.arrow_back
 import simfan.composeapp.generated.resources.eye_off
 import simfan.composeapp.generated.resources.eye_on
 
+// 🚀 Voyager Screen
+object NewPasswordScreen : Screen {
+
+    @Composable
+    override fun Content() {
+        NewPasswordUI(
+            onBackClick = { /* navigator.pop() */ },
+            onConfirmClick = { /* TODO: handle confirm */ }
+        )
+    }
+}
+
 @Composable
-fun NewPasswordScreen(
+fun NewPasswordUI(
     onBackClick: () -> Unit,
     onConfirmClick: () -> Unit
 ) {
@@ -38,11 +51,11 @@ fun NewPasswordScreen(
             .fillMaxSize()
             .background(Color(0xFFF5F6FA))
     ) {
+        // AppBar
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(Color.White)
-//                .padding(horizontal = 16.dp, vertical = 16.dp)
         ) {
             IconButton(
                 onClick = onBackClick,
@@ -63,16 +76,9 @@ fun NewPasswordScreen(
                 color = Color.Black,
                 modifier = Modifier.align(Alignment.Center)
             )
-
-            IconButton(
-                onClick = {},
-                enabled = false,
-                modifier = Modifier
-                    .align(Alignment.CenterEnd)
-                    .size(48.dp)
-            ) {}
         }
 
+        // Body
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -172,10 +178,10 @@ fun PasswordInputField(
     }
 }
 
-@Preview()
+@Preview
 @Composable
 fun NewPasswordScreenPreview() {
-    NewPasswordScreen(
+    NewPasswordUI(
         onBackClick = {},
         onConfirmClick = {}
     )

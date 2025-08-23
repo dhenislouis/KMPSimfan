@@ -63,7 +63,6 @@ fun PertanyaanUmumScreen(
             ) {}
         }
 
-        // 🔹 Scroll Content
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -78,7 +77,6 @@ fun PertanyaanUmumScreen(
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
 
-                    // Header + Toggle
                     Column(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -112,7 +110,6 @@ fun PertanyaanUmumScreen(
                         }
                     }
 
-                    // Expanded Content
                     if (expanded) {
                         Spacer(modifier = Modifier.height(16.dp))
 

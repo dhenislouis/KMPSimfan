@@ -17,7 +17,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import org.jetbrains.compose.resources.DrawableResource
+import cafe.adriel.voyager.core.screen.Screen
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import simfan.composeapp.generated.resources.Res
@@ -26,8 +26,17 @@ import simfan.composeapp.generated.resources.eye_off
 import simfan.composeapp.generated.resources.eye_on
 import simfan.composeapp.generated.resources.ic_google
 
+// 🚀 Voyager Screen
+object LoginScreen : Screen {
+
+    @Composable
+    override fun Content() {
+        LoginScreenUI()
+    }
+}
+
 @Composable
-fun LoginScreen(
+fun LoginScreenUI(
     onBackClick: () -> Unit = {},
     onLoginClick: () -> Unit = {},
     onGoogleLoginClick: () -> Unit = {},
@@ -39,13 +48,13 @@ fun LoginScreen(
             .fillMaxSize()
             .background(Color(0xFFF6F6F6))
     ) {
+        // Header
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(Color.White)
-//                .padding(horizontal = 16.dp, vertical = 16.dp)
-                .padding(top = 8.dp, bottom = 8.dp)
-//            verticalAlignment = Alignment.CenterVertically
+                .padding(vertical = 12.dp, horizontal = 8.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
             IconButton(onClick = onBackClick) {
                 Icon(
@@ -55,27 +64,15 @@ fun LoginScreen(
                     modifier = Modifier.size(24.dp)
                 )
             }
-
             Spacer(modifier = Modifier.width(12.dp))
-
             Column(
                 modifier = Modifier.weight(1f),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(
-                    text = "Masuk ke Akun Anda",
-                    fontSize = 24.sp,
-                    color = Color.Black,
-                    fontWeight = FontWeight.Bold
-                )
-
-                Text(
-                    text = "Silahkan masuk dengan akun Anda",
-                    fontSize = 14.sp,
-                    color = Color(0xFF7F909F),
-                    modifier = Modifier.padding(top = 2.dp)
-                )
+                Text("Masuk ke Akun Anda", fontSize = 20.sp, fontWeight = FontWeight.Bold)
+                Text("Silahkan masuk dengan akun Anda", fontSize = 13.sp, color = Color(0xFF7F909F))
             }
+            Spacer(modifier = Modifier.width(36.dp)) // biar header center
         }
 
         LoginContent(
@@ -106,152 +103,95 @@ fun LoginContent(
             .verticalScroll(scrollState)
             .padding(16.dp)
     ) {
+        // Input nomor HP
         Column(modifier = Modifier.padding(bottom = 14.dp)) {
-            Text(
-                text = "Nomor Handphone",
-                fontSize = 14.sp,
-                color = Color(0xFF6B7280),
-                modifier = Modifier.padding(bottom = 4.dp)
-            )
+            Text("Nomor Handphone", fontSize = 14.sp, color = Color(0xFF6B7280))
             OutlinedTextField(
                 value = phone,
                 onValueChange = { phone = it },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(48.dp),
+                modifier = Modifier.fillMaxWidth().height(48.dp),
                 placeholder = { Text("Masukkan nomor handphone", fontSize = 13.sp, color = Color(0xFF9CA3AF)) },
                 singleLine = true
             )
         }
 
+        // Input password
         Column(modifier = Modifier.padding(bottom = 14.dp)) {
-            Text(
-                text = "Password",
-                fontSize = 14.sp,
-                color = Color(0xFF6B7280),
-                modifier = Modifier.padding(bottom = 4.dp)
-            )
+            Text("Password", fontSize = 14.sp, color = Color(0xFF6B7280))
             OutlinedTextField(
                 value = password,
                 onValueChange = { password = it },
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().height(48.dp),
                 placeholder = { Text("Password", fontSize = 14.sp, color = Color(0xFF9CA3AF)) },
                 singleLine = true,
                 visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                 trailingIcon = {
                     IconButton(onClick = { passwordVisible = !passwordVisible }) {
                         Icon(
-                            painter = painterResource(
-                                if (passwordVisible) Res.drawable.eye_on else Res.drawable.eye_off
-                            ),
-                            contentDescription = "Toggle Password Visibility"
+                            painter = painterResource(if (passwordVisible) Res.drawable.eye_on else Res.drawable.eye_off),
+                            contentDescription = "Toggle Password"
                         )
                     }
                 }
             )
         }
 
+        // Checkbox + Lupa password
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 40.dp),
+            modifier = Modifier.fillMaxWidth().padding(bottom = 40.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Checkbox(
-                checked = rememberMe,
-                onCheckedChange = { rememberMe = it }
-            )
-            Text(
-                text = "Ingatkan Saya",
-                fontSize = 12.sp,
-                color = Color(0xFF999999),
-                modifier = Modifier.padding(start = 4.dp)
-            )
+            Checkbox(checked = rememberMe, onCheckedChange = { rememberMe = it })
+            Text("Ingatkan Saya", fontSize = 12.sp, color = Color(0xFF999999), modifier = Modifier.padding(start = 4.dp))
             Spacer(modifier = Modifier.weight(1f))
-            Text(
-                text = "Lupa password?",
-                fontSize = 12.sp,
-                color = Color(0xFF003FFC),
-                modifier = Modifier.clickable { onForgotPasswordClick() }
-            )
+            Text("Lupa password?", fontSize = 12.sp, color = Color(0xFF003FFC), modifier = Modifier.clickable { onForgotPasswordClick() })
         }
 
+        // Button Login
         Button(
             onClick = onLoginClick,
-            modifier = Modifier
-                .fillMaxWidth()
-                .align(Alignment.CenterHorizontally),
+            modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(24.dp),
             elevation = ButtonDefaults.buttonElevation(6.dp),
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF668CFF))
         ) {
-            Text(
-                text = "Masuk",
-                fontSize = 16.sp,
-                color = Color.White,
-                fontWeight = FontWeight.Bold
-            )
+            Text("Masuk", fontSize = 16.sp, color = Color.White, fontWeight = FontWeight.Bold)
         }
 
-        HorizontalDivider(
-            modifier = Modifier
-                .padding(vertical = 24.dp)
-                .fillMaxWidth(),
-            thickness = DividerDefaults.Thickness, color = Color(0xFFE0E0E0)
-        )
+        // Divider
+        HorizontalDivider(modifier = Modifier.padding(vertical = 24.dp).fillMaxWidth(), color = Color(0xFFE0E0E0))
 
+        // Google Login
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(48.dp)
-                .background(Color.White, shape = RoundedCornerShape(12.dp))
-                .border(1.dp, Color(0xFFE0E0E0), shape = RoundedCornerShape(12.dp))
+                .background(Color.White, RoundedCornerShape(12.dp))
+                .border(1.dp, Color(0xFFE0E0E0), RoundedCornerShape(12.dp))
                 .clickable { onGoogleLoginClick() }
                 .padding(horizontal = 16.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center
         ) {
-            Icon(
-                painter = painterResource(Res.drawable.ic_google),
-                contentDescription = "Google",
-                modifier = Modifier.size(32.dp),
-                tint = Color.Unspecified
-            )
-            Text(
-                text = "Masuk dengan Email",
-                fontSize = 12.sp,
-                color = Color(0xFF999999),
-                modifier = Modifier.padding(start = 12.dp)
-            )
+            Icon(painter = painterResource(Res.drawable.ic_google), contentDescription = "Google", modifier = Modifier.size(32.dp), tint = Color.Unspecified)
+            Text("Masuk dengan Email", fontSize = 12.sp, color = Color(0xFF999999), modifier = Modifier.padding(start = 12.dp))
         }
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        // Footer
+        // Footer register
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 24.dp),
+            modifier = Modifier.fillMaxWidth().padding(bottom = 24.dp),
             horizontalArrangement = Arrangement.Center
         ) {
-            Text(
-                text = "Belum punya akun?",
-                fontSize = 14.sp,
-                color = Color(0xFF7F909F)
-            )
-            Text(
-                text = " Buat Akun",
-                fontSize = 14.sp,
-                color = Color(0xFF003FFC),
-                fontWeight = FontWeight.SemiBold,
-                modifier = Modifier.clickable { onRegisterClick() }
-            )
+            Text("Belum punya akun?", fontSize = 14.sp, color = Color(0xFF7F909F))
+            Text(" Buat Akun", fontSize = 14.sp, color = Color(0xFF003FFC), fontWeight = FontWeight.SemiBold, modifier = Modifier.clickable { onRegisterClick() })
         }
     }
 }
 
-@Preview()
+@Preview
 @Composable
 fun LoginScreenPreview() {
-    LoginScreen()
+    LoginScreenUI()
 }

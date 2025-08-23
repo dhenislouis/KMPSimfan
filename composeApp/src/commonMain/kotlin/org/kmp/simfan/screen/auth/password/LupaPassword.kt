@@ -15,13 +15,22 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import cafe.adriel.voyager.core.screen.Screen
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.ui.tooling.preview.Preview
 import simfan.composeapp.generated.resources.Res
 import simfan.composeapp.generated.resources.arrow_back
-import org.jetbrains.compose.ui.tooling.preview.Preview
+
+// 🚀 Voyager Screen
+object LupaPasswordScreen : Screen {
+    @Composable
+    override fun Content() {
+        LupaPasswordScreenUI()
+    }
+}
 
 @Composable
-fun LupaPasswordScreen(
+fun LupaPasswordScreenUI(
     onBackClick: () -> Unit = {},
     onNextClick: (String) -> Unit = {}
 ) {
@@ -33,11 +42,11 @@ fun LupaPasswordScreen(
             .fillMaxSize()
             .background(Color(0xFFF6F6F6))
     ) {
+        // AppBar
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(Color.White)
-//                .padding(horizontal = 16.dp, vertical = 16.dp)
         ) {
             IconButton(
                 onClick = onBackClick,
@@ -59,15 +68,12 @@ fun LupaPasswordScreen(
                 modifier = Modifier.align(Alignment.Center)
             )
 
-            IconButton(
-                onClick = {},
-                enabled = false,
-                modifier = Modifier
-                    .align(Alignment.CenterEnd)
-                    .size(48.dp)
-            ) {}
+            Spacer(modifier = Modifier
+                .align(Alignment.CenterEnd)
+                .size(48.dp))
         }
 
+        // Konten scrollable
         Column(
             modifier = Modifier
                 .weight(1f)
@@ -80,37 +86,38 @@ fun LupaPasswordScreen(
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Medium,
                 color = Color.Black,
-                modifier = Modifier
-                    .fillMaxWidth()   // supaya textAlign bisa bekerja penuh
-                    .padding(bottom = 8.dp),
+                modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp),
                 lineHeight = 22.sp,
                 textAlign = TextAlign.Center
             )
-
 
             Text(
                 text = "Pilih metode di bawah ini untuk memulihkan kata sandi Anda",
                 fontSize = 13.sp,
                 color = Color(0xFF6B7280),
                 modifier = Modifier.padding(bottom = 40.dp),
-                lineHeight = 18.sp
+                lineHeight = 18.sp,
+                textAlign = TextAlign.Center
             )
 
             OptionCard(
                 title = "Via SMS",
-                description = "kode akan dikirim ke **** **** *512",
+                description = "Kode akan dikirim ke **** **** *512",
                 selected = selectedOption == "SMS",
                 onClick = { selectedOption = "SMS" }
             )
 
+            Spacer(modifier = Modifier.height(12.dp))
+
             OptionCard(
                 title = "Via Email",
-                description = "kode akan dikirim ke *****vktr",
+                description = "Kode akan dikirim ke *****vktr",
                 selected = selectedOption == "Email",
                 onClick = { selectedOption = "Email" }
             )
         }
 
+        // Tombol bawah
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -146,7 +153,7 @@ fun OptionCard(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .background(Color.White, shape = RoundedCornerShape(12.dp))
+            .background(Color.White, RoundedCornerShape(12.dp))
             .clickable { onClick() }
             .padding(16.dp)
             .padding(vertical = 12.dp),
@@ -161,23 +168,14 @@ fun OptionCard(
             )
         )
         Column(modifier = Modifier.padding(start = 12.dp)) {
-            Text(
-                text = title,
-                fontSize = 18.sp,
-                fontWeight = FontWeight.Medium,
-                color = Color(0xFF212121)
-            )
-            Text(
-                text = description,
-                fontSize = 14.sp,
-                color = Color(0xFF797979)
-            )
+            Text(title, fontSize = 18.sp, fontWeight = FontWeight.Medium, color = Color(0xFF212121))
+            Text(description, fontSize = 14.sp, color = Color(0xFF797979))
         }
     }
 }
 
-@Preview()
+@Preview
 @Composable
 fun LupaPasswordPreview() {
-    LupaPasswordScreen()
+    LupaPasswordScreenUI()
 }

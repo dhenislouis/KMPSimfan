@@ -6,13 +6,15 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.tooling.preview.Preview
+import cafe.adriel.voyager.navigator.Navigator
 import org.kmp.simfan.screen.auth.login.LoginScreen
 import org.kmp.simfan.screen.auth.password.LupaPasswordScreen
 import org.kmp.simfan.screen.auth.password.VerifikasiEmailScreen
 import org.kmp.simfan.screen.auth.password.VerifikasiSMSScreen
+import org.kmp.simfan.screen.auth.password.NewPasswordScreen
+import org.kmp.simfan.screen.auth.password.UbahPasswordScreen
 import org.kmp.simfan.screen.auth.register.RegisterScreen
+import org.kmp.simfan.screen.onboarding.OnboardingStep1
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,27 +24,9 @@ class MainActivity : ComponentActivity() {
         setContent {
             MaterialTheme {
                 Surface {
-                    VerifikasiSMSScreen(
-                        onBackClick = {},
-                        onResendClick = {},
-                        onVerifyClick = {}
-                    )
+                    Navigator(OnboardingStep1)
                 }
             }
-        }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun AppAndroidPreview() {
-    MaterialTheme {
-        Surface {
-            VerifikasiSMSScreen(
-                onBackClick = {},
-                onResendClick = {},
-                onVerifyClick = {}
-            )
         }
     }
 }

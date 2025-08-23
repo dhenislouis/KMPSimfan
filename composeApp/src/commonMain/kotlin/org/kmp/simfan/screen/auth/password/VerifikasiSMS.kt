@@ -15,14 +15,33 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import cafe.adriel.voyager.core.screen.Screen
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import simfan.composeapp.generated.resources.Res
 import simfan.composeapp.generated.resources.arrow_back
 
+// 🚀 Voyager Screen
+data class VerifikasiSMSScreen(
+    val phoneNumber: String
+) : Screen {
+
+    @Composable
+    override fun Content() {
+        VerifikasiSMSUI(
+            phoneNumber = phoneNumber,
+            onBackClick = { /* navigator.pop() */ },
+            onResendClick = { /* TODO: resend logic */ },
+            onVerifyClick = { code ->
+                // TODO: handle verification
+            }
+        )
+    }
+}
+
 @Composable
-fun VerifikasiSMSScreen(
-    phoneNumber: String = "081234567899",
+fun VerifikasiSMSUI(
+    phoneNumber: String,
     onBackClick: () -> Unit = {},
     onResendClick: () -> Unit = {},
     onVerifyClick: (String) -> Unit = {}
@@ -37,6 +56,7 @@ fun VerifikasiSMSScreen(
             .fillMaxSize()
             .background(Color(0xFFF6F6F6))
     ) {
+        // AppBar
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -61,17 +81,9 @@ fun VerifikasiSMSScreen(
                 color = Color.Black,
                 modifier = Modifier.align(Alignment.Center)
             )
-
-            IconButton(
-                onClick = {},
-                enabled = false,
-                modifier = Modifier
-                    .align(Alignment.CenterEnd)
-                    .size(48.dp)
-            ) {}
         }
 
-
+        // Body
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -97,6 +109,7 @@ fun VerifikasiSMSScreen(
                     .padding(bottom = 55.dp)
             )
 
+            // Input digit
             Row(
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
                 verticalAlignment = Alignment.CenterVertically,
@@ -119,6 +132,7 @@ fun VerifikasiSMSScreen(
                     .padding(bottom = 16.dp)
             )
 
+            // Tombol Lanjut
             Button(
                 onClick = {
                     val code = digit1 + digit2 + digit3 + digit4
@@ -157,15 +171,14 @@ fun SMSDigitTextField(
             fontSize = 20.sp,
             fontWeight = FontWeight.Bold
         ),
-        modifier = Modifier
-            .size(56.dp),
+        modifier = Modifier.size(56.dp),
         shape = RoundedCornerShape(8.dp),
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
     )
 }
 
-@Preview()
+@Preview
 @Composable
 fun VerifikasiSMSPreview() {
-    VerifikasiSMSScreen()
+    VerifikasiSMSUI(phoneNumber = "081234567899")
 }
