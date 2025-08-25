@@ -1,4 +1,4 @@
-package org.kmp.simfan.screen.bukarekening
+package org.kmp.simfan.screen.pengajuandata
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
@@ -22,6 +22,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import cafe.adriel.voyager.core.screen.Screen
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import simfan.composeapp.generated.resources.Res
@@ -30,8 +31,16 @@ import simfan.composeapp.generated.resources.backspace
 import simfan.composeapp.generated.resources.eye_off
 import simfan.composeapp.generated.resources.eye_on
 
+// 🚀 Voyager Screen
+object Langkah4BuatPinScreen : Screen {
+    @Composable
+    override fun Content() {
+        Langkah4BuatPinUI()
+    }
+}
+
 @Composable
-fun Langkah4KonfirmasiPinScreen(
+fun Langkah4BuatPinUI(
     onBackClick: () -> Unit = {},
     onNext: () -> Unit = {}
 ) {
@@ -44,7 +53,7 @@ fun Langkah4KonfirmasiPinScreen(
             .fillMaxSize()
             .background(Color(0xFFF4F4F4)) // bg_secondary
     ) {
-        // TopBar
+        // 🔹 TopBar
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -77,7 +86,7 @@ fun Langkah4KonfirmasiPinScreen(
             )
         }
 
-        // Content
+        // 🔹 Content
         Column(
             modifier = Modifier
                 .weight(1f)
@@ -96,7 +105,7 @@ fun Langkah4KonfirmasiPinScreen(
             )
             Spacer(Modifier.height(8.dp))
             Text(
-                "Konfirmasi PIN untuk keamanan akunmu",
+                "Buat PIN untuk keamanan akunmu",
                 fontSize = 15.sp,
                 fontWeight = FontWeight.SemiBold,
                 color = Color.Black,
@@ -114,7 +123,7 @@ fun Langkah4KonfirmasiPinScreen(
                     .padding(bottom = 8.dp)
             )
 
-            // PIN display
+            // 🔹 PIN display
             Row(
                 modifier = Modifier.padding(vertical = 24.dp),
                 horizontalArrangement = Arrangement.Center
@@ -142,7 +151,7 @@ fun Langkah4KonfirmasiPinScreen(
                 }
             }
 
-            // Show/Hide PIN
+            // 🔹 Show/Hide PIN
             IconButton(onClick = { showPin = !showPin }) {
                 Icon(
                     painter = painterResource(
@@ -154,7 +163,7 @@ fun Langkah4KonfirmasiPinScreen(
             }
         }
 
-        // Numpad
+        // 🔹 Numpad
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -236,6 +245,6 @@ fun Langkah4KonfirmasiPinScreen(
 
 @Preview
 @Composable
-fun PreviewLangkah4KonfirmasiPinScreen() {
-    Langkah4KonfirmasiPinScreen()
+fun PreviewLangkah4BuatPinUI() {
+    Langkah4BuatPinUI()
 }

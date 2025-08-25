@@ -1,4 +1,4 @@
-package org.kmp.simfan.screen.bukarekening
+package org.kmp.simfan.screen.pengajuandata
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -16,13 +16,24 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import cafe.adriel.voyager.core.screen.Screen
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.kmp.simfan.core.Button1
-import simfan.composeapp.generated.resources.*
+import simfan.composeapp.generated.resources.Res
+import simfan.composeapp.generated.resources.arrow_back
+import simfan.composeapp.generated.resources.arrow_down
+
+// 🚀 Voyager Screen
+object Langkah3Screen : Screen {
+    @Composable
+    override fun Content() {
+        Langkah3UI()
+    }
+}
 
 @Composable
-fun Langkah3Screen(
+fun Langkah3UI(
     onBackClick: () -> Unit = {},
     onNext: () -> Unit = {}
 ) {
@@ -31,11 +42,11 @@ fun Langkah3Screen(
             .fillMaxSize()
             .background(Color(0xFFF4F4F4)) // bg_secondary
     ) {
+        // 🔹 TopBar
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(Color.White)
-//                .padding(horizontal = 16.dp, vertical = 16.dp)
         ) {
             IconButton(
                 onClick = onBackClick,
@@ -57,16 +68,14 @@ fun Langkah3Screen(
                 modifier = Modifier.align(Alignment.Center)
             )
 
-            IconButton(
-                onClick = {},
-                enabled = false,
+            Spacer(
                 modifier = Modifier
-                    .align(Alignment.CenterEnd)
                     .size(48.dp)
-            ) {}
+                    .align(Alignment.CenterEnd)
+            )
         }
 
-        // Konten scroll
+        // 🔹 Konten scroll
         Column(
             modifier = Modifier
                 .weight(1f)
@@ -102,7 +111,7 @@ fun Langkah3Screen(
                 )
             }
 
-            // Form
+            // 🔹 Form
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -123,7 +132,7 @@ fun Langkah3Screen(
             }
         }
 
-        // Bottom button
+        // 🔹 Bottom button
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -146,13 +155,19 @@ fun Langkah3Screen(
 @Composable
 fun DropdownField(label: String, hint: String) {
     var value by remember { mutableStateOf("") }
-    Column(Modifier.fillMaxWidth().padding(bottom = 16.dp)) {
+    Column(
+        Modifier
+            .fillMaxWidth()
+            .padding(bottom = 16.dp)
+    ) {
         Text(label, fontSize = 14.sp, color = Color(0xFF505559))
         Spacer(Modifier.height(4.dp))
         OutlinedTextField(
             value = value,
             onValueChange = { value = it },
-            modifier = Modifier.fillMaxWidth().height(48.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(48.dp),
             placeholder = { Text(hint, fontSize = 13.sp, color = Color(0xFF9CA3AF)) },
             trailingIcon = {
                 Icon(
@@ -171,13 +186,19 @@ fun DropdownField(label: String, hint: String) {
 @Composable
 fun InputField(label: String, hint: String, keyboardType: KeyboardType = KeyboardType.Text) {
     var value by remember { mutableStateOf("") }
-    Column(Modifier.fillMaxWidth().padding(bottom = 16.dp)) {
+    Column(
+        Modifier
+            .fillMaxWidth()
+            .padding(bottom = 16.dp)
+    ) {
         Text(label, fontSize = 14.sp, color = Color(0xFF505559))
         Spacer(Modifier.height(4.dp))
         OutlinedTextField(
             value = value,
             onValueChange = { value = it },
-            modifier = Modifier.fillMaxWidth().height(48.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(48.dp),
             placeholder = { Text(hint, fontSize = 13.sp, color = Color(0xFF9CA3AF)) },
             shape = RoundedCornerShape(8.dp),
             textStyle = LocalTextStyle.current.copy(fontSize = 13.sp),
@@ -189,6 +210,6 @@ fun InputField(label: String, hint: String, keyboardType: KeyboardType = Keyboar
 
 @Preview
 @Composable
-fun PreviewLangkah3Screen() {
-    Langkah3Screen()
+fun PreviewLangkah3UI() {
+    Langkah3UI()
 }

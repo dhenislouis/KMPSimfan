@@ -1,4 +1,4 @@
-package org.kmp.simfan.screen.bukarekening
+package org.kmp.simfan.screen.pengajuandata
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -16,16 +16,27 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import cafe.adriel.voyager.core.screen.Screen
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.kmp.simfan.core.Button1
 import simfan.composeapp.generated.resources.*
 
+/**
+ * 🚀 Voyager Screen
+ */
+object Langkah1Screen : Screen {
+    @Composable
+    override fun Content() {
+        Langkah1UI()
+    }
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Langkah2PanduanScreen(
+fun Langkah1UI(
     onBack: () -> Unit = {},
-    onScanWajah: () -> Unit = {}
+    onAmbilFoto: () -> Unit = {}
 ) {
     Scaffold(
         topBar = {
@@ -36,7 +47,7 @@ fun Langkah2PanduanScreen(
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
-                            "Panduan Verifikasi Wajah",
+                            "Buka Rekening",
                             fontSize = 20.sp,
                             fontWeight = FontWeight.SemiBold,
                             color = Color.Black,
@@ -55,8 +66,7 @@ fun Langkah2PanduanScreen(
                     }
                 },
                 actions = {
-                    // Spacer untuk menyeimbangkan ikon kiri
-                    Spacer(Modifier.size(48.dp))
+                    Spacer(Modifier.size(48.dp)) // biar balance
                 },
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.White)
             )
@@ -70,14 +80,14 @@ fun Langkah2PanduanScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Button(
-                    onClick = onScanWajah,
+                    onClick = onAmbilFoto,
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(48.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = Button1)
                 ) {
                     Text(
-                        "Scan Wajah",
+                        "Ambil Foto e-KTP",
                         fontSize = 16.sp,
                         fontWeight = FontWeight.SemiBold,
                         color = Color.White
@@ -89,11 +99,11 @@ fun Langkah2PanduanScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color.White)
+                .background(Color(0xFFF4F4F4))
                 .verticalScroll(rememberScrollState())
                 .padding(innerPadding)
         ) {
-            // Header langkah
+            // === Header Langkah ===
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -101,7 +111,7 @@ fun Langkah2PanduanScreen(
                     .padding(16.dp)
             ) {
                 Text(
-                    "Langkah 2 dari 4",
+                    "Langkah 1 dari 4",
                     fontSize = 11.sp,
                     color = Color.Black,
                     modifier = Modifier
@@ -111,98 +121,91 @@ fun Langkah2PanduanScreen(
                 )
                 Spacer(Modifier.height(8.dp))
                 Text(
-                    "Scan Wajah",
+                    "Unggah foto e-KTP dengan jelas",
                     fontSize = 15.sp,
                     fontWeight = FontWeight.SemiBold,
                     color = Color.Black,
                     modifier = Modifier.padding(bottom = 8.dp)
                 )
                 Text(
-                    "Lakukan pemindaian wajah untuk verifikasi identitas anda.",
+                    "Ikuti langkah mudah untuk membuka rekening digital dalam hitungan menit — mulai dari verifikasi hingga aktivasi.",
                     fontSize = 12.sp,
                     color = Color.Black
                 )
             }
 
-            // Konten utama
+            // === Kartu Keamanan ===
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(Color.White)
-                    .padding(16.dp)
+                    .padding(horizontal = 16.dp, vertical = 35.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                // Label Tips
                 Row(
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(6.dp))
-                        .background(Color(0xFF003FFC))
-                        .padding(horizontal = 12.dp, vertical = 6.dp),
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.padding(bottom = 25.dp)
                 ) {
                     Icon(
                         painter = painterResource(Res.drawable.lock),
                         contentDescription = null,
-                        tint = Color.White,
-                        modifier = Modifier.size(20.dp)
+                        tint = Color.Black,
+                        modifier = Modifier.size(24.dp)
                     )
-                    Spacer(Modifier.width(6.dp))
-                    Text("Tips", color = Color.White, fontWeight = FontWeight.Bold)
-                }
-
-                Spacer(Modifier.height(16.dp))
-
-                // Gambar wajah
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    Image(
-                        painter = painterResource(Res.drawable.foto3),
-                        contentDescription = null,
-                        modifier = Modifier
-                            .weight(1f)
-                            .height(120.dp)
-                            .clip(RoundedCornerShape(12.dp))
-                    )
-                    Spacer(Modifier.width(16.dp))
-                    Image(
-                        painter = painterResource(Res.drawable.foto4),
-                        contentDescription = null,
-                        modifier = Modifier
-                            .weight(1f)
-                            .height(120.dp)
-                            .clip(RoundedCornerShape(12.dp))
-                    )
-                }
-
-                Spacer(Modifier.height(16.dp))
-
-                Text(
-                    "Panduan scan wajah:",
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.Black,
-                    modifier = Modifier.padding(bottom = 12.dp)
-                )
-
-                // Daftar poin tips
-                val tips = listOf(
-                    "Pastikan pencahayaan cukup\nGunakan ruangan yang terang, tetapi hindari cahaya langsung dari belakang.",
-                    "Hadapkan wajah ke kamera\nPosisikan wajah di tengah layar dan pastikan menghadap lurus ke depan.",
-                    "Jangan gunakan masker atau kacamata hitam\nWajah harus terlihat jelas tanpa penutup.",
-                    "Jangan bergerak terlalu cepat\nTetap diam sejenak hingga proses pemindaian selesai.",
-                    "Pastikan hanya satu wajah yang terlihat\nHindari orang lain atau objek yang menghalangi wajah Anda."
-                )
-                tips.forEach { text ->
-                    Row(modifier = Modifier.padding(bottom = 8.dp)) {
-                        Text("•", color = Color.Black)
-                        Spacer(Modifier.width(8.dp))
+                    Spacer(modifier = Modifier.width(12.dp))
+                    Column {
                         Text(
-                            text,
+                            "Kami menjamin semua data Anda terlindungi dengan",
                             fontSize = 12.sp,
-                            color = Color(0xFF252C32)
+                            color = Color.Black
+                        )
+                        Text(
+                            "teknologi enkripsi.",
+                            fontSize = 12.sp,
+                            color = Color.Black
                         )
                     }
+                }
+
+                // Gambar KTP
+                Box(
+                    modifier = Modifier
+                        .width(238.dp)
+                        .height(206.dp)
+                        .padding(bottom = 80.dp)
+                ) {
+                    Image(
+                        painter = painterResource(Res.drawable.ktp_pengajuan_deposito),
+                        contentDescription = "Ilustrasi KTP",
+                        modifier = Modifier.fillMaxSize()
+                    )
+                }
+
+                // Judul "Siapkan e-KTP anda"
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    Text(
+                        "Siapkan",
+                        fontSize = 17.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        color = Color.Black
+                    )
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Text(
+                        "e-KTP",
+                        fontSize = 17.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color(0xFFF78208)
+                    )
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Text(
+                        "anda",
+                        fontSize = 17.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        color = Color.Black
+                    )
                 }
             }
         }
@@ -211,6 +214,6 @@ fun Langkah2PanduanScreen(
 
 @Preview
 @Composable
-fun PreviewLangkah2PanduanScreen() {
-    Langkah2PanduanScreen()
+fun PreviewLangkah1UI() {
+    Langkah1UI()
 }
