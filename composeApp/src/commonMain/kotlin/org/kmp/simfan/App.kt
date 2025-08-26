@@ -85,6 +85,9 @@ fun App() {
                 composable<Routes.Home> {
                     HomeScreen(navController, Routes.Home)
                 }
+//                composable<Routes.Product> {
+//                    HomeScreen(navController, Routes.Home)
+//                }
 //            composable<Routes.Product> {
 //                ProductScreen()
 //            }
