@@ -6,6 +6,9 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import cafe.adriel.voyager.navigator.Navigator
 import org.kmp.simfan.screen.auth.login.LoginScreen
 import org.kmp.simfan.screen.auth.password.LupaPasswordScreen
@@ -18,15 +21,18 @@ import org.kmp.simfan.screen.onboarding.OnboardingStep1
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
-        enableEdgeToEdge()
+        val splashScreen = installSplashScreen() // jangan kasih "this"!
         super.onCreate(savedInstanceState)
 
         setContent {
-            MaterialTheme {
-                Surface {
-                    Navigator(OnboardingStep1)
-                }
-            }
+            App()
         }
     }
+}
+
+
+@Preview
+@Composable
+fun AppAndroidPreview() {
+    App()
 }

@@ -7,11 +7,11 @@ import org.kmp.simfan.screen.auth.login.LoginScreen
 @Preview(showBackground = true)
 @Composable
 fun LoginScreenPreview() {
-    LoginScreen(
-        onBackClick= {},
-        onLoginClick = {},
-        onGoogleLoginClick = {},
-        onForgotPasswordClick = {},
-        onRegisterClick = {}
-    )
+//    LoginScreen(
+//        onBackClick= {},
+//        onLoginClick = {},
+//        onGoogleLoginClick = {},
+//        onForgotPasswordClick = {},
+//        onRegisterClick = {}
+//    )
 }
