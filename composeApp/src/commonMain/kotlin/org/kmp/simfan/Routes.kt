@@ -19,4 +19,11 @@ sealed interface Routes {
     data object Onboard4 : Routes
     @Serializable
     data object Home : Routes
+    @Serializable
+    data object Product : Routes
+    @Serializable
+    data object Simfanku : Routes
+    @Serializable
+    data object Profile : Routes
+
 }

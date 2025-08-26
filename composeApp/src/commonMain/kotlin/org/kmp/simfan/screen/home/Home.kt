@@ -25,27 +25,40 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.kmp.simfan.Routes
+import org.kmp.simfan.core.navigation.BottomBar
 import org.kmp.simfan.extension.toRupiah
 import simfan.composeapp.generated.resources.Res
 import simfan.composeapp.generated.resources.*
 
 @Composable
-fun HomeScreen() {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color(0xFFF5F6FA))
-            .verticalScroll(rememberScrollState())
-    ) {
-        AppBarSection()
-        ProfileHeader()
-        SaldoCard()
-        SimulasiCard()
-        ProdukRekomendasi()
-        DepositoAktif()
+fun HomeScreen(navController: NavController, currentRoute: Routes?) {
+    Scaffold(
+        bottomBar = {
+            BottomBar(
+                currentRoute = currentRoute,
+                onNavigate = { navController.navigate(it) }
+            )
+        }
+    ) { innerPadding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color(0xFFF5F6FA))
+                .verticalScroll(rememberScrollState())
+        ) {
+            AppBarSection()
+            ProfileHeader()
+            SaldoCard()
+            SimulasiCard()
+            ProdukRekomendasi()
+            DepositoAktif()
+        }
     }
+
 }
 
 @Composable
@@ -362,8 +375,8 @@ fun DepositoAktif() {
     }
 }
 
-@Preview()
-@Composable
-fun PreviewHome() {
-    HomeScreen()
-}
+//@Preview()
+//@Composable
+//fun PreviewHome() {
+//    HomeScreen(na)
+//}
