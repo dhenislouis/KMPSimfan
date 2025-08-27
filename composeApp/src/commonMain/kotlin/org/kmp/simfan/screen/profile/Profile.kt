@@ -11,6 +11,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -21,132 +22,145 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.kmp.simfan.Routes
+import org.kmp.simfan.core.navigation.BottomBar
 import simfan.composeapp.generated.resources.Res
 import simfan.composeapp.generated.resources.*
 
 @Composable
-fun ProfileScreen() {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color(0xFFF9FAFB))
-    ) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(Color.White)
-                .padding(vertical = 16.dp),
-            contentAlignment = Alignment.Center
-        ) {
-            Text(
-                text = "Profil",
-                fontSize = 20.sp,
-                fontWeight = FontWeight.SemiBold,
-                color = Color.Black
+fun ProfileScreen(navController: NavController, currentRoute: Routes?) {
+    Scaffold(
+        bottomBar = {
+            BottomBar(
+                currentRoute = currentRoute,
+                onNavigate = { navController.navigate(it) }
             )
         }
-
+    ){
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .verticalScroll(rememberScrollState())
-                .padding(16.dp)
+                .background(Color(0xFFF9FAFB))
         ) {
-            ProfileHeader()
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            StatusCard()
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            SectionCard {
-                MenuItem(icon = Res.drawable.ic_phone, label = "Pengajuan Penempatan")
-            }
-
-            DividerLine()
-
-            SectionCard {
-                MenuItem(
-                    icon = Res.drawable.ic_profil,
-                    label = "Akun Saya",
-                    subtitle = "Lakukan perubahan pada akun anda"
-                )
-                MenuItem(
-                    icon = Res.drawable.ic_lock,
-                    label = "Ubah Kata Sandi",
-                    subtitle = "Ganti kata sandi untuk keamanan akun"
-                )
-                MenuItem(
-                    icon = Res.drawable.ic_credit,
-                    label = "Akun Bank",
-                    subtitle = "Akun ini berfungsi sebagai tujuan pencairan\nbunga, pokok deposito, dan transaksi cashback."
-                )
-                MenuItem(
-                    icon = Res.drawable.ic_ttd,
-                    label = "Akun Tanda Tangan Elektronik",
-                    subtitle = "Perbarui data tanda tangan digital"
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(Color.White)
+                    .padding(vertical = 16.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = "Profil",
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    color = Color.Black
                 )
             }
 
-            DividerLine()
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState())
+                    .padding(16.dp)
+            ) {
+                ProfileHeader()
 
-            Text(
-                text = "Fitur",
-                fontSize = 15.sp,
-                fontWeight = FontWeight.SemiBold,
-                modifier = Modifier.padding(bottom = 6.dp)
-            )
-            SectionCard {
-                MenuItem(icon = Res.drawable.ic_user_add, label = "Undang Teman & Dapatkan Bonus")
-                MenuItem(icon = Res.drawable.ic_money, label = "Riwayat Promo & Cashback")
-                MenuItem(icon = Res.drawable.ic_gift, label = "Keuntungan Eksklusif Komunal")
-                MenuItem(icon = Res.drawable.ic_chartbar, label = "History Poin Privileges / Riwayat Poin Hadiah")
-            }
+                Spacer(modifier = Modifier.height(16.dp))
 
-            DividerLine()
+                StatusCard()
 
-            Text(
-                text = "Informasi & Bantuan",
-                fontSize = 14.sp,
-                fontWeight = FontWeight.SemiBold,
-                modifier = Modifier.padding(vertical = 6.dp)
-            )
-            SectionCard {
-                MenuItem(icon = Res.drawable.ic_dokumen, label = "Ketentuan Layanan")
-                MenuItem(icon = Res.drawable.ic_shieldplus, label = "Aturan Privasi")
-                MenuItem(icon = Res.drawable.ic_question, label = "Pertanyaan Umum")
-                MenuItem(icon = Res.drawable.ic_building, label = "Profil Komunal / Info Komunal")
-            }
+                Spacer(modifier = Modifier.height(16.dp))
 
-            DividerLine()
+                SectionCard {
+                    MenuItem(icon = Res.drawable.ic_phone, label = "Pengajuan Penempatan")
+                }
 
-            SectionCard {
-                MenuItem(icon = Res.drawable.ic_trash, label = "Nonaktifkan Akun")
-            }
+                DividerLine()
 
-            DividerLine()
+                SectionCard {
+                    MenuItem(
+                        icon = Res.drawable.ic_profil,
+                        label = "Akun Saya",
+                        subtitle = "Lakukan perubahan pada akun anda"
+                    )
+                    MenuItem(
+                        icon = Res.drawable.ic_lock,
+                        label = "Ubah Kata Sandi",
+                        subtitle = "Ganti kata sandi untuk keamanan akun"
+                    )
+                    MenuItem(
+                        icon = Res.drawable.ic_credit,
+                        label = "Akun Bank",
+                        subtitle = "Akun ini berfungsi sebagai tujuan pencairan\nbunga, pokok deposito, dan transaksi cashback."
+                    )
+                    MenuItem(
+                        icon = Res.drawable.ic_ttd,
+                        label = "Akun Tanda Tangan Elektronik",
+                        subtitle = "Perbarui data tanda tangan digital"
+                    )
+                }
 
-            SectionCard {
-                MenuItem(icon = Res.drawable.ic_signout, label = "Keluar dari Aplikasi")
-            }
+                DividerLine()
 
-            DividerLine()
+                Text(
+                    text = "Fitur",
+                    fontSize = 15.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    modifier = Modifier.padding(bottom = 6.dp)
+                )
+                SectionCard {
+                    MenuItem(icon = Res.drawable.ic_user_add, label = "Undang Teman & Dapatkan Bonus")
+                    MenuItem(icon = Res.drawable.ic_money, label = "Riwayat Promo & Cashback")
+                    MenuItem(icon = Res.drawable.ic_gift, label = "Keuntungan Eksklusif Komunal")
+                    MenuItem(icon = Res.drawable.ic_chartbar, label = "History Poin Privileges / Riwayat Poin Hadiah")
+                }
 
-            SectionCard {
-                MenuItem(icon = Res.drawable.ic_handscoin, label = "Advisor Keuangan")
-            }
+                DividerLine()
 
-            DividerLine()
+                Text(
+                    text = "Informasi & Bantuan",
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    modifier = Modifier.padding(vertical = 6.dp)
+                )
+                SectionCard {
+                    MenuItem(icon = Res.drawable.ic_dokumen, label = "Ketentuan Layanan")
+                    MenuItem(icon = Res.drawable.ic_shieldplus, label = "Aturan Privasi")
+                    MenuItem(icon = Res.drawable.ic_question, label = "Pertanyaan Umum")
+                    MenuItem(icon = Res.drawable.ic_building, label = "Profil Komunal / Info Komunal")
+                }
 
-            SectionCard {
-                MenuItem(icon = Res.drawable.ic_headset, label = "Bantuan tersedia?")
+                DividerLine()
+
+                SectionCard {
+                    MenuItem(icon = Res.drawable.ic_trash, label = "Nonaktifkan Akun")
+                }
+
+                DividerLine()
+
+                SectionCard {
+                    MenuItem(icon = Res.drawable.ic_signout, label = "Keluar dari Aplikasi")
+                }
+
+                DividerLine()
+
+                SectionCard {
+                    MenuItem(icon = Res.drawable.ic_handscoin, label = "Advisor Keuangan")
+                }
+
+                DividerLine()
+
+                SectionCard {
+                    MenuItem(icon = Res.drawable.ic_headset, label = "Bantuan tersedia?")
+                }
             }
         }
     }
+
 }
 
 @Composable
@@ -414,8 +428,8 @@ fun DividerLine() {
     )
 }
 
-@Preview()
-@Composable
-fun ProfilePreview() {
-    ProfileScreen()
-}
+//@Preview()
+//@Composable
+//fun ProfilePreview() {
+//    ProfileScreen()
+//}

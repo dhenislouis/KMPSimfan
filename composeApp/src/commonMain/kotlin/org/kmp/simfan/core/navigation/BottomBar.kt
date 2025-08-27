@@ -16,13 +16,13 @@ import org.kmp.simfan.core.Primary
 import simfan.composeapp.generated.resources.Res
 import simfan.composeapp.generated.resources.deposito_active
 import simfan.composeapp.generated.resources.home
+import simfan.composeapp.generated.resources.home_svg
 import simfan.composeapp.generated.resources.home_active
 import simfan.composeapp.generated.resources.label_deposito
 import simfan.composeapp.generated.resources.product
+import simfan.composeapp.generated.resources.product_active
 import simfan.composeapp.generated.resources.profile
 import simfan.composeapp.generated.resources.profile_active
-import simfan.composeapp.generated.resources.simfanku
-import simfan.composeapp.generated.resources.simfanku_active
 
 val bottomBarRoutes = listOf(
     Routes.Home,
@@ -46,7 +46,7 @@ fun BottomBar(
                     painter = painterResource(  if ( currentRoute == Routes.Home) Res.drawable.home_active else Res.drawable.home),
                     contentDescription = "Home",
                     modifier = Modifier.size(18.dp),
-                    tint = Color.White
+                    tint = if ( currentRoute == Routes.Home) Color.White else Color.Black
 
                 )
             },
@@ -62,10 +62,10 @@ fun BottomBar(
             onClick = { onNavigate(Routes.Product) },
             icon = {
                 Icon(
-                    painter = painterResource(  if ( currentRoute == Routes.Home) Res.drawable.profile_active else Res.drawable.product),
-
+                    painter = painterResource(  if ( currentRoute == Routes.Product) Res.drawable.product_active else Res.drawable.product),
                     contentDescription = "Product",
-                    modifier = Modifier.size(18.dp)
+                    modifier = Modifier.size(18.dp),
+                    tint = if ( currentRoute == Routes.Product) Color.White else Color.Black
                 )
             },
             label = { Text("Product") },
@@ -80,10 +80,11 @@ fun BottomBar(
             onClick = { onNavigate(Routes.Simfanku) },
             icon = {
                 Icon(
-                    painter = painterResource(  if ( currentRoute == Routes.Home) Res.drawable.label_deposito else Res.drawable.deposito_active),
+                    painter = painterResource(  if ( currentRoute == Routes.Simfanku) Res.drawable.label_deposito else Res.drawable.deposito_active),
 
                     contentDescription = "Simfanku",
-                    modifier = Modifier.size(18.dp)
+                    modifier = Modifier.size(18.dp),
+                    tint = if ( currentRoute == Routes.Simfanku) Color.White else Color.Black
                 )
             },
             label = { Text("Simfanku") },
@@ -98,10 +99,12 @@ fun BottomBar(
             onClick = { onNavigate(Routes.Profile) },
             icon = {
                 Icon(
-                    painter = painterResource(  if ( currentRoute == Routes.Home) Res.drawable.profile_active else Res.drawable.profile),
+                    painter = painterResource(  if ( currentRoute == Routes.Profile) Res.drawable.profile_active else Res.drawable.profile),
 
                     contentDescription = "Profile",
-                    modifier = Modifier.size(18.dp)
+                    modifier = Modifier.size(18.dp),
+                    tint = if ( currentRoute == Routes.Profile) Color.White else Color.Black
+
                 )
             },
             label = { Text("Profile") },

@@ -18,9 +18,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.kmp.simfan.Routes
 import org.kmp.simfan.core.Button1
+import org.kmp.simfan.core.navigation.BottomBar
 import simfan.composeapp.generated.resources.Res
 import simfan.composeapp.generated.resources.aro
 import simfan.composeapp.generated.resources.arrow_forward
@@ -40,121 +43,134 @@ private val LabelOrange = Color(0xFFFF8A00)
 private val StatusBgYellow = Color(0xFFFFF7E0)   // sesuaikan dg @color/status_yellow_background
 private val StatusText = Color(0xFFF59E0B)       // sesuaikan dg @color/secondary
 
+@Preview()
 @Composable
 fun ProductScreen(
+    navController: NavController,
+    currentRoute: Routes?,
     onFilterClick: () -> Unit = {},
     onDetailClick: () -> Unit = {},
     onSaveClick: () -> Unit = {}
 ) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(BgSecondary)
-    ) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(Color.White)
-                .padding(top = 12.dp, bottom = 12.dp)
-        ) {
-            Text(
-                text = "Produk",
-                fontSize = 20.sp,
-                fontWeight = FontWeight.SemiBold,
-                color = Color.Black,
-                modifier = Modifier.align(Alignment.Center)
+    Scaffold(
+        bottomBar = {
+            BottomBar(
+                currentRoute = currentRoute,
+                onNavigate = { navController.navigate(it) }
             )
         }
-
+    ){
         Column(
             modifier = Modifier
-                .background(AppBarBg)
-                .padding(horizontal = 16.dp, vertical = 12.dp)
+                .fillMaxSize()
+                .background(BgSecondary)
         ) {
-            var search by remember { mutableStateOf("") }
-            Card(
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(48.dp),
-                shape = RoundedCornerShape(24.dp),
-                elevation = CardDefaults.cardElevation(2.dp)
+                    .background(Color.White)
+                    .padding(top = 12.dp, bottom = 12.dp)
             ) {
-                Row(
+                Text(
+                    text = "Produk",
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    color = Color.Black,
+                    modifier = Modifier.align(Alignment.Center)
+                )
+            }
+
+            Column(
+                modifier = Modifier
+                    .background(AppBarBg)
+                    .padding(horizontal = 16.dp, vertical = 12.dp)
+            ) {
+                var search by remember { mutableStateOf("") }
+                Card(
                     modifier = Modifier
-                        .fillMaxSize()
-                        .background(BgSecondary)
-                        .padding(start = 16.dp, end = 12.dp),
-                    verticalAlignment = Alignment.CenterVertically
+                        .fillMaxWidth()
+                        .height(48.dp),
+                    shape = RoundedCornerShape(24.dp),
+                    elevation = CardDefaults.cardElevation(2.dp)
                 ) {
-                    Icon(
-                        painter = painterResource(Res.drawable.ic_search),
-                        contentDescription = null,
-                        tint = Color.Gray,
-                        modifier = Modifier.size(22.dp)
-                    )
-                    Spacer(Modifier.width(8.dp))
-                    BasicTextField(
-                        value = search,
-                        onValueChange = { search = it },
-                        modifier = Modifier.weight(1f),
-                        singleLine = true,
-                        decorationBox = { inner ->
-                            if (search.isEmpty()) {
-                                Text("Cari produk", color = Color.Gray, fontSize = 16.sp)
-                            }
-                            inner()
-                        }
-                    )
-                    Icon(
-                        painter = painterResource(Res.drawable.ic_filter),
-                        contentDescription = "Filter",
-                        tint = Color.Gray,
+                    Row(
                         modifier = Modifier
-                            .size(22.dp)
-                            .clickable { onFilterClick() }
-                    )
+                            .fillMaxSize()
+                            .background(BgSecondary)
+                            .padding(start = 16.dp, end = 12.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            painter = painterResource(Res.drawable.ic_search),
+                            contentDescription = null,
+                            tint = Color.Gray,
+                            modifier = Modifier.size(22.dp)
+                        )
+                        Spacer(Modifier.width(8.dp))
+                        BasicTextField(
+                            value = search,
+                            onValueChange = { search = it },
+                            modifier = Modifier.weight(1f),
+                            singleLine = true,
+                            decorationBox = { inner ->
+                                if (search.isEmpty()) {
+                                    Text("Cari produk", color = Color.Gray, fontSize = 16.sp)
+                                }
+                                inner()
+                            }
+                        )
+                        Icon(
+                            painter = painterResource(Res.drawable.ic_filter),
+                            contentDescription = "Filter",
+                            tint = Color.Gray,
+                            modifier = Modifier
+                                .size(22.dp)
+                                .clickable { onFilterClick() }
+                        )
+                    }
                 }
             }
-        }
 
-        Column(
-            modifier = Modifier
-                .weight(1f)
-                .verticalScroll(rememberScrollState())
-                .padding(horizontal = 16.dp, vertical = 18.dp)
-        ) {
-            // Kartu 1 — dengan label Bilyet Fisik + ARO
-            ProductCard(
-                title = "Simfan Websuite",
-                subtitle = "DKI Jakarta - 3 Transaksi",
-                minimumLabel = "Minimum Penempatan",
-                duration = "3 Bulan",
-                nominal = "Rp10.000.000",
-                estimasi = "6%",
-                showBilyet = true,
-                showAro = true,
-                onDetailClick = onDetailClick
-            )
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .verticalScroll(rememberScrollState())
+                    .padding(horizontal = 16.dp, vertical = 18.dp)
+            ) {
+                // Kartu 1 — dengan label Bilyet Fisik + ARO
+                ProductCard(
+                    title = "Simfan Websuite",
+                    subtitle = "DKI Jakarta - 3 Transaksi",
+                    minimumLabel = "Minimum Penempatan",
+                    duration = "3 Bulan",
+                    nominal = "Rp10.000.000",
+                    estimasi = "6%",
+                    showBilyet = true,
+                    showAro = true,
+                    onDetailClick = onDetailClick
+                )
 
-            Spacer(Modifier.height(12.dp))
+                Spacer(Modifier.height(12.dp))
 
-            // Kartu 2 — tanpa label, tapi ada status bar kuning
-            ProductCard(
-                title = "Simfan WebSuite",
-                subtitle = "DKI Jakarta - 3 Transaksi",
-                minimumLabel = "Minimum Penempatan",
-                duration = "3 Bulan",
-                nominal = "Rp10.000.000",
-                estimasi = "6%",
-                showBilyet = false,
-                showAro = false,
-                showStatusBar = true,
-                statusTitle = "Belum dapat menerima transaksi.",
-                statusSubtitle = "Data sedang diperbarui",
-                onDetailClick = onDetailClick
-            )
+                // Kartu 2 — tanpa label, tapi ada status bar kuning
+                ProductCard(
+                    title = "Simfan WebSuite",
+                    subtitle = "DKI Jakarta - 3 Transaksi",
+                    minimumLabel = "Minimum Penempatan",
+                    duration = "3 Bulan",
+                    nominal = "Rp10.000.000",
+                    estimasi = "6%",
+                    showBilyet = false,
+                    showAro = false,
+                    showStatusBar = true,
+                    statusTitle = "Belum dapat menerima transaksi.",
+                    statusSubtitle = "Data sedang diperbarui",
+                    onDetailClick = onDetailClick
+                )
+            }
         }
     }
+
 }
 
 @Composable
@@ -375,8 +391,7 @@ private fun StatusInfoBar(
     }
 }
 
-@Preview()
-@Composable
-private fun ProductScreenPreview() {
-    ProductScreen()
-}
+//@Composable
+//private fun ProductScreenPreview() {
+//    ProductScreen()
+//}

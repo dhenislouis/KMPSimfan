@@ -10,11 +10,14 @@ import androidx.navigation.compose.rememberNavController
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.kmp.simfan.core.Theme
 import org.kmp.simfan.core.navigation.BottomBar
+import org.kmp.simfan.screen.deposito.DepositoScreen
 import org.kmp.simfan.screen.home.HomeScreen
 import org.kmp.simfan.screen.onboarding.OnboardingStep1
 import org.kmp.simfan.screen.onboarding.OnboardingStep2
 import org.kmp.simfan.screen.onboarding.OnboardingStep3
 import org.kmp.simfan.screen.onboarding.OnboardingStep4
+import org.kmp.simfan.screen.product.ProductScreen
+import org.kmp.simfan.screen.profile.ProfileScreen
 
 //@Composable
 //@Preview
@@ -85,9 +88,15 @@ fun App() {
                 composable<Routes.Home> {
                     HomeScreen(navController, Routes.Home)
                 }
-//                composable<Routes.Product> {
-//                    HomeScreen(navController, Routes.Home)
-//                }
+                composable<Routes.Product> {
+                    ProductScreen(navController, Routes.Product)
+                }
+                composable<Routes.Simfanku> {
+                    DepositoScreen(navController, Routes.Simfanku)
+                }
+                composable<Routes.Profile> {
+                    ProfileScreen(navController, Routes.Profile)
+                }
 //            composable<Routes.Product> {
 //                ProductScreen()
 //            }

@@ -14,8 +14,11 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.kmp.simfan.Routes
+import org.kmp.simfan.core.navigation.BottomBar
 import simfan.composeapp.generated.resources.Res
 import simfan.composeapp.generated.resources.*
 
@@ -29,59 +32,70 @@ private val EstimasiGreen = Color(0xFF22C55E)
 private val BannerKrem = Color(0xFFFFF7E0)
 private val Secondary = Color(0xFFF59E0B)
 
+@Preview
 @Composable
-fun DepositoScreen() {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(BgSecondary)
-    ) {
-        // ===== APPBAR =====
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(Color.White, shape = RoundedCornerShape(bottomStart = 12.dp, bottomEnd = 12.dp))
-                .padding(vertical = 14.dp),
-            contentAlignment = Alignment.Center
-        ) {
-            Text(
-                text = "Deposito",
-                fontSize = 18.sp,
-                fontWeight = FontWeight.SemiBold,
-                color = Color.Black
+fun DepositoScreen(navController: NavController, currentRoute: Routes?) {
+    Scaffold(
+        bottomBar = {
+            BottomBar(
+                currentRoute = currentRoute,
+                onNavigate = { navController.navigate(it) }
             )
         }
-
-        // ===== SCROLL =====
+    ){
         Column(
             modifier = Modifier
-                .verticalScroll(rememberScrollState())
-                .weight(1f)
-                .padding(horizontal = 16.dp, vertical = 16.dp)
+                .fillMaxSize()
+                .background(BgSecondary)
         ) {
-            // Tabs
-            Row(
+            // ===== APPBAR =====
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .horizontalScroll(rememberScrollState())
+                    .background(Color.White, shape = RoundedCornerShape(bottomStart = 12.dp, bottomEnd = 12.dp))
+                    .padding(vertical = 14.dp),
+                contentAlignment = Alignment.Center
             ) {
-                DepositoTab("Semua", selected = true)
-                DepositoTab("Proses")
-                DepositoTab("Aktif")
-                DepositoTab("Lunas", last = true)
+                Text(
+                    text = "Deposito",
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    color = Color.Black
+                )
             }
 
-            Spacer(Modifier.height(16.dp))
+            // ===== SCROLL =====
+            Column(
+                modifier = Modifier
+                    .verticalScroll(rememberScrollState())
+                    .weight(1f)
+                    .padding(horizontal = 16.dp, vertical = 16.dp)
+            ) {
+                // Tabs
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .horizontalScroll(rememberScrollState())
+                ) {
+                    DepositoTab("Semua", selected = true)
+                    DepositoTab("Proses")
+                    DepositoTab("Aktif")
+                    DepositoTab("Lunas", last = true)
+                }
 
-            // Kartu Total Deposito Aktif
-            TotalDepositoCard()
+                Spacer(Modifier.height(16.dp))
 
-            Spacer(Modifier.height(16.dp))
+                // Kartu Total Deposito Aktif
+                TotalDepositoCard()
 
-            // Kartu detail produk
-            DepositoDetailCard()
+                Spacer(Modifier.height(16.dp))
+
+                // Kartu detail produk
+                DepositoDetailCard()
+            }
         }
     }
+
 }
 
 @Composable
@@ -277,8 +291,8 @@ private fun DepositoDetailCard() {
     }
 }
 
-@Preview
-@Composable
-private fun DepositoScreenPreview() {
-    DepositoScreen()
-}
+//@Preview
+//@Composable
+//private fun DepositoScreenPreview() {
+//    DepositoScreen()
+//}
