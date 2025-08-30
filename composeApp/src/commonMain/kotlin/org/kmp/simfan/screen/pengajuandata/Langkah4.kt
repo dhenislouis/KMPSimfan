@@ -17,23 +17,32 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.kmp.simfan.core.Button1
+import org.kmp.simfan.core.Label_Langkah
 import simfan.composeapp.generated.resources.Res
 import simfan.composeapp.generated.resources.arrow_back
 import simfan.composeapp.generated.resources.arrow_down
 
 // 🚀 Voyager Screen
-object Langkah3Screen : Screen {
+object Langkah4Screen : Screen {
     @Composable
     override fun Content() {
-        Langkah3UI()
+        val navigator = LocalNavigator.currentOrThrow
+        Langkah4UI(
+            onBackClick = {navigator.pop()},
+            onNext = {
+                navigator.push(Langkah5BuatPinScreen)
+            }
+        )
     }
 }
 
 @Composable
-fun Langkah3UI(
+fun Langkah4UI(
     onBackClick: () -> Unit = {},
     onNext: () -> Unit = {}
 ) {
@@ -61,7 +70,7 @@ fun Langkah3UI(
             }
 
             Text(
-                text = "Buka Rekening",
+                text = "Pengajuan Data",
                 fontSize = 20.sp,
                 fontWeight = FontWeight.SemiBold,
                 color = Color.Black,
@@ -88,12 +97,12 @@ fun Langkah3UI(
                     .padding(16.dp)
             ) {
                 Text(
-                    "Langkah 3 dari 4",
+                    "Langkah 4 dari 5",
                     fontSize = 11.sp,
                     color = Color.Black,
                     modifier = Modifier
                         .clip(RoundedCornerShape(6.dp))
-                        .background(Color(0xFFE0E7FF))
+                        .background(Label_Langkah)
                         .padding(horizontal = 12.dp, vertical = 3.dp)
                 )
                 Spacer(Modifier.height(8.dp))
@@ -210,6 +219,6 @@ fun InputField(label: String, hint: String, keyboardType: KeyboardType = Keyboar
 
 @Preview
 @Composable
-fun PreviewLangkah3UI() {
-    Langkah3UI()
+fun PreviewLangkah4UI() {
+    Langkah4UI()
 }

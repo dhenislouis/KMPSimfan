@@ -4,6 +4,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -16,95 +17,96 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import org.jetbrains.compose.resources.painterResource
+import org.kmp.simfan.Routes
 import simfan.composeapp.generated.resources.*
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PromoScreen(
+    navController: NavController,
+    currentRoute: Routes?,
     onBackClick: () -> Unit,
     onMenuClick: () -> Unit
 ) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color(0xFFF5F6FA))
-    ) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(Color.White)
-//                .padding(horizontal = 16.dp, vertical = 16.dp)
-        ) {
-            IconButton(
-                onClick = onBackClick,
-                modifier = Modifier.align(Alignment.CenterStart)
-            ) {
-                Icon(
-                    painter = painterResource(Res.drawable.arrow_back),
-                    contentDescription = "Kembali",
-                    tint = Color.Black,
-                    modifier = Modifier.size(18.dp)
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(
+                        text = "Promo",
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        color = Color.Black
+                    )
+                },
+                navigationIcon = {
+                    IconButton(onClick = onBackClick) {
+                        Icon(
+                            painter = painterResource(Res.drawable.arrow_back),
+                            contentDescription = "Kembali",
+                            tint = Color.Black,
+                            modifier = Modifier.size(18.dp)
+                        )
+                    }
+                },
+                actions = {},
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = Color.White
                 )
-            }
-
-            Text(
-                text = "Promo",
-                fontSize = 20.sp,
-                fontWeight = FontWeight.SemiBold,
-                color = Color.Black,
-                modifier = Modifier.align(Alignment.Center)
             )
-
-            IconButton(
-                onClick = {},
-                enabled = false,
-                modifier = Modifier
-                    .align(Alignment.CenterEnd)
-                    .size(48.dp)
-            ) {}
-        }
-
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 4.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Image(
-                painter = painterResource(Res.drawable.logo_simfan),
-                contentDescription = "SimFan Logo",
-                modifier = Modifier
-                    .width(85.dp)
-                    .height(28.dp)
-            )
-
-            Spacer(modifier = Modifier.weight(1f))
-
-            IconButton(onClick = onMenuClick) {
-                Icon(
-                    painter = painterResource(Res.drawable.menu),
-                    contentDescription = "Menu Icon",
-                    tint = Color(0xFF252C32),
-                    modifier = Modifier.size(25.dp)
-                )
-            }
-        }
-
-        Column(
+        },
+        containerColor = Color(0xFFF5F6FA)
+    ) { innerPadding ->
+        LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .verticalScroll(rememberScrollState())
+                .padding(innerPadding)
                 .padding(horizontal = 16.dp, vertical = 18.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            PromoCard(
-                title = "Kejutan Tanggal Kembar 7.7! Raih Cashback s/d 750Rb + Voucher Gopay 55Rb!",
-                source = "SimFan by SimFan",
-                date = "07 July 2025"
-            )
+            item {
+                // Baris logo + menu
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 16.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Image(
+                        painter = painterResource(Res.drawable.logo_simfan),
+                        contentDescription = "SimFan Logo",
+                        modifier = Modifier
+                            .width(85.dp)
+                            .height(28.dp)
+                    )
+
+                    Spacer(modifier = Modifier.weight(1f))
+
+                    IconButton(onClick = onMenuClick) {
+                        Icon(
+                            painter = painterResource(Res.drawable.menu),
+                            contentDescription = "Menu Icon",
+                            tint = Color(0xFF252C32),
+                            modifier = Modifier.size(25.dp)
+                        )
+                    }
+                }
+            }
+
+            item {
+                PromoCard(
+                    title = "Kejutan Tanggal Kembar 7.7! Raih Cashback s/d 750Rb + Voucher Gopay 55Rb!",
+                    source = "SimFan by SimFan",
+                    date = "07 July 2025"
+                )
+            }
         }
     }
 }
+
 
 @Composable
 fun PromoCard(

@@ -1,4 +1,4 @@
-package org.kmp.simfan.screen.deposito.detail
+package org.kmp.simfan.screen.deposito.detail.detaildeposito
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
@@ -12,14 +12,18 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.kmp.simfan.Routes
 import org.kmp.simfan.core.Button1
 import simfan.composeapp.generated.resources.Res
 import simfan.composeapp.generated.resources.*
 
 @Composable
 fun DetailDepositoScreen(
+    navController: NavController,
+    currentRoute: Routes?,
     onBackClick: () -> Unit = {},
     onTandaTangan: () -> Unit = {}
 ) {
@@ -437,8 +441,8 @@ fun DetailDepositoScreen(
     }
 }
 
-@Preview()
-@Composable
-fun PreviewDetailDeposito() {
-    DetailDepositoScreen()
-}
+//@Preview()
+//@Composable
+//fun PreviewDetailDeposito() {
+//    DetailDepositoScreen()
+//}

@@ -20,15 +20,19 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.kmp.simfan.Routes
 import simfan.composeapp.generated.resources.Res
 import simfan.composeapp.generated.resources.arrow_back
 import simfan.composeapp.generated.resources.simfan_websuite
 
 @Composable
 fun SubDetailScreen(
-    onBackClick: () -> Unit = {}
+    navController: NavController,
+    currentRoute: Routes?,
+    onBackClick: () -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -184,8 +188,8 @@ fun DividerLine() {
     )
 }
 
-@Preview
-@Composable
-fun PreviewSubDetail() {
-    SubDetailScreen()
-}
+//@Preview
+//@Composable
+//fun PreviewSubDetail() {
+//    SubDetailScreen()
+//}

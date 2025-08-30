@@ -17,57 +17,46 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 import simfan.composeapp.generated.resources.Res
 import simfan.composeapp.generated.resources.onboard1
 
-object OnboardingStep1 : Screen {
+@Composable
+fun OnboardingStep1(
+    onNextClick: () -> Unit,
 
-    @Composable
-    override fun Content() {
-        Box(
-            modifier = Modifier.fillMaxSize()
+    ) {
+    Box(
+        modifier = Modifier.fillMaxSize()
+    ) {
+        // Background Image
+        Image(
+            painter = painterResource(Res.drawable.onboard1),
+            contentDescription = null,
+            modifier = Modifier.fillMaxSize(),
+            contentScale = ContentScale.Crop
+        )
+
+        // Konten di bawah
+        Column(
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(horizontal = 24.dp, vertical = 40.dp)
         ) {
-            Image(
-                painter = painterResource(Res.drawable.onboard1),
-                contentDescription = null,
-                modifier = Modifier.fillMaxSize(),
-                contentScale = ContentScale.Crop
+            ContentOnboarding(
+                label = "Introducing Simpanan Deposito App",
+                title = "100% Online dengan Proses Praktis dan Cepat",
+                description = "Buka deposito langsung dari aplikasi tanpa harus ke kantor cabang. Simpan dana dengan lebih mudah, cepat, dan efisien.",
+                buttonText = "Lanjut",
+                onButtonClick = {
+                    onNextClick()
+                }
             )
-
-            var showDialog by remember { mutableStateOf(false) }
-
-            if (showDialog) {
-                AlertDialog(
-                    onDismissRequest = { showDialog = false },
-                    title = { Text("Info") },
-                    text = { Text("Clicked") },
-                    confirmButton = {
-                        TextButton(onClick = { showDialog = false }) {
-                            Text("OK")
-                        }
-                    }
-                )
-            }
-
-            Column(
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .padding(horizontal = 24.dp, vertical = 40.dp)
-            ) {
-                ContentOnboarding(
-                    label = "Introducing Simpanan Deposito App",
-                    title = "100% Online dengan Proses Praktis dan Cepat",
-                    description = "Buka deposito langsung dari aplikasi tanpa harus ke kantor cabang. Simpan dana dengan lebih mudah, cepat, dan efisien.",
-                    buttonText = "Lanjut",
-                    onButtonClick = {
-                        // TODO: nanti ganti dengan push ke OnboardingStep2
-                        showDialog = true
-                    }
-                )
-            }
         }
     }
 }
 
-@Preview
+
+@Preview()
 @Composable
 fun OnboardingStep1Preview() {
-    OnboardingStep1.Content()
+    OnboardingStep1(
+        onNextClick = {}
+    )
 }

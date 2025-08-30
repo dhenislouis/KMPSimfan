@@ -2,7 +2,6 @@ package org.kmp.simfan.screen.deposito
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -14,79 +13,133 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.kmp.simfan.Routes
+import org.kmp.simfan.core.Button1
+import org.kmp.simfan.core.navigation.BottomBar
 import simfan.composeapp.generated.resources.Res
 import simfan.composeapp.generated.resources.*
 
-// Warna mock sesuai desain
+// 🎨 Warna sesuai desain
 private val BgSecondary = Color(0xFFF1F2F6)
-private val TabSelected = Color(0xFF003FFC)
 private val TabUnselected = Color(0xFF6B6B6B)
-private val GradientTop = Color(0xFF678CFE)
-private val GradientBottom = Color(0xFF003FFC)
 private val EstimasiGreen = Color(0xFF22C55E)
 private val BannerKrem = Color(0xFFFFF7E0)
 private val Secondary = Color(0xFFF59E0B)
 
 @Composable
-fun DepositoScreen() {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(BgSecondary)
-    ) {
-        // ===== APPBAR =====
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(Color.White, shape = RoundedCornerShape(bottomStart = 12.dp, bottomEnd = 12.dp))
-                .padding(vertical = 14.dp),
-            contentAlignment = Alignment.Center
-        ) {
-            Text(
-                text = "Deposito",
-                fontSize = 18.sp,
-                fontWeight = FontWeight.SemiBold,
-                color = Color.Black
+fun SimfankuDepositoScreen(
+    navController: NavController,
+    currentRoute: Routes?,
+    onScreenDeposito: () -> Unit = {},
+    onScreenTabungan: () -> Unit = {},
+    onDetailDepositoSimfanku: () -> Unit
+) {
+    Scaffold(
+        bottomBar = {
+            BottomBar(
+                currentRoute = currentRoute,
+                onNavigate = { navController.navigate(it) }
             )
         }
-
-        // ===== SCROLL =====
+    ) { innerPadding ->
         Column(
             modifier = Modifier
-                .verticalScroll(rememberScrollState())
-                .weight(1f)
-                .padding(horizontal = 16.dp, vertical = 16.dp)
+                .fillMaxSize()
+                .background(BgSecondary)
+                .padding(innerPadding)
         ) {
-            // Tabs
+            // ===== APPBAR =====
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(
+                        Color.White,
+                        shape = RoundedCornerShape(bottomStart = 12.dp, bottomEnd = 12.dp)
+                    )
+                    .padding(vertical = 14.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = "Deposito",
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    color = Color.Black
+                )
+            }
+
+            // Tombol sejajar di bawah TopBar
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .horizontalScroll(rememberScrollState())
+                    .background(BgSecondary)
+                    .padding(horizontal = 24.dp, vertical = 8.dp),
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                DepositoTab("Semua", selected = true)
-                DepositoTab("Proses")
-                DepositoTab("Aktif")
-                DepositoTab("Lunas", last = true)
+                // Tombol filled
+                Button(
+                    onClick = onScreenDeposito,
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(40.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = Button1),
+                    shape = RoundedCornerShape(50)
+                ) {
+                    Text("Deposito", fontSize = 12.sp, color = Color.White)
+                }
+
+                // Tombol outlined
+                OutlinedButton(
+                    onClick = onScreenTabungan,
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(40.dp),
+                    colors = ButtonDefaults.outlinedButtonColors(contentColor = Button1),
+                    border = BorderStroke(1.5.dp, Button1),
+                    shape = RoundedCornerShape(50)
+                ) {
+                    Text("Tabungan", fontSize = 12.sp, color = Button1)
+                }
             }
 
-            Spacer(Modifier.height(16.dp))
+            // ===== SCROLL =====
+            Column(
+                modifier = Modifier
+                    .verticalScroll(rememberScrollState())
+                    .weight(1f)
+                    .padding(horizontal = 16.dp, vertical = 16.dp)
+            ) {
+                // Tabs
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .horizontalScroll(rememberScrollState())
+                ) {
+                    DepositoTab("Semua", selected = true)
+                    DepositoTab("Proses")
+                    DepositoTab("Aktif")
+                    DepositoTab("Lunas", last = true)
+                }
 
-            // Kartu Total Deposito Aktif
-            TotalDepositoCard()
+                Spacer(Modifier.height(16.dp))
 
-            Spacer(Modifier.height(16.dp))
+                // Kartu Total Deposito Aktif
+                TotalDepositoCard()
 
-            // Kartu detail produk
-            DepositoDetailCard()
+                Spacer(Modifier.height(16.dp))
+
+                // Kartu detail produk
+                DepositoDetailCard { onDetailDepositoSimfanku() }
+            }
         }
     }
 }
 
 @Composable
 private fun DepositoTab(text: String, selected: Boolean = false, last: Boolean = false) {
-    val bg = if (selected) TabSelected else Color.Transparent
+    val bg = if (selected) Button1 else Color.Transparent
     val fg = if (selected) Color.White else TabUnselected
     Box(
         modifier = Modifier
@@ -96,7 +149,12 @@ private fun DepositoTab(text: String, selected: Boolean = false, last: Boolean =
             .border(1.dp, TabUnselected.copy(alpha = 0.2f), RoundedCornerShape(20.dp))
             .padding(horizontal = 16.dp, vertical = 8.dp)
     ) {
-        Text(text, color = fg, fontSize = 13.sp, fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal)
+        Text(
+            text,
+            color = fg,
+            fontSize = 13.sp,
+            fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal
+        )
     }
 }
 
@@ -112,24 +170,24 @@ private fun TotalDepositoCard() {
                 .height(158.dp)
                 .fillMaxWidth()
         ) {
-            // Layer 1: Gradient background (135°)
+            // Background gradient
             Box(
                 modifier = Modifier
                     .matchParentSize()
                     .background(
                         Brush.linearGradient(
                             colors = listOf(
-                                Color(0xB8A1BAE0), // startColor dengan alpha
-                                Color(0xFF4A68FF), // centerColor
-                                Color(0xFF4A68FF)  // endColor
+                                Color(0xB8A1BAE0),
+                                Color(0xFF4A68FF),
+                                Color(0xFF4A68FF)
                             ),
                             start = Offset(0f, 0f),
-                            end = Offset(1000f, 1000f) // arah 135 derajat
+                            end = Offset(1000f, 1000f)
                         )
                     )
             )
 
-            // Layer 2: Gambar dekoratif memenuhi tinggi card
+            // Gambar dekoratif
             Image(
                 painter = painterResource(Res.drawable.bg_card_gambar),
                 contentDescription = null,
@@ -140,7 +198,7 @@ private fun TotalDepositoCard() {
                 contentScale = ContentScale.FillHeight
             )
 
-            // Layer 3: Konten teks
+            // Konten teks
             Column(
                 Modifier
                     .fillMaxSize()
@@ -166,24 +224,24 @@ private fun TotalDepositoCard() {
                 ) {
                     Text("Bunga saat ini", fontSize = 14.sp, fontWeight = FontWeight.Bold, color = Color.Gray)
                     Spacer(Modifier.weight(1f))
-                    Text("↑ Rp250.000", fontSize = 20.sp, fontWeight = FontWeight.Bold, color = TabSelected)
+                    Text("↑ Rp250.000", fontSize = 20.sp, fontWeight = FontWeight.Bold, color = Button1)
                 }
             }
         }
     }
 }
 
-
-
 @Composable
-private fun DepositoDetailCard() {
+fun DepositoDetailCard(onDetailDepositoSimfanku: () -> Unit = {}) {
     Card(
+        onClick = onDetailDepositoSimfanku,
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(12.dp),
-        elevation = CardDefaults.cardElevation(2.dp)
+        elevation = CardDefaults.cardElevation(2.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White)
     ) {
-        Column(Modifier.padding(horizontal = 16.dp, vertical = 16.dp)) {
-            // Gambar + info
+        Column(Modifier.padding(16.dp)) {
+            // Header
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.padding(bottom = 16.dp)
@@ -201,11 +259,11 @@ private fun DepositoDetailCard() {
                         .weight(1f)
                 ) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text("Simfan Websuite", fontSize = 13.sp, fontWeight = FontWeight.Medium, color = Color.Black)
+                        Text("Simfan Websuite", fontSize = 13.sp, fontWeight = FontWeight.Medium)
                         Spacer(Modifier.width(8.dp))
                         Box(
                             modifier = Modifier
-                                .clip(RoundedCornerShape(4.dp))
+                                .clip(RoundedCornerShape(24.dp))
                                 .background(Secondary)
                                 .padding(horizontal = 8.dp, vertical = 2.dp)
                         ) {
@@ -252,7 +310,7 @@ private fun DepositoDetailCard() {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(36.dp) // lebih tipis
+                    .height(36.dp)
                     .clip(RoundedCornerShape(8.dp))
                     .background(BannerKrem)
                     .padding(horizontal = 12.dp),
@@ -275,10 +333,4 @@ private fun DepositoDetailCard() {
             }
         }
     }
-}
-
-@Preview
-@Composable
-private fun DepositoScreenPreview() {
-    DepositoScreen()
 }

@@ -1,4 +1,4 @@
-import org.jetbrains.compose.desktop.application.dsl.TargetFormat
+
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
@@ -7,6 +7,7 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
+    alias(libs.plugins.jetbrains.kotlin.serialization)
 }
 
 kotlin {
@@ -32,7 +33,13 @@ kotlin {
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
+            implementation(libs.koin.android)
+            implementation(libs.koin.androidx.compose)
+            implementation(libs.ktor.client.okhttp)
+            implementation(libs.core.splashscreen)
 //            implementation("com.airbnb.android:lottie:6.4.0")
+            implementation("com.google.firebase:firebase-auth-ktx:22.1.1")
+            implementation("com.google.firebase:firebase-firestore-ktx:24.9.1")
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -49,9 +56,26 @@ kotlin {
             implementation("androidx.compose.material:material-icons-extended:1.7.0")
             implementation(project.dependencies.platform("androidx.compose:compose-bom:2024.08.00"))
             implementation("androidx.compose.material:material-icons-core")
+            implementation("org.jetbrains.androidx.navigation:navigation-compose:2.9.0-beta04")
+            implementation(compose.components.resources)
+            implementation(compose.components.uiToolingPreview)
+            implementation(libs.androidx.lifecycle.viewmodelCompose)
+            implementation(libs.androidx.lifecycle.runtimeCompose)
+            implementation(libs.koin.core)
+            implementation(libs.kotlinx.serialization.json)
+            implementation(libs.bundles.ktor)
+            api(libs.koin.core)
+            implementation(libs.koin.compose)
+            implementation(libs.koin.compose.viewmodel)
+            implementation("dev.gitlive:firebase-auth:2.3.0")
+            implementation("dev.gitlive:firebase-firestore:1.12.0")
+            implementation("org.jetbrains.compose.material:material-icons-extended:1.7.0")
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
+        }
+        nativeMain.dependencies {
+            implementation(libs.ktor.client.darwin)
         }
     }
 }
@@ -88,4 +112,3 @@ dependencies {
 //    implementation("com.airbnb.android:lottie-compose:6.4.0")
 
 }
-

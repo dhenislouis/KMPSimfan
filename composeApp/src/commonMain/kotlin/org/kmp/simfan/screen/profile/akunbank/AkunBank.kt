@@ -2,6 +2,7 @@ package org.kmp.simfan.screen.profile.akunbank
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -15,27 +16,52 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.kmp.simfan.core.Button1
 import simfan.composeapp.generated.resources.*
 
+/**
+ * 🚀 Voyager Screen AkunBank
+ */
+object AkunBankScreen : Screen {
+    @Composable
+    override fun Content() {
+        val navigator = LocalNavigator.currentOrThrow
+
+        AkunBankUI(
+            onBackClick = { navigator.pop() },
+            onTambahAkunClick = {
+                // contoh navigasi ke screen tambah akun
+                navigator.push(AkunBankScreen)
+            },
+            onSimpanClick = {
+                // TODO: aksi simpan data akun
+                navigator.pop()
+            }
+        )
+    }
+}
+
 @Composable
-fun AkunBankScreen(
-    onBackClick: () -> Unit,
-    onTambahAkunClick: () -> Unit,
-    onSimpanClick: () -> Unit
+fun AkunBankUI(
+    onBackClick: () -> Unit = {},
+    onTambahAkunClick: () -> Unit = {},
+    onSimpanClick: () -> Unit = {}
 ) {
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(Color(0xFFF5F6FA)) // bg_secondary
     ) {
+        // 🔹 TopBar manual
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(Color.White)
-//                .padding(horizontal = 16.dp, vertical = 16.dp)
         ) {
             IconButton(
                 onClick = onBackClick,
@@ -91,7 +117,8 @@ fun AkunBankScreen(
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 14.dp),
+                    .padding(top = 14.dp)
+                    .clickable { onTambahAkunClick() },
                 shape = RoundedCornerShape(12.dp),
                 elevation = CardDefaults.cardElevation(2.dp),
                 colors = CardDefaults.cardColors(containerColor = Color.White)
@@ -251,12 +278,8 @@ fun AkunBankScreen(
     }
 }
 
-@Preview()
+@Preview
 @Composable
-fun AkunBankScreenPreview() {
-    AkunBankScreen(
-        onBackClick = {},
-        onTambahAkunClick = {},
-        onSimpanClick = {}
-    )
+fun PreviewAkunBankUI() {
+    AkunBankUI()
 }

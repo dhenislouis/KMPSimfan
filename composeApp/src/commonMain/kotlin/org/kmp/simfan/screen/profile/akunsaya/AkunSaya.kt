@@ -20,13 +20,34 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import simfan.composeapp.generated.resources.*
 
+/**
+ * 🚀 Voyager Screen DataPribadi
+ */
+object DataPribadiScreen : Screen {
+    @Composable
+    override fun Content() {
+        val navigator = LocalNavigator.currentOrThrow
+
+        DataPribadiUI(
+            onBackClick = { navigator.pop() },
+            onAjukanPerubahan = {
+                // TODO: Navigasi atau aksi Ajukan Perubahan
+                // navigator.push(AjukanPerubahanScreen)
+            }
+        )
+    }
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DataPribadiScreen(
+fun DataPribadiUI(
     onBackClick: () -> Unit = {},
     onAjukanPerubahan: () -> Unit = {}
 ) {
@@ -38,6 +59,7 @@ fun DataPribadiScreen(
             .fillMaxSize()
             .background(Color(0xFFF4F4F4))
     ) {
+        // 🔹 TopBar manual
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -148,7 +170,11 @@ fun DataPribadiScreen(
                                     contentColor = Color(0xFF0066CC)
                                 )
                             ) {
-                                Text("Ajukan Perubahan", fontSize = 14.sp, fontWeight = FontWeight.Medium)
+                                Text(
+                                    "Ajukan Perubahan",
+                                    fontSize = 14.sp,
+                                    fontWeight = FontWeight.Medium
+                                )
                             }
                         }
                     }
@@ -176,6 +202,6 @@ fun DataItem(label: String, value: String) {
 
 @Preview
 @Composable
-fun PreviewDataPribadiScreen() {
-    DataPribadiScreen()
+fun PreviewDataPribadiUI() {
+    DataPribadiUI()
 }

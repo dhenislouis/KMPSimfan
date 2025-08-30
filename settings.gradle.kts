@@ -13,6 +13,9 @@ pluginManagement {
         mavenCentral()
         gradlePluginPortal()
     }
+    plugins {
+        id("com.google.gms.google-services") version "4.4.2"
+    }
 }
 
 dependencyResolutionManagement {
@@ -25,6 +28,7 @@ dependencyResolutionManagement {
             }
         }
         mavenCentral()
+        maven("https://maven.pkg.jetbrains.space/public/p/firebase-kotlin-sdk")
     }
 }
 

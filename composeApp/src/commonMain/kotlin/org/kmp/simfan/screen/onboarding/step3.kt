@@ -19,59 +19,46 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 import simfan.composeapp.generated.resources.Res
 import simfan.composeapp.generated.resources.onboard3
 
-object OnboardingStep3 : Screen {
+@Composable
+fun OnboardingStep3(
+    onNextClick: () -> Unit,
 
-    @Composable
-    override fun Content() {
-        val navigator = LocalNavigator.currentOrThrow
-        var showDialog by remember { mutableStateOf(false) }
+    ) {
+    Box(
+        modifier = Modifier.fillMaxSize()
+    ) {
+        // Background Image
+        Image(
+            painter = painterResource(Res.drawable.onboard3),
+            contentDescription = null,
+            modifier = Modifier.fillMaxSize(),
+            contentScale = ContentScale.Crop
+        )
 
-        Box(
-            modifier = Modifier.fillMaxSize()
+        // Konten di bawah
+        Column(
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(horizontal = 24.dp, vertical = 40.dp)
         ) {
-            Image(
-                painter = painterResource(Res.drawable.onboard3),
-                contentDescription = null,
-                modifier = Modifier.fillMaxSize(),
-                contentScale = ContentScale.Crop
+            ContentOnboarding(
+                label = "Protected by LPS & Trusted Banks",
+                title = "100% Aman oleh LPS & Bank Terpercaya",
+                description = "Dana dijamin LPS dan dikelola oleh bank mitra terpercaya untuk perlindungan dan ketenangan maksimal.",
+                buttonText = "Lanjut",
+                onButtonClick = {
+                    onNextClick()
+                }
             )
-
-            if (showDialog) {
-                AlertDialog(
-                    onDismissRequest = { showDialog = false },
-                    title = { Text(text = "Info") },
-                    text = { Text("Clicked") },
-                    confirmButton = {
-                        TextButton(onClick = { showDialog = false }) {
-                            Text("OK")
-                        }
-                    }
-                )
-            }
-
-            Column(
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .padding(horizontal = 24.dp, vertical = 40.dp)
-            ) {
-                ContentOnboarding(
-                    label = "Protected by LPS & Trusted Banks",
-                    title = "100% Aman oleh LPS & Bank Terpercaya",
-                    description = "Dana dijamin LPS dan dikelola oleh bank mitra terpercaya untuk perlindungan dan ketenangan maksimal.",
-                    buttonText = "Lanjut",
-                    onButtonClick = {
-                        // ganti dengan layar berikutnya, misalnya Dashboard
-                        // navigator.push(DashboardScreen)
-                        showDialog = true
-                    }
-                )
-            }
         }
     }
 }
 
-@Preview
+
+@Preview()
 @Composable
 fun OnboardingStep3Preview() {
-    OnboardingStep3.Content()
+    OnboardingStep3(
+        onNextClick = {}
+    )
 }

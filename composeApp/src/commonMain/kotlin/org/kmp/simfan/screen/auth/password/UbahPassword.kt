@@ -19,8 +19,11 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.kmp.simfan.screen.profile.ProfileScreen
 import simfan.composeapp.generated.resources.Res
 import simfan.composeapp.generated.resources.arrow_back
 import simfan.composeapp.generated.resources.eye_off
@@ -30,10 +33,8 @@ import simfan.composeapp.generated.resources.eye_on
 object UbahPasswordScreen : Screen {
     @Composable
     override fun Content() {
-        UbahPasswordUI(
-            onBackClick = { /* navigator.pop() */ },
-            onSaveClick = { /* TODO: handle save */ }
-        )
+        val navigator = LocalNavigator.currentOrThrow
+//        UbahPasswordUI()
     }
 }
 

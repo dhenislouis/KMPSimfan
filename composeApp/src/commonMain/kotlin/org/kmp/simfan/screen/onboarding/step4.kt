@@ -19,59 +19,39 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 import simfan.composeapp.generated.resources.Res
 import simfan.composeapp.generated.resources.onboard4
 
-object OnboardingStep4 : Screen {
 
-    @Composable
-    override fun Content() {
-        val navigator = LocalNavigator.currentOrThrow
-        var showDialog by remember { mutableStateOf(false) }
+@Composable
+fun OnboardingStep4(
+    onNextClick: () -> Unit,
 
-        Box(
-            modifier = Modifier.fillMaxSize()
+    ) {
+    Box(
+        modifier = Modifier.fillMaxSize()
+    ) {
+        // Background Image
+        Image(
+            painter = painterResource(Res.drawable.onboard4),
+            contentDescription = null,
+            modifier = Modifier.fillMaxSize(),
+            contentScale = ContentScale.Crop
+        )
+
+        // Konten di bawah
+        Column(
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(horizontal = 24.dp, vertical = 40.dp)
         ) {
-            Image(
-                painter = painterResource(Res.drawable.onboard4),
-                contentDescription = null,
-                modifier = Modifier.fillMaxSize(),
-                contentScale = ContentScale.Crop
+            ContentOnboarding(
+                label = "Maksimalkan Pengalaman Pengguna",
+                title = "Jelajahi Fitur Aplikasi & Dapatkan Bantuan",
+                description = "Nikmati layanan terbaik lewat aplikasi kami. Pilih paket sesuai kebutuhan, akses fitur unggulan.",
+                buttonText = "Mulai Pengajuan",
+                onButtonClick = {
+                    onNextClick()
+                }
             )
-
-            if (showDialog) {
-                AlertDialog(
-                    onDismissRequest = { showDialog = false },
-                    title = { Text("Info") },
-                    text = { Text("Clicked") },
-                    confirmButton = {
-                        TextButton(onClick = { showDialog = false }) {
-                            Text("OK")
-                        }
-                    }
-                )
-            }
-
-            Column(
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .padding(horizontal = 24.dp, vertical = 40.dp)
-            ) {
-                ContentOnboarding(
-                    label = "Get Started with Simfan",
-                    title = "Mulai Simpan & Investasi Sekarang",
-                    description = "Buka akunmu sekarang, nikmati bunga kompetitif, dan kelola deposito dengan mudah langsung dari aplikasi.",
-                    buttonText = "Lanjut",
-                    onButtonClick = {
-                        // setelah step terakhir → arahkan ke dashboard/login dsb.
-                        // contoh: navigator.push(LoginScreen)
-                        showDialog = true
-                    }
-                )
-            }
         }
     }
 }
 
-@Preview
-@Composable
-fun OnboardingStep4Preview() {
-    OnboardingStep4.Content()
-}

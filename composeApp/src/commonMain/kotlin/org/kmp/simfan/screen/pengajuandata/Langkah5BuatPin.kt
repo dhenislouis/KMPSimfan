@@ -23,8 +23,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.kmp.simfan.core.Button1
+import org.kmp.simfan.core.Label_Langkah
 import simfan.composeapp.generated.resources.Res
 import simfan.composeapp.generated.resources.arrow_back
 import simfan.composeapp.generated.resources.backspace
@@ -32,15 +36,21 @@ import simfan.composeapp.generated.resources.eye_off
 import simfan.composeapp.generated.resources.eye_on
 
 // 🚀 Voyager Screen
-object Langkah4BuatPinScreen : Screen {
+object Langkah5BuatPinScreen : Screen {
     @Composable
     override fun Content() {
-        Langkah4BuatPinUI()
+        val navigator = LocalNavigator.currentOrThrow
+        Langkah5BuatPinUI(
+            onBackClick = {navigator.pop()},
+            onNext = {
+                navigator.push(Langkah5KonfirmasiPinScreen)
+            }
+        )
     }
 }
 
 @Composable
-fun Langkah4BuatPinUI(
+fun Langkah5BuatPinUI(
     onBackClick: () -> Unit = {},
     onNext: () -> Unit = {}
 ) {
@@ -72,7 +82,7 @@ fun Langkah4BuatPinUI(
             }
 
             Text(
-                text = "Buka Rekening",
+                text = "Pengajuan Data",
                 fontSize = 20.sp,
                 fontWeight = FontWeight.SemiBold,
                 color = Color.Black,
@@ -87,46 +97,72 @@ fun Langkah4BuatPinUI(
         }
 
         // 🔹 Content
+        // 🔹 Content (di atas putih)
         Column(
             modifier = Modifier
                 .weight(1f)
                 .verticalScroll(rememberScrollState())
-                .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+                .padding(16.dp)
         ) {
             Text(
-                "Langkah 4 dari 4",
+                "Langkah 5 dari 5",
                 fontSize = 11.sp,
                 color = Color.Black,
                 modifier = Modifier
                     .clip(RoundedCornerShape(6.dp))
-                    .background(Color(0xFFE0E7FF))
+                    .background(Label_Langkah)
                     .padding(horizontal = 12.dp, vertical = 3.dp)
             )
             Spacer(Modifier.height(8.dp))
             Text(
-                "Buat PIN untuk keamanan akunmu",
+                "Atur PIN Rekening",
                 fontSize = 15.sp,
                 fontWeight = FontWeight.SemiBold,
                 color = Color.Black,
                 modifier = Modifier.padding(bottom = 8.dp)
             )
             Text(
-                "Jangan khawatir, hanya beberapa\nlangkah saja",
-                fontSize = 18.sp,
-                fontWeight = FontWeight.Medium,
+                "PIN terdiri dari 6 angka dan bersifat rahasia. Jangan bagikan PIN Anda kepada siapa pun untuk menjaga keamanan akun.",
+                fontSize = 12.sp,
                 color = Color.Black,
                 lineHeight = 22.sp,
-                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
+
+// 🔹 Bagian Putih: PIN Display + Eye + Numpad
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp))
+                .background(Color.White)
+                .padding(vertical = 24.dp, horizontal = 16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            // 🔹 Judul & Label PIN
+            Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 8.dp)
-            )
+                    .padding(bottom = 16.dp),
+                horizontalAlignment = Alignment.Start
+            ) {
+                Text(
+                    text = "Buat PIN",
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    color = Color.Black
+                )
+                Text(
+                    text = "Masukkan PIN",
+                    fontSize = 12.sp,
+                    color = Color.Gray
+                )
+            }
 
-            // 🔹 PIN display
+            // 🔹 PIN Display
             Row(
-                modifier = Modifier.padding(vertical = 24.dp),
-                horizontalArrangement = Arrangement.Center
+                horizontalArrangement = Arrangement.Center,
+                modifier = Modifier.fillMaxWidth()
             ) {
                 repeat(6) { index ->
                     val char = pin.getOrNull(index)?.toString() ?: ""
@@ -151,7 +187,7 @@ fun Langkah4BuatPinUI(
                 }
             }
 
-            // 🔹 Show/Hide PIN
+            // 🔹 Eye Icon
             IconButton(onClick = { showPin = !showPin }) {
                 Icon(
                     painter = painterResource(
@@ -161,16 +197,10 @@ fun Langkah4BuatPinUI(
                     tint = Color.Gray
                 )
             }
-        }
 
-        // 🔹 Numpad
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(Color.White)
-                .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
+            Spacer(Modifier.height(16.dp))
+
+            // 🔹 Numpad
             val buttons = listOf(
                 listOf("1", "2", "3"),
                 listOf("4", "5", "6"),
@@ -230,7 +260,7 @@ fun Langkah4BuatPinUI(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(48.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF2563EB))
+                colors = ButtonDefaults.buttonColors(containerColor = Button1)
             ) {
                 Text(
                     "Lanjut",
@@ -245,6 +275,6 @@ fun Langkah4BuatPinUI(
 
 @Preview
 @Composable
-fun PreviewLangkah4BuatPinUI() {
-    Langkah4BuatPinUI()
+fun PreviewLangkah5BuatPinUI() {
+    Langkah5BuatPinUI()
 }

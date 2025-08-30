@@ -17,6 +17,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.kmp.simfan.core.Button1
@@ -28,7 +30,14 @@ import simfan.composeapp.generated.resources.*
 object LangkahScreen : Screen {
     @Composable
     override fun Content() {
-        LangkahUI()
+        val navigator = LocalNavigator.currentOrThrow
+
+        LangkahUI(
+            onBack = { navigator.pop() },
+            onLanjut = {
+                navigator.push(Langkah1Screen)
+            }
+        )
     }
 }
 
@@ -112,7 +121,7 @@ fun LangkahUI(
                         .fillMaxWidth()
                         .height(48.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = Button1),
-                    shape = RoundedCornerShape(8.dp)
+                    shape = RoundedCornerShape(50)
                 ) {
                     Text(
                         "Lanjut",

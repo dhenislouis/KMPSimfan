@@ -1,4 +1,4 @@
-package org.kmp.simfan.screen.product.detail.pengajuan
+package org.kmp.simfan.screen.nonalur.pengajuan
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
