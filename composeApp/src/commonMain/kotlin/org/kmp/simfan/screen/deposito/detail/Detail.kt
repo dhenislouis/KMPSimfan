@@ -21,7 +21,8 @@ import simfan.composeapp.generated.resources.*
 @Composable
 fun DetailDepositoScreen(
     onBackClick: () -> Unit = {},
-    onTandaTangan: () -> Unit = {}
+    onTandaTangan: () -> Unit = {},
+    isApproved: Boolean = false
 ) {
     Column(
         modifier = Modifier
@@ -160,100 +161,105 @@ fun DetailDepositoScreen(
 
             Spacer(Modifier.height(12.dp))
 
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 15.dp),
-                shape = RoundedCornerShape(12.dp),
-                elevation = CardDefaults.cardElevation(2.dp),
-                colors = CardDefaults.cardColors(
-                    containerColor = Color.White
-                )
-            ) {
-                Column(Modifier.padding(16.dp)) {
-                    Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-                        Text("Status Deposito", fontSize = 13.sp, color = Color.Black)
-                        Spacer(Modifier.width(8.dp))
-                        Text(
-                            "Proses",
-                            fontSize = 10.sp,
-                            color = Color.White,
-                            modifier = Modifier
-                                .background(Color(0xFF003FFC), RoundedCornerShape(6.dp))
-                                .padding(horizontal = 8.dp, vertical = 2.dp)
-                        )
-                        Spacer(Modifier.weight(1f))
-                        Text("Lihat Detail", fontSize = 10.sp, color = Color(0xFF003FFC))
-                    }
-
-                    Spacer(Modifier.height(6.dp))
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Icon(
-                            painter = painterResource(Res.drawable.ic_info),
-                            contentDescription = null,
-                            tint = Color(0xFFF89227),
-                            modifier = Modifier.size(16.dp)
-                        )
-                        Spacer(Modifier.width(4.dp))
-                        Text(
-                            "Pengajuan sedang dalam proses",
-                            fontSize = 11.sp,
-                            color = Color(0xFF999999)
-                        )
-                    }
-
-                    Row(Modifier.padding(top = 12.dp)) {
-                        Column(
-                            modifier = Modifier
-                                .padding(top = 15.dp),
-                            horizontalAlignment = Alignment.CenterHorizontally
+            if (isApproved) {
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 15.dp),
+                    shape = RoundedCornerShape(12.dp),
+                    elevation = CardDefaults.cardElevation(2.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = Color.White
+                    )
+                ) {
+                    Column(Modifier.padding(16.dp)) {
+                        Row(
+                            Modifier.fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
-                            Icon(
-                                painter = painterResource(Res.drawable.close),
-                                contentDescription = null,
-                                modifier = Modifier.size(14.dp)
+                            Text("Status Deposito", fontSize = 13.sp, color = Color.Black)
+                            Spacer(Modifier.width(8.dp))
+                            Text(
+                                "Proses",
+                                fontSize = 10.sp,
+                                color = Color.White,
+                                modifier = Modifier
+                                    .background(Color(0xFF003FFC), RoundedCornerShape(6.dp))
+                                    .padding(horizontal = 8.dp, vertical = 2.dp)
                             )
-                            Box(
-                                Modifier
-                                    .width(1.dp)
-                                    .height(30.dp)
-                                    .background(Color(0xFFCCCCCC))
-                            )
+                            Spacer(Modifier.weight(1f))
+                            Text("Lihat Detail", fontSize = 10.sp, color = Color(0xFF003FFC))
+                        }
+
+                        Spacer(Modifier.height(6.dp))
+                        Row(verticalAlignment = Alignment.CenterVertically) {
                             Icon(
-                                painter = painterResource(Res.drawable.close),
+                                painter = painterResource(Res.drawable.ic_info),
                                 contentDescription = null,
+                                tint = Color(0xFFF89227),
                                 modifier = Modifier.size(16.dp)
                             )
-                        }
-                        Spacer(Modifier.width(12.dp))
-                        Column {
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .background(Color(0xFFEFF4FF), RoundedCornerShape(8.dp))
-                                    .padding(12.dp)
-                            ) {
-                                Column {
-                                    Text(
-                                        "Menandatangani Dokumen",
-                                        fontSize = 11.sp,
-                                        fontWeight = FontWeight.SemiBold,
-                                        color = Color(0xFF003FFC)
-                                    )
-                                    Text(
-                                        "Tandatangani dokumen untuk persetujuan BPR",
-                                        fontSize = 10.sp,
-                                        color = Color(0xFF22242F)
-                                    )
-                                }
-                            }
-                            Spacer(Modifier.height(12.dp))
+                            Spacer(Modifier.width(4.dp))
                             Text(
-                                "Menunggu Persetujuan BPR",
+                                "Pengajuan sedang dalam proses",
                                 fontSize = 11.sp,
-                                fontWeight = FontWeight.Medium,
-                                color = Color.Black
+                                color = Color(0xFF999999)
                             )
+                        }
+
+                        Row(Modifier.padding(top = 12.dp)) {
+                            Column(
+                                modifier = Modifier
+                                    .padding(top = 15.dp),
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Icon(
+                                    painter = painterResource(Res.drawable.close),
+                                    contentDescription = null,
+                                    modifier = Modifier.size(14.dp)
+                                )
+                                Box(
+                                    Modifier
+                                        .width(1.dp)
+                                        .height(30.dp)
+                                        .background(Color(0xFFCCCCCC))
+                                )
+                                Icon(
+                                    painter = painterResource(Res.drawable.close),
+                                    contentDescription = null,
+                                    modifier = Modifier.size(16.dp)
+                                )
+                            }
+                            Spacer(Modifier.width(12.dp))
+                            Column {
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .background(Color(0xFFEFF4FF), RoundedCornerShape(8.dp))
+                                        .padding(12.dp)
+                                ) {
+                                    Column {
+                                        Text(
+                                            "Menandatangani Dokumen",
+                                            fontSize = 11.sp,
+                                            fontWeight = FontWeight.SemiBold,
+                                            color = Color(0xFF003FFC)
+                                        )
+                                        Text(
+                                            "Tandatangani dokumen untuk persetujuan BPR",
+                                            fontSize = 10.sp,
+                                            color = Color(0xFF22242F)
+                                        )
+                                    }
+                                }
+                                Spacer(Modifier.height(12.dp))
+                                Text(
+                                    "Menunggu Persetujuan BPR",
+                                    fontSize = 11.sp,
+                                    fontWeight = FontWeight.Medium,
+                                    color = Color.Black
+                                )
+                            }
                         }
                     }
                 }
@@ -411,27 +417,12 @@ fun DetailDepositoScreen(
                 .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            IconButton(
-                onClick = { /* aksi opsi lain */ },
-                modifier = Modifier
-                    .size(50.dp)
-                    .background(Button1, CircleShape)
-            ) {
-                Icon(
-                    painter = painterResource(Res.drawable.ic_more),
-                    contentDescription = "Lihat opsi lain",
-                    tint = Color.White,
-                    modifier = Modifier.size(24.dp)
-                )
-            }
-            Spacer(Modifier.width(12.dp))
             Button(
                 onClick = onTandaTangan,
-                modifier = Modifier.weight(1f),
-                shape = RoundedCornerShape(50),
+                modifier = Modifier.fillMaxWidth(),
                 colors = ButtonDefaults.buttonColors(containerColor = Button1)
             ) {
-                Text("Tanda Tangan di Sini", fontSize = 16.sp, color = Color.White)
+                Text("Tanda Tangan di Sini", color = Color.White, fontSize = 16.sp, fontWeight = FontWeight.SemiBold)
             }
         }
     }

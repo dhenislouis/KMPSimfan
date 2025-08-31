@@ -6,6 +6,10 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -14,13 +18,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.kmp.simfan.core.Button1
 import simfan.composeapp.generated.resources.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SyaratKetentuanScreen(
-    onBackClick: () -> Unit = {}
+    onBackClick: () -> Unit = {},
+    onSetujuChange: (Boolean) -> Unit = {},
+    onTandaTangan: () -> Unit = {}
 ) {
+    var isChecked by remember { mutableStateOf(false) }
     val syaratList = listOf(
         "1. Definisi" to "Deposito adalah produk simpanan berjangka dengan suku bunga tetap, di mana dana nasabah akan disimpan dalam jangka waktu tertentu dan tidak dapat ditarik sebelum jatuh tempo, kecuali atas persetujuan khusus.",
         "2. Penempatan Dana" to "Minimum penempatan dana untuk membuka deposito adalah sebesar Rp1.000.000,- atau sesuai ketentuan yang berlaku. Penempatan dana dilakukan melalui metode pembayaran yang tersedia, seperti transfer bank, virtual account, atau metode lain yang disediakan oleh platform.",
@@ -37,6 +45,7 @@ fun SyaratKetentuanScreen(
             .fillMaxSize()
             .background(Color(0xFFF4F4F4))
     ) {
+        // 🔹 Header
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -61,39 +70,76 @@ fun SyaratKetentuanScreen(
                 color = Color.Black,
                 modifier = Modifier.align(Alignment.Center)
             )
-
-            IconButton(
-                onClick = {},
-                enabled = false,
-                modifier = Modifier
-                    .align(Alignment.CenterEnd)
-                    .size(48.dp)
-            ) {}
         }
 
-        // 🔹 List isi
-        LazyColumn(
+        // 🔹 List isi + checkbox
+        Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = 16.dp, vertical = 8.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+                .padding(horizontal = 16.dp, vertical = 8.dp)
         ) {
-            items(syaratList) { (judul, isi) ->
-                Column {
-                    Text(
-                        text = judul,
-                        fontSize = 13.sp,
-                        fontWeight = FontWeight.Medium,
-                        color = Color(0xFF252C32),
-                        modifier = Modifier.padding(top = 4.dp, bottom = 2.dp)
+            LazyColumn(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                items(syaratList) { (judul, isi) ->
+                    Column {
+                        Text(
+                            text = judul,
+                            fontSize = 13.sp,
+                            fontWeight = FontWeight.Medium,
+                            color = Color(0xFF252C32),
+                            modifier = Modifier.padding(top = 4.dp, bottom = 2.dp)
+                        )
+                        Text(
+                            text = isi,
+                            fontSize = 13.sp,
+                            lineHeight = 18.sp,
+                            color = Color(0xFF22242F)
+                        )
+                    }
+                }
+            }
+
+            // 🔹 Checkbox persetujuan
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 12.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Checkbox(
+                    checked = isChecked,
+                    onCheckedChange = {
+                        isChecked = it
+                        onSetujuChange(it)
+                    },
+                    colors = CheckboxDefaults.colors(
+                        checkedColor = Color(0xFF003FFC)
                     )
-                    Text(
-                        text = isi,
-                        fontSize = 13.sp,
-                        fontWeight = FontWeight.Normal,
-                        lineHeight = 18.sp,
-                        color = Color(0xFF22242F)
-                    )
+                )
+                Spacer(Modifier.width(8.dp))
+                Text(
+                    text = "Saya menyetujui Syarat & Ketentuan penempatan deposito.",
+                    fontSize = 13.sp,
+                    color = Color(0xFF22242F)
+                )
+            }
+
+            Spacer(Modifier.height(12.dp))
+            Row(
+                modifier = Modifier
+//                    .background(Color.White)
+                    .padding(16.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Button(
+                    onClick = onTandaTangan,
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = ButtonDefaults.buttonColors(containerColor = Button1,  disabledContainerColor = Color(0xFFB0BEC5)),
+                    enabled = isChecked
+                ) {
+                    Text("Tanda Tangan", color = Color.White, fontSize = 16.sp, fontWeight = FontWeight.SemiBold)
                 }
             }
         }
@@ -103,5 +149,7 @@ fun SyaratKetentuanScreen(
 @Preview
 @Composable
 fun PreviewSyaratKetentuan() {
-    SyaratKetentuanScreen()
+    SyaratKetentuanScreen(
+        onBackClick = {}
+    )
 }

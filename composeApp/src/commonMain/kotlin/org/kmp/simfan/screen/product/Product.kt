@@ -1,5 +1,6 @@
 package org.kmp.simfan.screen.product
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -19,6 +20,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.kmp.simfan.Routes
@@ -43,7 +45,8 @@ private val LabelOrange = Color(0xFFFF8A00)
 private val StatusBgYellow = Color(0xFFFFF7E0)   // sesuaikan dg @color/status_yellow_background
 private val StatusText = Color(0xFFF59E0B)       // sesuaikan dg @color/secondary
 
-@Preview()
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+//@Preview()
 @Composable
 fun ProductScreen(
     navController: NavController,
@@ -284,20 +287,31 @@ private fun ProductCard(
                 Box(
                     modifier = Modifier
                         .align(Alignment.CenterHorizontally)
-                        .size(40.dp)
+//                        .size(40.dp)
                         .clip(CircleShape)
-                        .background(PrimaryBlue)
+//                        .background(PrimaryBlue)
                         .clickable { onDetailClick() },
                     contentAlignment = Alignment.Center
                 ) {
-                    Icon(
-                        painter = painterResource(Res.drawable.arrow_forward),
-                        contentDescription = "Detail",
-                        tint = Color.White
-                    )
+                    Button(
+                        onClick = onDetailClick,
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = ButtonDefaults.buttonColors(containerColor = Button1)
+                    ) {
+                        Text("Detail Product", color = Color.White, fontSize = 16.sp, fontWeight = FontWeight.SemiBold)
+                    }
                 }
+//                {
+//                    Icon(
+//                        painter = painterResource(Res.drawable.arrow_forward),
+//                        contentDescription = "Detail",
+//                        tint = Color.White
+//                    )
+//                }
 
                 Spacer(Modifier.height(8.dp))
+
+
             }
 
             // Status bar (khusus kartu kedua)
@@ -395,3 +409,15 @@ private fun StatusInfoBar(
 //private fun ProductScreenPreview() {
 //    ProductScreen()
 //}
+@Preview
+@Composable
+private fun ProductScreenPreview() {
+    val navController = rememberNavController() // dummy NavController
+    ProductScreen(
+        navController = navController,
+        currentRoute = null, // atau bisa isi Routes.Product kalau ada
+        onFilterClick = {},
+        onDetailClick = {},
+        onSaveClick = {}
+    )
+}

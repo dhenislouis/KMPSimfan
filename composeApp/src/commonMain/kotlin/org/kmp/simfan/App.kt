@@ -1,6 +1,6 @@
 package org.kmp.simfan
 
-import androidx.compose.material3.MaterialTheme
+import android.annotation.SuppressLint
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.*
 import androidx.navigation.compose.NavHost
@@ -9,15 +9,21 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.kmp.simfan.core.Theme
-import org.kmp.simfan.core.navigation.BottomBar
 import org.kmp.simfan.screen.deposito.DepositoScreen
+import org.kmp.simfan.screen.deposito.detail.DetailDepositoScreen
 import org.kmp.simfan.screen.home.HomeScreen
 import org.kmp.simfan.screen.onboarding.OnboardingStep1
 import org.kmp.simfan.screen.onboarding.OnboardingStep2
 import org.kmp.simfan.screen.onboarding.OnboardingStep3
 import org.kmp.simfan.screen.onboarding.OnboardingStep4
 import org.kmp.simfan.screen.product.ProductScreen
+import org.kmp.simfan.screen.product.detail.DetailBPRScreen
+import org.kmp.simfan.screen.product.detail.DetailScreen
+import org.kmp.simfan.components.value.InputOtpUI
+import org.kmp.simfan.components.value.InputPinUI
 import org.kmp.simfan.screen.profile.ProfileScreen
+import org.kmp.simfan.screen.profile.syaratketentuan.SyaratKetentuanScreen
+import org.kmp.simfan.screen.profile.tandatangan.TandaTanganScreen
 
 //@Composable
 //@Preview
@@ -47,7 +53,7 @@ import org.kmp.simfan.screen.profile.ProfileScreen
 //        }
 //    }
 //}
-
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 @Preview
 fun App() {
@@ -97,9 +103,60 @@ fun App() {
                 composable<Routes.Profile> {
                     ProfileScreen(navController, Routes.Profile)
                 }
-//            composable<Routes.Product> {
-//                ProductScreen()
-//            }
+                composable<Routes.Product> {
+                    ProductScreen(
+                        navController,
+                        Routes.Product,
+                        onDetailClick = {
+                            navController.navigate(Routes.ProductDetail)
+                        }
+                    )
+                }
+                composable<Routes.ProductDetail> {
+                    DetailScreen(
+                        navController = navController,
+                        onBackClick = { navController.popBackStack() },
+                        onAjukanClick = { navController.navigate(Routes.DepositoDetail) }
+                    )
+                }
+                composable<Routes.BPRDetail> {
+                    DetailBPRScreen(
+                        onBackClick = { navController.popBackStack() }
+                    )
+                }
+                composable<Routes.DepositoDetail> {
+                    DetailDepositoScreen(
+                        onBackClick = { navController.popBackStack() },
+                        onTandaTangan = {navController.navigate(Routes.SyaratKetentuan)}
+                    )
+                }
+                composable<Routes.SyaratKetentuan> {
+                    SyaratKetentuanScreen (
+                        onBackClick = { navController.popBackStack() },
+                        onTandaTangan = {navController.navigate(Routes.TandaTangan)}
+                    )
+                }
+                composable<Routes.TandaTangan> {
+                    TandaTanganScreen (
+                        onBackClick = { navController.popBackStack() },
+                        onSave = {navController.navigate(Routes.InputPin)}
+                    )
+                }
+                composable<Routes.InputPin> {
+                    InputPinUI (
+                        onBackClick = { navController.popBackStack() },
+                        onNext = {navController.navigate(Routes.OTP)},
+                        onForgotPin = {}
+                    )
+                }
+                composable<Routes.OTP> {
+                    InputOtpUI (
+                        onBackClick = { navController.popBackStack() },
+                        onNext = {},
+                        onVerify = {},
+                        onResend = {}
+                    )
+                }
 //            composable<Routes.Deposito> {
 //                DepositoScreen()
 //            }

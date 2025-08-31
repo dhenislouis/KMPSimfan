@@ -1,5 +1,6 @@
 package org.kmp.simfan.screen.deposito
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -15,10 +16,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.kmp.simfan.Routes
 import org.kmp.simfan.core.navigation.BottomBar
+import org.kmp.simfan.screen.product.ProductScreen
 import simfan.composeapp.generated.resources.Res
 import simfan.composeapp.generated.resources.*
 
@@ -32,7 +35,8 @@ private val EstimasiGreen = Color(0xFF22C55E)
 private val BannerKrem = Color(0xFFFFF7E0)
 private val Secondary = Color(0xFFF59E0B)
 
-@Preview
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+//@Preview
 @Composable
 fun DepositoScreen(navController: NavController, currentRoute: Routes?) {
     Scaffold(
@@ -296,3 +300,12 @@ private fun DepositoDetailCard() {
 //private fun DepositoScreenPreview() {
 //    DepositoScreen()
 //}
+@Preview
+@Composable
+private fun DepositoScreenPreview() {
+    val navController = rememberNavController() // dummy untuk preview
+    DepositoScreen(
+        navController = navController,
+        currentRoute = null
+    )
+}

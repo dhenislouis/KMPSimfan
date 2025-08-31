@@ -9,15 +9,21 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.kmp.simfan.Routes
 import org.kmp.simfan.core.Button1
 import simfan.composeapp.generated.resources.Res
 import simfan.composeapp.generated.resources.arrow_back
@@ -27,9 +33,12 @@ import simfan.composeapp.generated.resources.simfan_websuite
 
 @Composable
 fun DetailScreen(
+    navController: NavHostController,
     onBackClick: () -> Unit = {},
-    onAjukanClick: () -> Unit = {}
+    onAjukanClick: () -> Unit = {},
+    onAvailableChange: (Boolean) -> Unit = {},
 ) {
+    var isChecked by remember { mutableStateOf(false) }
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -136,27 +145,42 @@ fun DetailScreen(
                     .fillMaxWidth()
                     .background(Color(0xFF003FFC).copy(alpha = 0.1f), RoundedCornerShape(12.dp))
                     .padding(vertical = 10.dp, horizontal = 16.dp),
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween // biar ada spasi antara kiri & kanan
             ) {
-                Box(
-                    modifier = Modifier
-                        .size(24.dp)
-                        .background(Color.White, CircleShape),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(
-                        painter = painterResource(Res.drawable.aro),
-                        contentDescription = null,
-                        tint = Color(0xFF003FFC),
-                        modifier = Modifier.size(20.dp)
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Box(
+                        modifier = Modifier
+                            .size(24.dp)
+                            .background(Color.White, CircleShape),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            painter = painterResource(Res.drawable.aro),
+                            contentDescription = null,
+                            tint = Color(0xFF003FFC),
+                            modifier = Modifier.size(20.dp)
+                        )
+                    }
+                    Text(
+                        text = "Automatic Roll Over (ARO)",
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 12.5.sp,
+                        color = Color(0xFF003FFC),
+                        modifier = Modifier.padding(start = 12.dp)
                     )
                 }
-                Text(
-                    text = "Automatic Roll Over (ARO)",
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 12.5.sp,
-                    color = Color(0xFF003FFC),
-                    modifier = Modifier.padding(start = 12.dp)
+
+                // 🔹 Checkbox di kanan
+                Checkbox(
+                    checked = isChecked,
+                    onCheckedChange = {
+                        isChecked = it
+                        onAvailableChange(it)
+                    },
+                    colors = CheckboxDefaults.colors(
+                        checkedColor = Color(0xFF003FFC)
+                    )
                 )
             }
 
@@ -190,11 +214,15 @@ fun DetailScreen(
                             Text("Simfan Websuite", fontSize = 13.sp, fontWeight = FontWeight.Medium)
                             Text("DKI Jakarta - 3 Transaksi", fontSize = 11.sp, color = Color(0xFF999999))
                         }
-                        Icon(
-                            painter = painterResource(Res.drawable.arrow_forward),
-                            contentDescription = null,
-                            tint = Color.Gray
-                        )
+                        IconButton(
+                            onClick = { navController.navigate(Routes.BPRDetail) }
+                        ) {
+                            Icon(
+                                painter = painterResource(Res.drawable.arrow_forward),
+                                contentDescription = "Detail BPR",
+                                tint = Color.Gray
+                            )
+                        }
                     }
                     DividerLine(Modifier.padding(vertical = 15.dp))
                     InfoRow("Lokasi", "Jakarta Selatan")
@@ -256,17 +284,47 @@ fun DetailScreen(
             }
         }
 
+
         Box(
             modifier = Modifier
                 .background(Color.White)
                 .padding(16.dp)
         ) {
-            Button(
-                onClick = onAjukanClick,
-                modifier = Modifier.fillMaxWidth(),
-                colors = ButtonDefaults.buttonColors(containerColor = Button1)
-            ) {
-                Text("Ajukan Deposito", color = Color.White, fontSize = 16.sp, fontWeight = FontWeight.SemiBold)
+            Column {
+                var nominal by remember { mutableStateOf("") }
+
+                OutlinedTextField(
+                    value = nominal,
+                    onValueChange = { newValue ->
+                        // filter hanya angka
+                        if (newValue.all { it.isDigit() }) {
+                            nominal = newValue
+                        }
+                    },
+                    label = { Text("Nominal Penempatan") },
+                    placeholder = { Text("Masukkan nominal (Rp)") },
+                    singleLine = true,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 12.dp),
+                    shape = RoundedCornerShape(12.dp),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = Button1,
+                        cursorColor = Button1
+                    )
+                )
+                Button(
+                    onClick = onAjukanClick,
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = ButtonDefaults.buttonColors(containerColor = Button1)
+                ) {
+                    Text(
+                        "Ajukan Deposito",
+                        color = Color.White,
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                }
             }
         }
     }
@@ -296,5 +354,11 @@ fun DividerLine(modifier: Modifier = Modifier) {
 @Preview
 @Composable
 fun PreviewDetailScreen() {
-    DetailScreen()
+    val navController = rememberNavController()
+    DetailScreen(
+        navController = navController,
+        onBackClick = {navController.popBackStack()},
+        onAjukanClick = {}
+
+    )
 }

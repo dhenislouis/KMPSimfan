@@ -21,9 +21,31 @@ sealed interface Routes {
     data object Home : Routes
     @Serializable
     data object Product : Routes
+
+    @Serializable
+    data object ProductDetail : Routes
+
+    @Serializable
+    data object BPRDetail : Routes
+
+    @Serializable
+    data object DepositoDetail : Routes
+
     @Serializable
     data object Simfanku : Routes
     @Serializable
     data object Profile : Routes
+
+    @Serializable
+    data object SyaratKetentuan : Routes
+
+    @Serializable
+    data object TandaTangan : Routes
+
+    @Serializable
+    data object InputPin : Routes
+
+    @Serializable
+    data object OTP : Routes
 
 }

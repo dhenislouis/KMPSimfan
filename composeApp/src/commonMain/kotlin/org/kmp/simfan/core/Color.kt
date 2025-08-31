@@ -8,7 +8,7 @@ var Primary = Color(0xFF3366FF)
 var Secondary = Color(0xFFFAB46B)
 var BackgroundPrimary = Color(0xFFF7F7F8)
 var BackgroundSecondary = Color(0xFF84919A)
-var Button1 = Color(0xFF668CFF)
+var Button1 = Color(0xFF023FFC)
 
 internal val LightColorScheme = lightColorScheme(
     primary = Primary,
