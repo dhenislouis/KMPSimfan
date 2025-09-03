@@ -1,4 +1,4 @@
-package org.kmp.simfan.screen.profile.syaratketentuan
+package org.kmp.simfan.screen.product.productdeposito.productdeposito
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -15,22 +15,30 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.platform.LocalDensity
 import androidx.navigation.NavController
 import kotlinx.coroutines.delay
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.kmp.simfan.Routes
+import org.kmp.simfan.core.Button1
 import simfan.composeapp.generated.resources.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SyaratKetentuanScreen(
-    navController: NavController, currentRoute: Routes?,
-    onBack: () -> Unit = {}
+fun SyaratKetentuanProdukDepositoScreen(
+    navController: NavController,
+    currentRoute: Routes?,
+    onBack: () -> Unit = {},
+    onContinue: () -> Unit = {}
 ) {
     val syaratList = listOf(
         "1. Definisi" to "Deposito adalah produk simpanan berjangka dengan suku bunga tetap, di mana dana nasabah akan disimpan dalam jangka waktu tertentu dan tidak dapat ditarik sebelum jatuh tempo, kecuali atas persetujuan khusus.",
@@ -44,6 +52,20 @@ fun SyaratKetentuanScreen(
     )
 
     val listState = rememberLazyListState()
+    var isChecked by remember { mutableStateOf(false) }
+
+    // 🔹 Animasi perubahan warna tombol
+    val buttonColor by animateColorAsState(
+        targetValue = if (isChecked) Color(0xFF007AFF) else Color.Gray,
+        label = "buttonColorAnim"
+    )
+
+    // 🔹 Animasi scale untuk checkbox
+    val checkBoxScale by animateFloatAsState(
+        targetValue = if (isChecked) 1.2f else 1f,
+        animationSpec = tween(durationMillis = 150),
+        label = "checkboxScaleAnim"
+    )
 
     Scaffold(
         topBar = {
@@ -71,11 +93,54 @@ fun SyaratKetentuanScreen(
                         )
                     }
                 },
-                actions = {
-                    Spacer(Modifier.size(48.dp)) // balance kanan
-                },
+                actions = { Spacer(Modifier.size(48.dp)) },
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.White)
             )
+        },
+        bottomBar = {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(Color.White)
+                    .padding(16.dp)
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Box(
+                        modifier = Modifier.scale(checkBoxScale)
+                    ) {
+                        Checkbox(
+                            checked = isChecked,
+                            onCheckedChange = { isChecked = it },
+                            colors = CheckboxDefaults.colors(
+                                checkedColor = Button1,
+                                uncheckedColor = Color(0xFF252C32)
+                            )
+                        )
+                    }
+                    Text(
+                        text = "Saya menyetujui Syarat & Ketentuan penempatan deposito.",
+                        fontSize = 13.sp,
+                        color = Color(0xFF252C32)
+                    )
+                }
+                Spacer(modifier = Modifier.height(8.dp))
+                Button(
+                    onClick = { if (isChecked) onContinue() },
+                    enabled = isChecked,
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = ButtonDefaults.buttonColors(containerColor = Button1),
+                    shape = RoundedCornerShape(50)
+                ) {
+                    Text(
+                        text = "TandaTangan",
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        color = Color.White
+                    )
+                }
+            }
         }
     ) { innerPadding ->
         Box(
@@ -111,7 +176,7 @@ fun SyaratKetentuanScreen(
                 }
             }
 
-            // 🔹 Custom scrollbar auto-hide
+            // 🔹 Scrollbar auto-hide
             CustomScrollbarAutoHide(
                 listState = listState,
                 modifier = Modifier
@@ -124,7 +189,7 @@ fun SyaratKetentuanScreen(
 
 @Composable
 fun CustomScrollbarAutoHide(
-    listState: androidx.compose.foundation.lazy.LazyListState,
+    listState: LazyListState,
     modifier: Modifier = Modifier,
     visibleHeightFraction: Float = 0.25f
 ) {
@@ -187,5 +252,5 @@ fun CustomScrollbarAutoHide(
 //@Preview
 //@Composable
 //fun PreviewSyaratKetentuanUI() {
-//    SyaratKetentuanScreen()
+//    SyaratKetentuanProdukDepositoScreen()
 //}

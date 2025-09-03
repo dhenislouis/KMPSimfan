@@ -16,38 +16,16 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.navigator.LocalNavigator
-import cafe.adriel.voyager.navigator.currentOrThrow
+import androidx.navigation.NavController
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.kmp.simfan.Routes
 import org.kmp.simfan.core.Button1
 import simfan.composeapp.generated.resources.*
 
-/**
- * 🚀 Voyager Screen AkunBank
- */
-object AkunBankScreen : Screen {
-    @Composable
-    override fun Content() {
-        val navigator = LocalNavigator.currentOrThrow
-
-        AkunBankUI(
-            onBackClick = { navigator.pop() },
-            onTambahAkunClick = {
-                // contoh navigasi ke screen tambah akun
-                navigator.push(AkunBankScreen)
-            },
-            onSimpanClick = {
-                // TODO: aksi simpan data akun
-                navigator.pop()
-            }
-        )
-    }
-}
-
 @Composable
-fun AkunBankUI(
+fun AkunBankScreen(
+    navController: NavController, currentRoute: Routes?,
     onBackClick: () -> Unit = {},
     onTambahAkunClick: () -> Unit = {},
     onSimpanClick: () -> Unit = {}
@@ -278,8 +256,8 @@ fun AkunBankUI(
     }
 }
 
-@Preview
-@Composable
-fun PreviewAkunBankUI() {
-    AkunBankUI()
-}
+//@Preview
+//@Composable
+//fun PreviewAkunBankUI() {
+//    AkunBankUI()
+//}

@@ -160,8 +160,8 @@ fun PromoCard(
     }
 }
 
-@Preview()
-@Composable
-fun PromoScreenPreview() {
-    PromoScreen(onBackClick = {}, onMenuClick = {})
-}
+//@Preview()
+//@Composable
+//fun PromoScreenPreview() {
+//    PromoScreen(onBackClick = {}, onMenuClick = {})
+//}

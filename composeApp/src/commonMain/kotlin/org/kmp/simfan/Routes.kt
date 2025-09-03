@@ -19,6 +19,8 @@ sealed interface Routes {
     @Serializable
     data object Onboard4 : Routes
 
+
+
     // Auth
     @Serializable
     data object Login : Routes
@@ -38,14 +40,20 @@ sealed interface Routes {
     data object NewPassword : Routes
 
 
+
     @Serializable
     data object Home : Routes
     @Serializable
     data object Product : Routes
     @Serializable
-    data object Simfanku : Routes
+    data object SimpanankuDeposito : Routes
+    @Serializable
+    data object SimpanankuTabungan : Routes
     @Serializable
     data object Profile : Routes
+
+
+
 
     // Sub Page Home
     @Serializable
@@ -55,28 +63,102 @@ sealed interface Routes {
     @Serializable
     data object Promo : Routes
 
+
+
+
     // Sub Page Produk
     @Serializable
     data object ProductDeposito : Routes
+
     @Serializable
     data object ProductTabungan : Routes
+
     @Serializable
     data object DetailProductDeposito : Routes
+
     @Serializable
-    data object SubDetailProductDeposito : Routes
+    data object PengajuanProductDeposito : Routes
+
+    @Serializable
+    data object BottomSheetPengajuanProductDeposito : Routes
+
+    @Serializable
+    data object AjukanPenempatanProductDeposito : Routes
+
+    @Serializable
+    data object SyaratKetentuanProductDeposito : Routes
+
+    @Serializable
+    data object InputPinAjukanPenempatanProductDeposito : Routes
+
+    @Serializable
+    data object BottomSheetTTDBerhasil : Routes
+
+    @Serializable
+    data object BerhasilPenempatanProductDeposito : Routes
+
     @Serializable
     data object DetailProductTabungan : Routes
 
-    //Sub Page Simfanku
+
+
+
+    //Sub Page Simpananku
+    //Deposito
     @Serializable
-    data object  SimfankuDeposito : Routes
+    data object DetailDepositoSimpananku : Routes
     @Serializable
-    data object SimfankuTabungan : Routes
+    data object TrackingBilyetFisikDepositoSimpananku : Routes
     @Serializable
-    data object DetailDeposito : Routes
+    data object TrackingEBilyetDepositoSimpananku : Routes
     @Serializable
-    data object DetailTabungan : Routes
+    data object TrackingDetailStatusDepositoSimpananku : Routes
+
+    //Tabungan
+    @Serializable
+    data object DetailTabunganSimpananku : Routes
+
+
+
 
     // Sub Page Profile
+    @Serializable
+    data object Langkah : Routes
+    @Serializable
+    data object Langkah1 : Routes
+    @Serializable
+    data object Langkah1KTP : Routes
+    @Serializable
+    data object Langkah2Panduan : Routes
+    @Serializable
+    data object Langkah2Verifikasi : Routes
+    @Serializable
+    data object Langkah3 : Routes
+    @Serializable
+    data object Langkah4 : Routes
+    @Serializable
+    data object Langkah5BuatPin : Routes
+    @Serializable
+    data object Langkah5KonfirmasiPin : Routes
+    @Serializable
+    data object PengajuanDataBerhasil : Routes
+    @Serializable
+    data object AkunSaya : Routes
+    @Serializable
+    data object UbahPassword : Routes
+    @Serializable
+    data object AkunBank : Routes
+    @Serializable
+    data object TambahAkunBank : Routes
+    @Serializable
+    data object TandaTanganElektronik : Routes
+    @Serializable
+    data object KetentuanLayanan : Routes
+    @Serializable
+    data object PertanyaanUmum : Routes
+    @Serializable
+    data object NonAktifkanAkun : Routes
+    @Serializable
+    data object KeluarAplikasi : Routes
 
 }

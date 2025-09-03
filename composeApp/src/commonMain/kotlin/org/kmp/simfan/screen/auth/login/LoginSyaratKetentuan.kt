@@ -29,9 +29,8 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import kotlinx.coroutines.delay
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.kmp.simfan.core.Button1
 import simfan.composeapp.generated.resources.*
-
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -40,14 +39,14 @@ fun LoginSyaratKetentuanUI(
     onContinue: () -> Unit = {}
 ) {
     val syaratList = listOf(
-        "1. Definisi" to "Deposito adalah produk simpanan berjangka dengan suku bunga tetap...",
-        "2. Penempatan Dana" to "Minimum penempatan dana untuk membuka deposito adalah sebesar Rp1.000.000...",
-        "3. Jangka Waktu" to "Pilihan tenor deposito tersedia mulai dari 1 bulan, 3 bulan, 6 bulan...",
-        "4. Suku Bunga dan Perhitungan" to "Suku bunga bersifat tetap selama jangka waktu yang telah disepakati...",
-        "5. Pencairan Dana" to "Setelah jatuh tempo, dana pokok dan bunga bersih akan ditransfer otomatis...",
-        "6. Risiko dan Jaminan" to "yang bekerja sama dijamin oleh LPS hingga batas maksimal...",
-        "7. Perubahan Ketentuan" to "Pihak penyedia layanan berhak untuk mengubah syarat dan ketentuan ini...",
-        "8. Lain-lain" to "Dengan menyetujui syarat dan ketentuan ini, pengguna menyatakan..."
+        "1. Definisi" to "Deposito adalah produk simpanan berjangka dengan suku bunga tetap, di mana dana nasabah akan disimpan dalam jangka waktu tertentu dan tidak dapat ditarik sebelum jatuh tempo, kecuali atas persetujuan khusus.",
+        "2. Penempatan Dana" to "Minimum penempatan dana untuk membuka deposito adalah sebesar Rp1.000.000,- atau sesuai ketentuan yang berlaku. Penempatan dana dilakukan melalui metode pembayaran yang tersedia, seperti transfer bank, viertual account, atau metode lain yang disediakan oleh platform.",
+        "3. Jangka Waktu" to "Pilihan tenor deposito tersedia mulai dari 1 bulan, 3 bulan, 6 bulan, hingga 12 bulan, tergantung produk dan mitra BPR yang dipilih oleh pengguna. Dana tidak dapat dicairkan sebelum jatuh tempo (breakable), kecuali pada produk tertentu yang menyatakan sebaliknya.",
+        "4. Suku Bunga dan Perhitungan" to "Suku bunga bersifat tetap selama jangka waktu yang telah disepakati dan ditentukan pada saat penempatan deposito.\n\nPerhitungan bunga menggunakan metode gross (belum dipotong pajak), dan akan dikenakan pajak sesuai ketentuan perpajakan yang berlaku di indonesia.",
+        "5. Pencairan Dana" to "Setelah jatuh tempo, dana pokok dan bunga bersih (setelah dipotong pajak) akan ditransfer otomatis ke rekening bank yang telah didaftarkan oleh nasabah pada saat registrasi.\nUntuk pencairan sebelum jatuh tempo, bunga tidak akan diberikan, dan nasabah harus mengajukan permintaan resmi ke penyedia layanan.",
+        "6. Risiko dan Jaminan" to "Produk deposito dari mitra BPR yang bekerja sama dijamin oleh Lembaga Penjamin Simpanan (LPS) hingga batas maksimal sesuai regulasi, yakni Rp2.000.000.000 per nasabah per bank. Pengguna disarankan membaca detail produk masing-masing sebelum melakukan penempatan.",
+        "7. Perubahan Ketentuan" to "Pihak penyedia layanan berhak untuk mengubah syarat dan ketentuan ini sewaktu-waktu, dengan pemberitahuan sebelumnya kepada pengguna melalui media resmi seperti email atau aplikasi.",
+        "8. Lain-lain" to "Dengan menyetujui syarat dan ketentuan ini, pengguna menyatakan bahwa seluruh informasi yang diberikan adalah benar dan dapat dipertanggungjawabkan. pengguna juga menyatakan setuju untuk tunduk pada hukum dan peraturan yang berlaku di wilayah Republik Indonesia."
     )
 
     val listState = rememberLazyListState()
@@ -113,7 +112,7 @@ fun LoginSyaratKetentuanUI(
                             checked = isChecked,
                             onCheckedChange = { isChecked = it },
                             colors = CheckboxDefaults.colors(
-                                checkedColor = Color(0xFF252C32),
+                                checkedColor = Button1,
                                 uncheckedColor = Color(0xFF252C32)
                             )
                         )

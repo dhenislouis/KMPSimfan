@@ -20,57 +20,67 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
+import org.kmp.simfan.core.Button1
 import simfan.composeapp.generated.resources.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PanduanFotoKTPScreen(
-    onBackClick: () -> Unit = {}
+    onBackClick: () -> Unit = {},
+    onAmbilFoto: () -> Unit = {}
 ) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color(0xFFF4F4F4))
-    ) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(Color.White)
-//                .padding(horizontal = 16.dp, vertical = 16.dp)
-        ) {
-            IconButton(
-                onClick = onBackClick,
-                modifier = Modifier.align(Alignment.CenterStart)
-            ) {
-                Icon(
-                    painter = painterResource(Res.drawable.arrow_back),
-                    contentDescription = "Kembali",
-                    tint = Color.Black,
-                    modifier = Modifier.size(18.dp)
+    Scaffold(
+        topBar = {
+            CenterAlignedTopAppBar(
+                title = {
+                    Text(
+                        text = "Panduan Foto KTP",
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        color = Color.Black
+                    )
+                },
+                navigationIcon = {
+                    IconButton(onClick = onBackClick) {
+                        Icon(
+                            painter = painterResource(Res.drawable.arrow_back),
+                            contentDescription = "Kembali",
+                            tint = Color.Black,
+                            modifier = Modifier.size(18.dp)
+                        )
+                    }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = Color.White
                 )
-            }
-
-            Text(
-                text = "Panduan Foto KTP",
-                fontSize = 20.sp,
-                fontWeight = FontWeight.SemiBold,
-                color = Color.Black,
-                modifier = Modifier.align(Alignment.Center)
             )
-
-            IconButton(
-                onClick = {},
-                enabled = false,
+        },
+        bottomBar = {
+            Column(
                 modifier = Modifier
-                    .align(Alignment.CenterEnd)
-                    .size(48.dp)
-            ) {}
+                    .background(Color.White)
+                    .padding(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Button(
+                    onClick = { onAmbilFoto },
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = ButtonDefaults.buttonColors(containerColor = Button1)
+                ) {
+                    Text(
+                        "Ambil Foto",
+                        color = Color.White,
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                }
+            }
         }
-
-        // 🔹 Konten scroll
+    ) { innerPadding ->
         Column(
             modifier = Modifier
-                .weight(1f)
+                .padding(innerPadding)
+                .fillMaxSize()
                 .verticalScroll(rememberScrollState())
                 .background(Color.White)
                 .padding(16.dp)
@@ -120,18 +130,9 @@ fun PanduanFotoKTPScreen(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                SalahCard(
-                    image = Res.drawable.ktp_terpotong,
-                    label = "Terpotong"
-                )
-                SalahCard(
-                    image = Res.drawable.ktp_buram,
-                    label = "Buram"
-                )
-                SalahCard(
-                    image = Res.drawable.ktp_kena_flash,
-                    label = "Kena Flash"
-                )
+                SalahCard(image = Res.drawable.ktp_terpotong, label = "Terpotong")
+                SalahCard(image = Res.drawable.ktp_buram, label = "Buram")
+                SalahCard(image = Res.drawable.ktp_kena_flash, label = "Kena Flash")
             }
 
             Spacer(Modifier.height(24.dp))
@@ -142,22 +143,6 @@ fun PanduanFotoKTPScreen(
             SyaratItem("1. Gunakan e-KTP asli (bukan fotokopi atau hasil scan)")
             SyaratItem("2. Ambil foto secara horizontal, pastikan e-KTP tidak terpotong dan terlihat jelas")
             SyaratItem("3. Pastikan foto e-KTP tidak terkena bayangan atau cahaya flash")
-        }
-
-        // 🔹 Tombol bawah
-        Column(
-            modifier = Modifier
-                .background(Color.White)
-                .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Button(
-                onClick = { /* TODO: Ambil foto */ },
-                modifier = Modifier.fillMaxWidth(),
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF023FFC))
-            ) {
-                Text("Lanjut Buka Rekening", color = Color.White, fontSize = 16.sp, fontWeight = FontWeight.SemiBold)
-            }
         }
     }
 }

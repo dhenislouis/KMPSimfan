@@ -26,8 +26,9 @@ import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import simfan.composeapp.generated.resources.Res
 import simfan.composeapp.generated.resources.arrow_back
+import simfan.composeapp.generated.resources.eye_off
+import simfan.composeapp.generated.resources.eye_on
 import simfan.composeapp.generated.resources.ic_google
-
 
 @Composable
 fun RegisterScreenUI(
@@ -293,13 +294,17 @@ fun PasswordField(
             .padding(vertical = 8.dp),
         visualTransformation = if (visible) VisualTransformation.None else PasswordVisualTransformation(),
         trailingIcon = {
-            val iconText = if (visible) "🙈" else "👁"
-            Text(
-                text = iconText,
-                modifier = Modifier.clickable { onToggleVisibility() }
-            )
+            IconButton(onClick = onToggleVisibility) {
+                Icon(
+                    painter = painterResource(
+                        if (visible) Res.drawable.eye_on else Res.drawable.eye_off
+                    ),
+                    contentDescription = if (visible) "Hide password" else "Show password"
+                )
+            }
         },
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+        singleLine = true
     )
 }
 

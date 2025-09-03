@@ -27,7 +27,7 @@ import simfan.composeapp.generated.resources.profile_active
 val bottomBarRoutes = listOf(
     Routes.Home,
     Routes.Product,
-    Routes.Simfanku,
+    Routes.SimpanankuDeposito,
     Routes.Profile
 )
 
@@ -76,18 +76,18 @@ fun BottomBar(
         )
 
         NavigationBarItem(
-            selected = currentRoute == Routes.Simfanku,
-            onClick = { onNavigate(Routes.Simfanku) },
+            selected = currentRoute == Routes.SimpanankuDeposito,
+            onClick = { onNavigate(Routes.SimpanankuDeposito) },
             icon = {
                 Icon(
-                    painter = painterResource(  if ( currentRoute == Routes.Simfanku) Res.drawable.label_deposito else Res.drawable.deposito_active),
+                    painter = painterResource(  if ( currentRoute == Routes.SimpanankuDeposito) Res.drawable.label_deposito else Res.drawable.deposito_active),
 
-                    contentDescription = "Simfanku",
+                    contentDescription = "Simpananku",
                     modifier = Modifier.size(18.dp),
-                    tint = if ( currentRoute == Routes.Simfanku) Color.White else Color.Black
+                    tint = if ( currentRoute == Routes.SimpanankuDeposito) Color.White else Color.Black
                 )
             },
-            label = { Text("Simfanku") },
+            label = { Text("Simpananku") },
             colors = NavigationBarItemDefaults.colors(
                 indicatorColor = Primary,
 

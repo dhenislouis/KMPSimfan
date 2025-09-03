@@ -15,14 +15,19 @@ import androidx.compose.foundation.Image
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.text.style.TextAlign
+import androidx.navigation.NavController
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.kmp.simfan.Routes
 import simfan.composeapp.generated.resources.Res
 import simfan.composeapp.generated.resources.arrow_circle
 
 @Composable
 fun LoginSuccessScreen(
-    onContinueClick: () -> Unit
+    onContinueClick: () -> Unit,
+    onDismiss: () -> Unit = {},
+    navController: NavController,
+    currentRoute: Routes?,
 ) {
     Column(
         modifier = Modifier
@@ -137,8 +142,8 @@ fun LoginSuccessScreen(
 }
 
 
-@Preview
-@Composable
-fun PreviewLoginSuccess() {
-    LoginSuccessScreen(onContinueClick = {})
-}
+//@Preview
+//@Composable
+//fun PreviewLoginSuccess() {
+//    LoginSuccessScreen(onContinueClick = {})
+//}

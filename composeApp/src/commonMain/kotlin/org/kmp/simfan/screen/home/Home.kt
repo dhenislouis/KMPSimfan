@@ -244,7 +244,6 @@ fun SaldoCard() {
                         )
                     }
 
-                    // 🔄 Riwayat dengan background putih & rounded hanya di kiri
                     Row(
                         modifier = Modifier
                             .background(
@@ -358,7 +357,7 @@ fun MenuGrid() {
             ) {
                 Surface(
                     modifier = Modifier
-                        .size(56.dp)
+                        .size(40.dp)
                         .clip(CircleShape),
                     color = Color.White,
                     shadowElevation = 2.dp
@@ -385,7 +384,7 @@ fun MenuGrid() {
 
 @Composable
 fun SimulasiDeposito() {
-    var jumlahText by remember { mutableStateOf("100000000") }
+    var jumlahText by remember { mutableStateOf("") }
     var hasil by remember { mutableStateOf(emptyList<Triple<String, String, String>>()) }
 
     val bungaTahunan = 0.0625
@@ -456,16 +455,16 @@ fun SimulasiDeposito() {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(IntrinsicSize.Min) // biar divider ikut tinggi row
+                    .height(IntrinsicSize.Min)
                     .background(Color(0xFF007BFF), RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp))
                     .padding(horizontal = 8.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                TableCell("Tenor\n(Bulan)", weight = 1f, color = Color.White, bold = true)
+                TableCell("Bulan", weight = 1f, color = Color.White, bold = true)
                 TableDivider()
-                TableCell("Nilai Akhir Deposito\nBank Lainnya (Gross)", weight = 1.5f, color = Color.White, bold = true)
+                TableCell("Bunga", weight = 1.5f, color = Color.White, bold = true)
                 TableDivider()
-                TableCell("Nilai Akhir Deposito di\nFUNDtastic (Gross)", weight = 1.5f, color = Color.White, bold = true)
+                TableCell("Nilai Akhir", weight = 1.5f, color = Color.White, bold = true)
             }
 
             // Isi tabel

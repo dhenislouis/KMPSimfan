@@ -2,6 +2,7 @@ package org.kmp.simfan.screen.profile
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -32,7 +33,9 @@ import simfan.composeapp.generated.resources.Res
 import simfan.composeapp.generated.resources.*
 
 @Composable
-fun ProfileScreen(navController: NavController, currentRoute: Routes?) {
+fun ProfileScreen(
+    navController: NavController, currentRoute: Routes?
+) {
     Scaffold(
         bottomBar = {
             BottomBar(
@@ -73,89 +76,185 @@ fun ProfileScreen(navController: NavController, currentRoute: Routes?) {
 
                 StatusCard()
 
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(8.dp))
 
                 SectionCard {
-                    MenuItem(icon = Res.drawable.ic_phone, label = "Pengajuan Penempatan")
+                    MenuItem(
+                        icon = Res.drawable.ic_phone,
+                        label = "Pengajuan Penempatan",
+                        onClick = {
+//                            navController.navigate(Routes.PengajuanPenempatan)
+                        }
+                    )
                 }
 
+                Spacer(Modifier.height(8.dp))
                 DividerLine()
 
+                Spacer(Modifier.height(8.dp))
                 SectionCard {
                     MenuItem(
                         icon = Res.drawable.ic_profil,
                         label = "Akun Saya",
-                        subtitle = "Lakukan perubahan pada akun anda"
+                        subtitle = "Lakukan perubahan pada akun anda",
+                        onClick = {
+                            navController.navigate(Routes.Langkah)
+                        }
                     )
                     MenuItem(
                         icon = Res.drawable.ic_lock,
                         label = "Ubah Kata Sandi",
-                        subtitle = "Ganti kata sandi untuk keamanan akun"
+                        subtitle = "Ganti kata sandi untuk keamanan akun",
+                        onClick = {
+                            navController.navigate(Routes.UbahPassword)
+                        }
                     )
                     MenuItem(
                         icon = Res.drawable.ic_credit,
                         label = "Akun Bank",
-                        subtitle = "Akun ini berfungsi sebagai tujuan pencairan\nbunga, pokok deposito, dan transaksi cashback."
+                        subtitle = "Akun ini berfungsi sebagai tujuan pencairan\nbunga, pokok deposito, dan transaksi cashback.",
+                        onClick = {
+                            navController.navigate(Routes.AkunBank)
+                        }
                     )
                     MenuItem(
                         icon = Res.drawable.ic_ttd,
                         label = "Akun Tanda Tangan Elektronik",
-                        subtitle = "Perbarui data tanda tangan digital"
+                        subtitle = "Perbarui data tanda tangan digital",
+                        onClick = {
+                            navController.navigate(Routes.TandaTanganElektronik)
+                        }
                     )
                 }
 
+                Spacer(Modifier.height(8.dp))
                 DividerLine()
 
-                Text(
-                    text = "Fitur",
-                    fontSize = 15.sp,
-                    fontWeight = FontWeight.SemiBold,
-                    modifier = Modifier.padding(bottom = 6.dp)
-                )
+                Spacer(Modifier.height(8.dp))
                 SectionCard {
-                    MenuItem(icon = Res.drawable.ic_user_add, label = "Undang Teman & Dapatkan Bonus")
-                    MenuItem(icon = Res.drawable.ic_money, label = "Riwayat Promo & Cashback")
-                    MenuItem(icon = Res.drawable.ic_gift, label = "Keuntungan Eksklusif Komunal")
-                    MenuItem(icon = Res.drawable.ic_chartbar, label = "History Poin Privileges / Riwayat Poin Hadiah")
+                    MenuItem(
+                        icon = Res.drawable.ic_user_add,
+                        label = "Undang Teman & Dapatkan Bonus",
+                        onClick = {
+//                            navController.navigate(Routes.UndangTeman)
+                        }
+                    )
+                    MenuItem(
+                        icon = Res.drawable.ic_money,
+                        label = "Riwayat Promo & Cashback",
+                        onClick = {
+//                            navController.navigate(Routes.RiwayatPromoCashback)
+                        }
+                    )
+                    MenuItem(
+                        icon = Res.drawable.ic_gift,
+                        label = "Keuntungan Eksklusif Komunal",
+                        onClick = {
+//                            navController.navigate(Routes.KeuntunganEkslusifKomunal)
+                        }
+                    )
+                    MenuItem(
+                        icon = Res.drawable.ic_chartbar,
+                        label = "History Poin Privileges / Riwayat Poin Hadiah",
+                        onClick = {
+//                            navController.navigate(Routes.HistoryPoin)
+                        }
+                    )
                 }
-
-                DividerLine()
-
+                Spacer(Modifier.height(16.dp))
                 Text(
                     text = "Informasi & Bantuan",
                     fontSize = 14.sp,
                     fontWeight = FontWeight.SemiBold,
                     modifier = Modifier.padding(vertical = 6.dp)
                 )
+
+                Spacer(Modifier.height(8.dp))
                 SectionCard {
-                    MenuItem(icon = Res.drawable.ic_dokumen, label = "Ketentuan Layanan")
-                    MenuItem(icon = Res.drawable.ic_shieldplus, label = "Aturan Privasi")
-                    MenuItem(icon = Res.drawable.ic_question, label = "Pertanyaan Umum")
-                    MenuItem(icon = Res.drawable.ic_building, label = "Profil Komunal / Info Komunal")
+                    MenuItem(
+                        icon = Res.drawable.ic_dokumen,
+                        label = "Ketentuan Layanan",
+                        onClick = {
+                            navController.navigate(Routes.KetentuanLayanan)
+                        }
+                    )
+                    MenuItem(
+                        icon = Res.drawable.ic_shieldplus,
+                        label = "Aturan Privasi",
+                        onClick = {
+//                            navController.navigate(Routes.AturanPrivasi)
+                        }
+                    )
+                    MenuItem(
+                        icon = Res.drawable.ic_question,
+                        label = "Pertanyaan Umum",
+                        onClick = {
+                            navController.navigate(Routes.PertanyaanUmum)
+                        }
+                    )
+                    MenuItem(
+                        icon = Res.drawable.ic_building,
+                        label = "Profil Komunal / Info Komunal",
+                        onClick = {
+//                            navController.navigate(Routes.ProInKomunal)
+                        }
+                    )
                 }
 
+                Spacer(Modifier.height(8.dp))
                 DividerLine()
 
+                Spacer(Modifier.height(8.dp))
                 SectionCard {
-                    MenuItem(icon = Res.drawable.ic_trash, label = "Nonaktifkan Akun")
+                    MenuItem(
+                        icon = Res.drawable.ic_trash,
+                        label = "Nonaktifkan Akun",
+                        onClick = {
+                            navController.navigate(Routes.NonAktifkanAkun)
+                        }
+                    )
                 }
 
+                Spacer(Modifier.height(8.dp))
                 DividerLine()
 
+                Spacer(Modifier.height(8.dp))
                 SectionCard {
-                    MenuItem(icon = Res.drawable.ic_signout, label = "Keluar dari Aplikasi")
+                    MenuItem(
+                        icon = Res.drawable.ic_signout,
+                        label = "Keluar dari Aplikasi",
+                        onClick = {
+                            navController.navigate(Routes.KeluarAplikasi)
+                        }
+                    )
                 }
 
+                Spacer(Modifier.height(8.dp))
                 DividerLine()
 
+                Spacer(Modifier.height(8.dp))
                 SectionCard {
-                    MenuItem(icon = Res.drawable.ic_handscoin, label = "Advisor Keuangan")
+                    MenuItem(
+                        icon = Res.drawable.ic_handscoin,
+                        label = "Advisor Keuangan",
+                        onClick = {
+//                            navController.navigate(Routes.AdvisorKeuangan)
+                        }
+                    )
                 }
 
+                Spacer(Modifier.height(8.dp))
                 DividerLine()
 
+                Spacer(Modifier.height(8.dp))
                 SectionCard {
-                    MenuItem(icon = Res.drawable.ic_headset, label = "Bantuan tersedia?")
+                    MenuItem(
+                        icon = Res.drawable.ic_headset,
+                        label = "Bantuan tersedia?",
+                        onClick = {
+//                            navController.navigate(Routes.Bantuan)
+                        }
+                    )
                 }
             }
         }
@@ -239,7 +338,7 @@ fun StatusCard(
                         modifier = Modifier.size(20.dp)
                     )
                     Text(
-                        text = "Gold",
+                        text = "Bronze",
                         fontSize = 13.sp,
                         fontWeight = FontWeight.Bold,
                         color = Color(0xFF181D27),
@@ -252,7 +351,7 @@ fun StatusCard(
                         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
                     ) {
                         Text(
-                            text = "200.000 Poin",
+                            text = "0 Poin",
                             fontSize = 8.sp,
                             fontWeight = FontWeight.SemiBold,
                             color = Color.Black,
@@ -374,10 +473,16 @@ fun SectionCard(content: @Composable ColumnScope.() -> Unit) {
 }
 
 @Composable
-fun MenuItem(icon: DrawableResource, label: String, subtitle: String? = null) {
+fun MenuItem(
+    icon: DrawableResource,
+    label: String,
+    subtitle: String? = null,
+    onClick: () -> Unit = {}
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
+            .clickable { onClick() }
             .padding(vertical = 12.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
