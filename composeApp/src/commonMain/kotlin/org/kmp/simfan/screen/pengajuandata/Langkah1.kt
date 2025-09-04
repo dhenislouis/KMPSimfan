@@ -17,9 +17,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.kmp.simfan.core.Button1
+import org.kmp.simfan.core.Label_Langkah
 import simfan.composeapp.generated.resources.*
 
 /**
@@ -28,7 +31,13 @@ import simfan.composeapp.generated.resources.*
 object Langkah1Screen : Screen {
     @Composable
     override fun Content() {
-        Langkah1UI()
+        val navigator = LocalNavigator.currentOrThrow
+        Langkah1UI(
+            onBack = { navigator.pop()},
+            onAmbilFoto = {
+                navigator.push(Langkah2PanduanScreen)
+            }
+        )
     }
 }
 
@@ -47,7 +56,7 @@ fun Langkah1UI(
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
-                            "Buka Rekening",
+                            "Pengajuan Data",
                             fontSize = 20.sp,
                             fontWeight = FontWeight.SemiBold,
                             color = Color.Black,
@@ -116,7 +125,7 @@ fun Langkah1UI(
                     color = Color.Black,
                     modifier = Modifier
                         .clip(RoundedCornerShape(6.dp))
-                        .background(Color(0xFFE0E7FF))
+                        .background(Label_Langkah)
                         .padding(horizontal = 12.dp, vertical = 3.dp)
                 )
                 Spacer(Modifier.height(8.dp))

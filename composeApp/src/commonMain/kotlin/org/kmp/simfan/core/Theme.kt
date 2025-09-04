@@ -6,7 +6,7 @@ import androidx.compose.runtime.Composable
 
 @Composable
 fun Theme(
-   // Checks if your system is in dark theme mode.
+    // Checks if your system is in dark theme mode.
     content: @Composable () -> Unit
 ) {
     val colors =  LightColorScheme

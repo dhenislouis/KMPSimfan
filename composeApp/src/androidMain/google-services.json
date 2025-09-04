@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "815675833022",
+    "project_id": "simfan-kmp",
+    "storage_bucket": "simfan-kmp.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:815675833022:android:ace438b1c381ef61d53cef",
+        "android_client_info": {
+          "package_name": "org.kmp.simfan"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB8poILTgBgMrYUcl33vNc1-fnEskvJVhY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

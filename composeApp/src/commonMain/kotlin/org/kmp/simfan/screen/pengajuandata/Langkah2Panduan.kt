@@ -1,4 +1,4 @@
-package org.kmp.simfan.screen.bukarekening
+package org.kmp.simfan.screen.pengajuandata
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -17,9 +17,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.kmp.simfan.core.Button1
+import org.kmp.simfan.core.Label_Langkah
+import org.kmp.simfan.core.Secondary
 import simfan.composeapp.generated.resources.*
 
 /**
@@ -28,7 +32,13 @@ import simfan.composeapp.generated.resources.*
 object Langkah2PanduanScreen : Screen {
     @Composable
     override fun Content() {
-        Langkah2PanduanUI()
+        val navigator = LocalNavigator.currentOrThrow
+        Langkah2PanduanUI(
+            onBack = {navigator.pop()},
+            onScanWajah = {
+                navigator.push(Langkah3Screen)
+            }
+        )
     }
 }
 
@@ -116,7 +126,7 @@ fun Langkah2PanduanUI(
                     color = Color.Black,
                     modifier = Modifier
                         .clip(RoundedCornerShape(6.dp))
-                        .background(Color(0xFFE0E7FF))
+                        .background(Label_Langkah)
                         .padding(horizontal = 12.dp, vertical = 3.dp)
                 )
                 Spacer(Modifier.height(8.dp))
@@ -144,19 +154,25 @@ fun Langkah2PanduanUI(
                 // Label Tips
                 Row(
                     modifier = Modifier
-                        .clip(RoundedCornerShape(6.dp))
-                        .background(Color(0xFF003FFC))
+                        .clip(RoundedCornerShape(50))
+                        .background(Label_Langkah)
                         .padding(horizontal = 12.dp, vertical = 6.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
+                    Row(
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(25))
+                            .background(Secondary)
+                            .padding(8.dp)
+                    ) {
                     Icon(
-                        painter = painterResource(Res.drawable.lock),
+                        painter = painterResource(Res.drawable.ic_tips),
                         contentDescription = null,
                         tint = Color.White,
                         modifier = Modifier.size(20.dp)
-                    )
+                    ) }
                     Spacer(Modifier.width(6.dp))
-                    Text("Tips", color = Color.White, fontWeight = FontWeight.Bold)
+                    Text("Tips", color = Color.Black, fontWeight = FontWeight.Bold)
                 }
 
                 Spacer(Modifier.height(16.dp))

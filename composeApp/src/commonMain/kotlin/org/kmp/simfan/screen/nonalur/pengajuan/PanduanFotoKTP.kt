@@ -1,4 +1,4 @@
-package org.kmp.simfan.screen.product.detail.pengajuan
+package org.kmp.simfan.screen.nonalur.pengajuan
 
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import androidx.compose.foundation.Image
@@ -18,6 +18,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 import simfan.composeapp.generated.resources.*
 
@@ -162,7 +163,7 @@ fun PanduanFotoKTPScreen(
 }
 
 @Composable
-fun SalahCard(image: org.jetbrains.compose.resources.DrawableResource, label: String) {
+fun SalahCard(image: DrawableResource, label: String) {
     Column(
         modifier = Modifier
             .width(110.dp)

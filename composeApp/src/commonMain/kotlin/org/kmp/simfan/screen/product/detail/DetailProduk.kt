@@ -16,8 +16,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.kmp.simfan.Routes
 import org.kmp.simfan.core.Button1
 import simfan.composeapp.generated.resources.Res
 import simfan.composeapp.generated.resources.arrow_back
@@ -27,8 +29,11 @@ import simfan.composeapp.generated.resources.simfan_websuite
 
 @Composable
 fun DetailScreen(
-    onBackClick: () -> Unit = {},
-    onAjukanClick: () -> Unit = {}
+    navController: NavController,
+    currentRoute: Routes?,
+    onBackClick: () -> Unit,
+    onAjukanClick: () -> Unit,
+    DetailProdukLainnya: () -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -218,6 +223,7 @@ fun DetailScreen(
             )
 
             Card(
+                onClick = DetailProdukLainnya,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 15.dp),
@@ -266,7 +272,7 @@ fun DetailScreen(
                 modifier = Modifier.fillMaxWidth(),
                 colors = ButtonDefaults.buttonColors(containerColor = Button1)
             ) {
-                Text("Ajukan Deposito", color = Color.White, fontSize = 16.sp, fontWeight = FontWeight.SemiBold)
+                Text("Ajukan Penempatan", color = Color.White, fontSize = 16.sp, fontWeight = FontWeight.SemiBold)
             }
         }
     }
@@ -293,8 +299,8 @@ fun DividerLine(modifier: Modifier = Modifier) {
     )
 }
 
-@Preview
-@Composable
-fun PreviewDetailScreen() {
-    DetailScreen()
-}
+//@Preview
+//@Composable
+//fun PreviewDetailScreen() {
+//    DetailScreen()
+//}

@@ -16,18 +16,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import simfan.composeapp.generated.resources.Res
 import simfan.composeapp.generated.resources.arrow_back
-
-// 🚀 Voyager Screen
-object LupaPasswordScreen : Screen {
-    @Composable
-    override fun Content() {
-        LupaPasswordScreenUI()
-    }
-}
 
 @Composable
 fun LupaPasswordScreenUI(
@@ -37,46 +31,68 @@ fun LupaPasswordScreenUI(
     var selectedOption by remember { mutableStateOf("SMS") }
     val scrollState = rememberScrollState()
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color(0xFFF6F6F6))
-    ) {
-        // AppBar
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(Color.White)
-        ) {
-            IconButton(
-                onClick = onBackClick,
-                modifier = Modifier.align(Alignment.CenterStart)
+    Scaffold(
+        topBar = {
+            // ==== TOP BAR ====
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(Color.White)
+                    .padding(vertical = 12.dp, horizontal = 8.dp),
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Icon(
-                    painter = painterResource(Res.drawable.arrow_back),
-                    contentDescription = "Kembali",
-                    tint = Color.Black,
-                    modifier = Modifier.size(24.dp)
+                IconButton(onClick = onBackClick) {
+                    Icon(
+                        painter = painterResource(Res.drawable.arrow_back),
+                        contentDescription = "Kembali",
+                        tint = Color.Black,
+                        modifier = Modifier.size(24.dp)
+                    )
+                }
+                Spacer(modifier = Modifier.width(12.dp))
+                Text(
+                    text = "Lupa Password",
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    color = Color.Black,
+                    modifier = Modifier.weight(1f),
+                    textAlign = TextAlign.Center
                 )
+                Spacer(modifier = Modifier.width(36.dp)) // biar judul tetap center
             }
-
-            Text(
-                text = "Lupa Password",
-                fontSize = 20.sp,
-                fontWeight = FontWeight.SemiBold,
-                color = Color.Black,
-                modifier = Modifier.align(Alignment.Center)
-            )
-
-            Spacer(modifier = Modifier
-                .align(Alignment.CenterEnd)
-                .size(48.dp))
+        },
+        bottomBar = {
+            // ==== BOTTOM BAR ====
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(Color.White)
+                    .padding(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Button(
+                    onClick = { onNextClick(selectedOption) },
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(24.dp),
+                    elevation = ButtonDefaults.buttonElevation(6.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF668CFF))
+                ) {
+                    Text(
+                        text = "Lanjut",
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        color = Color.White
+                    )
+                }
+            }
         }
-
-        // Konten scrollable
+    ) { innerPadding ->
+        // ==== BODY CONTENT ====
         Column(
             modifier = Modifier
-                .weight(1f)
+                .fillMaxSize()
+                .background(Color(0xFFF6F6F6))
+                .padding(innerPadding)
                 .verticalScroll(scrollState)
                 .padding(horizontal = 16.dp, vertical = 24.dp),
             horizontalAlignment = Alignment.CenterHorizontally
@@ -86,7 +102,9 @@ fun LupaPasswordScreenUI(
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Medium,
                 color = Color.Black,
-                modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 8.dp),
                 lineHeight = 22.sp,
                 textAlign = TextAlign.Center
             )
@@ -111,34 +129,10 @@ fun LupaPasswordScreenUI(
 
             OptionCard(
                 title = "Via Email",
-                description = "Kode akan dikirim ke *****vktr",
+                description = "Kode akan dikirim ke *****@vktr.com",
                 selected = selectedOption == "Email",
                 onClick = { selectedOption = "Email" }
             )
-        }
-
-        // Tombol bawah
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(Color.White)
-                .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Button(
-                onClick = { onNextClick(selectedOption) },
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(24.dp),
-                elevation = ButtonDefaults.buttonElevation(6.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF668CFF))
-            ) {
-                Text(
-                    text = "Lanjut",
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.SemiBold,
-                    color = Color.White
-                )
-            }
         }
     }
 }

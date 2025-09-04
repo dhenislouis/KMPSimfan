@@ -55,4 +55,3 @@ fun OnboardingStep4(
     }
 }
 
-

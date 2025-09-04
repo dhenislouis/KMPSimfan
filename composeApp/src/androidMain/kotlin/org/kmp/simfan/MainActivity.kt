@@ -10,19 +10,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import cafe.adriel.voyager.navigator.Navigator
-import org.kmp.simfan.screen.auth.login.LoginScreen
-import org.kmp.simfan.screen.auth.password.LupaPasswordScreen
-import org.kmp.simfan.screen.auth.password.VerifikasiEmailScreen
-import org.kmp.simfan.screen.auth.password.VerifikasiSMSScreen
-import org.kmp.simfan.screen.auth.password.NewPasswordScreen
-import org.kmp.simfan.screen.auth.password.UbahPasswordScreen
-import org.kmp.simfan.screen.auth.register.RegisterScreen
-import org.kmp.simfan.screen.onboarding.OnboardingStep1
+import com.google.firebase.FirebaseApp
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         val splashScreen = installSplashScreen() // jangan kasih "this"!
         super.onCreate(savedInstanceState)
+//        FirebaseApp.initializeApp(this)
+//        FirebaseConfig.init()
 
         setContent {
             App()

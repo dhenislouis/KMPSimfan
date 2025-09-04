@@ -1,5 +1,6 @@
 package org.kmp.simfan.screen.product
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -18,15 +19,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
-import org.kmp.simfan.Routes
 import org.kmp.simfan.core.Button1
-import org.kmp.simfan.core.navigation.BottomBar
 import simfan.composeapp.generated.resources.Res
 import simfan.composeapp.generated.resources.aro
-import simfan.composeapp.generated.resources.arrow_forward
 import simfan.composeapp.generated.resources.arrow_upward
 import simfan.composeapp.generated.resources.ic_filter
 import simfan.composeapp.generated.resources.ic_more
@@ -40,17 +37,18 @@ private val PrimaryBlue = Color(0xFF678CFE)
 private val AroBlue = Color(0xFF003FFC)
 private val PositiveGreen = Color(0xFF22C55E)
 private val LabelOrange = Color(0xFFFF8A00)
-private val StatusBgYellow = Color(0xFFFFF7E0)   // sesuaikan dg @color/status_yellow_background
-private val StatusText = Color(0xFFF59E0B)       // sesuaikan dg @color/secondary
+private val StatusBgYellow = Color(0xFFFFF7E0)
+private val StatusText = Color(0xFFF59E0B)
 
-@Preview()
 @Composable
-fun ProductScreen(
+fun ProductDepositoScreen(
     navController: NavController,
     currentRoute: Routes?,
     onFilterClick: () -> Unit = {},
-    onDetailClick: () -> Unit = {},
-    onSaveClick: () -> Unit = {}
+    onSaveClick: () -> Unit = {},
+    onScreenDeposito: () -> Unit = {},
+    onScreenTabungan: () -> Unit = {},
+    AjukanPenempatan: () -> Unit
 ) {
     Scaffold(
         bottomBar = {
@@ -59,12 +57,14 @@ fun ProductScreen(
                 onNavigate = { navController.navigate(it) }
             )
         }
-    ){
+    ) { paddingValues ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .background(BgSecondary)
+                .padding(paddingValues)
         ) {
+            // TopBar
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -80,9 +80,48 @@ fun ProductScreen(
                 )
             }
 
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(BgSecondary)
+                    .padding(horizontal = 24.dp, vertical = 8.dp),
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                Button(
+                    onClick = onScreenDeposito,
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(40.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = Button1),
+                    shape = RoundedCornerShape(50)
+                ) {
+                    Text(
+                        "Deposito",
+                        fontSize = 12.sp,
+                        color = Color.White
+                    )
+                }
+
+                OutlinedButton(
+                    onClick = onScreenTabungan,
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(40.dp),
+                    colors = ButtonDefaults.outlinedButtonColors(contentColor = Button1),
+                    border = BorderStroke(1.5.dp, Button1),
+                    shape = RoundedCornerShape(50)
+                ) {
+                    Text(
+                        "Tabungan",
+                        fontSize = 12.sp,
+                        color = Button1
+                    )
+                }
+            }
+
             Column(
                 modifier = Modifier
-                    .background(AppBarBg)
+                    .background(BgSecondary)
                     .padding(horizontal = 16.dp, vertical = 12.dp)
             ) {
                 var search by remember { mutableStateOf("") }
@@ -131,13 +170,13 @@ fun ProductScreen(
                 }
             }
 
+            // Daftar produk
             Column(
                 modifier = Modifier
                     .weight(1f)
                     .verticalScroll(rememberScrollState())
                     .padding(horizontal = 16.dp, vertical = 18.dp)
             ) {
-                // Kartu 1 — dengan label Bilyet Fisik + ARO
                 ProductCard(
                     title = "Simfan Websuite",
                     subtitle = "DKI Jakarta - 3 Transaksi",
@@ -147,12 +186,11 @@ fun ProductScreen(
                     estimasi = "6%",
                     showBilyet = true,
                     showAro = true,
-                    onDetailClick = onDetailClick
+                    AjukanPenempatan = AjukanPenempatan
                 )
 
                 Spacer(Modifier.height(12.dp))
 
-                // Kartu 2 — tanpa label, tapi ada status bar kuning
                 ProductCard(
                     title = "Simfan WebSuite",
                     subtitle = "DKI Jakarta - 3 Transaksi",
@@ -165,16 +203,15 @@ fun ProductScreen(
                     showStatusBar = true,
                     statusTitle = "Belum dapat menerima transaksi.",
                     statusSubtitle = "Data sedang diperbarui",
-                    onDetailClick = onDetailClick
+                    AjukanPenempatan = AjukanPenempatan
                 )
             }
         }
     }
-
 }
 
 @Composable
-private fun ProductCard(
+fun ProductCard(
     title: String,
     subtitle: String,
     minimumLabel: String,
@@ -186,7 +223,7 @@ private fun ProductCard(
     showStatusBar: Boolean = false,
     statusTitle: String = "",
     statusSubtitle: String = "",
-    onDetailClick: () -> Unit
+    AjukanPenempatan: () -> Unit = {}
 ) {
     Card(
         modifier = Modifier.fillMaxWidth(),
@@ -196,7 +233,6 @@ private fun ProductCard(
     ) {
         Column {
             Column(Modifier.padding(top = 18.dp, start = 16.dp, end = 16.dp, bottom = 8.dp)) {
-                // Header: gambar, judul, subjudul + label
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Image(
                         painter = painterResource(Res.drawable.simfan_websuite),
@@ -210,7 +246,6 @@ private fun ProductCard(
                             .weight(1f)
                             .padding(start = 12.dp)
                     ) {
-                        // Judul + label di satu baris
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Text(
                                 title,
@@ -229,14 +264,10 @@ private fun ProductCard(
                         }
                         Text(subtitle, fontSize = 11.sp, color = Color(0xFF999999))
                     }
-
-                    // (opsional) ikon lebih atau panah — tidak ditampilkan di kartu 1 XML,
-                    // jadi kita kosongkan.
                 }
 
                 Spacer(Modifier.height(8.dp))
 
-                // Minimum Penempatan | Durasi
                 Row {
                     Text(minimumLabel, fontSize = 12.sp, color = Color(0xFF22242F), modifier = Modifier.weight(1f))
                     Text(duration, fontSize = 12.sp, color = Color(0xFF22242F))
@@ -244,7 +275,6 @@ private fun ProductCard(
 
                 Spacer(Modifier.height(4.dp))
 
-                // Nominal | Estimasi (dengan ikon panah hijau)
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text(
                         nominal,
@@ -270,7 +300,6 @@ private fun ProductCard(
                     }
                 }
 
-                // Divider
                 Spacer(Modifier.height(8.dp))
                 Box(
                     Modifier
@@ -280,27 +309,19 @@ private fun ProductCard(
                 )
                 Spacer(Modifier.height(8.dp))
 
-                // Tombol lihat detail (bulat)
-                Box(
-                    modifier = Modifier
-                        .align(Alignment.CenterHorizontally)
-                        .size(40.dp)
-                        .clip(CircleShape)
-                        .background(PrimaryBlue)
-                        .clickable { onDetailClick() },
-                    contentAlignment = Alignment.Center
+                Button(
+                    onClick = AjukanPenempatan,
+                    enabled = !showStatusBar,
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = ButtonDefaults.buttonColors(containerColor = Button1),
+                    shape = RoundedCornerShape(24.dp)
                 ) {
-                    Icon(
-                        painter = painterResource(Res.drawable.arrow_forward),
-                        contentDescription = "Detail",
-                        tint = Color.White
-                    )
+                    Text("Ajukan Penempatan", color = Color.White)
                 }
 
                 Spacer(Modifier.height(8.dp))
             }
 
-            // Status bar (khusus kartu kedua)
             if (showStatusBar) {
                 StatusInfoBar(
                     title = statusTitle,
@@ -336,7 +357,6 @@ private fun AroLabel() {
             .padding(horizontal = 8.dp, vertical = 3.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        // lingkaran biru kecil dengan ikon panah white
         Box(
             modifier = Modifier
                 .size(18.dp)

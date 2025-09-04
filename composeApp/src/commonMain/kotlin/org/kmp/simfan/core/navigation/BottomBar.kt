@@ -111,7 +111,7 @@ fun BottomBar(
             colors = NavigationBarItemDefaults.colors(
                 indicatorColor = Primary,
 
-            )
+                )
         )
     }
 }

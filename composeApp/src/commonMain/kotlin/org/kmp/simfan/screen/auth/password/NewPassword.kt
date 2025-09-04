@@ -17,24 +17,14 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import simfan.composeapp.generated.resources.Res
 import simfan.composeapp.generated.resources.arrow_back
 import simfan.composeapp.generated.resources.eye_off
 import simfan.composeapp.generated.resources.eye_on
-
-// 🚀 Voyager Screen
-object NewPasswordScreen : Screen {
-
-    @Composable
-    override fun Content() {
-        NewPasswordUI(
-            onBackClick = { /* navigator.pop() */ },
-            onConfirmClick = { /* TODO: handle confirm */ }
-        )
-    }
-}
 
 @Composable
 fun NewPasswordUI(
@@ -46,91 +36,114 @@ fun NewPasswordUI(
     var passwordVisible by remember { mutableStateOf(false) }
     var confirmPasswordVisible by remember { mutableStateOf(false) }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color(0xFFF5F6FA))
-    ) {
-        // AppBar
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(Color.White)
-        ) {
-            IconButton(
-                onClick = onBackClick,
-                modifier = Modifier.align(Alignment.CenterStart)
-            ) {
-                Icon(
-                    painter = painterResource(Res.drawable.arrow_back),
-                    contentDescription = "Kembali",
-                    tint = Color.Black,
-                    modifier = Modifier.size(24.dp)
-                )
-            }
-
-            Text(
-                text = "Ubah Kata Sandi",
-                fontSize = 20.sp,
-                fontWeight = FontWeight.SemiBold,
-                color = Color.Black,
-                modifier = Modifier.align(Alignment.Center)
-            )
-        }
-
-        // Body
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 24.dp)
-                .padding(top = 35.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text(
-                text = "Silakan masukkan kata sandi baru Anda",
-                fontSize = 13.sp,
-                color = Color(0xFF252C32),
-                modifier = Modifier.padding(bottom = 24.dp)
-            )
-
-            PasswordInputField(
-                label = "Password Baru",
-                value = password,
-                onValueChange = { password = it },
-                placeholder = "Masukkan kata sandi baru",
-                visible = passwordVisible,
-                onToggleVisibility = { passwordVisible = !passwordVisible }
-            )
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            PasswordInputField(
-                label = "Konfirmasi Kata Sandi Baru",
-                value = confirmPassword,
-                onValueChange = { confirmPassword = it },
-                placeholder = "Masukkan kata sandi baru",
-                visible = confirmPasswordVisible,
-                onToggleVisibility = { confirmPasswordVisible = !confirmPasswordVisible }
-            )
-
-            Spacer(modifier = Modifier.height(35.dp))
-
-            Button(
-                onClick = onConfirmClick,
+    Scaffold(
+        topBar = {
+            // ===== APPBAR =====
+            Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 8.dp),
-                shape = RoundedCornerShape(24.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF668CFF)),
-                elevation = ButtonDefaults.buttonElevation(6.dp)
+                    .background(Color.White)
+                    .padding(vertical = 12.dp, horizontal = 8.dp),
+                verticalAlignment = Alignment.CenterVertically
             ) {
+                IconButton(onClick = onBackClick) {
+                    Icon(
+                        painter = painterResource(Res.drawable.arrow_back),
+                        contentDescription = "Kembali",
+                        tint = Color.Black,
+                        modifier = Modifier.size(24.dp)
+                    )
+                }
+                Spacer(modifier = Modifier.width(12.dp))
                 Text(
-                    text = "Konfirmasi",
-                    fontSize = 16.sp,
-                    color = Color.White,
-                    fontWeight = FontWeight.SemiBold
+                    text = "Ubah Kata Sandi",
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    color = Color.Black
                 )
             }
+        }
+    ) { innerPadding ->
+        // ===== BODY =====
+        NewPasswordContent(
+            modifier = Modifier.padding(innerPadding),
+            password = password,
+            onPasswordChange = { password = it },
+            passwordVisible = passwordVisible,
+            onTogglePasswordVisibility = { passwordVisible = !passwordVisible },
+            confirmPassword = confirmPassword,
+            onConfirmPasswordChange = { confirmPassword = it },
+            confirmPasswordVisible = confirmPasswordVisible,
+            onToggleConfirmPasswordVisibility = { confirmPasswordVisible = !confirmPasswordVisible },
+            onConfirmClick = onConfirmClick
+        )
+    }
+}
+
+@Composable
+fun NewPasswordContent(
+    modifier: Modifier = Modifier,
+    password: String,
+    onPasswordChange: (String) -> Unit,
+    passwordVisible: Boolean,
+    onTogglePasswordVisibility: () -> Unit,
+    confirmPassword: String,
+    onConfirmPasswordChange: (String) -> Unit,
+    confirmPasswordVisible: Boolean,
+    onToggleConfirmPasswordVisibility: () -> Unit,
+    onConfirmClick: () -> Unit
+) {
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .background(Color(0xFFF5F6FA))
+            .padding(horizontal = 24.dp, vertical = 35.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            text = "Silakan masukkan kata sandi baru Anda",
+            fontSize = 13.sp,
+            color = Color(0xFF252C32),
+            modifier = Modifier.padding(bottom = 24.dp)
+        )
+
+        PasswordInputField(
+            label = "Password Baru",
+            value = password,
+            onValueChange = onPasswordChange,
+            placeholder = "Masukkan kata sandi baru",
+            visible = passwordVisible,
+            onToggleVisibility = onTogglePasswordVisibility
+        )
+
+        Spacer(modifier = Modifier.height(12.dp))
+
+        PasswordInputField(
+            label = "Konfirmasi Kata Sandi Baru",
+            value = confirmPassword,
+            onValueChange = onConfirmPasswordChange,
+            placeholder = "Masukkan kata sandi baru",
+            visible = confirmPasswordVisible,
+            onToggleVisibility = onToggleConfirmPasswordVisibility
+        )
+
+        Spacer(modifier = Modifier.height(35.dp))
+
+        Button(
+            onClick = onConfirmClick,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 8.dp),
+            shape = RoundedCornerShape(24.dp),
+            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF668CFF)),
+            elevation = ButtonDefaults.buttonElevation(6.dp)
+        ) {
+            Text(
+                text = "Konfirmasi",
+                fontSize = 16.sp,
+                color = Color.White,
+                fontWeight = FontWeight.SemiBold
+            )
         }
     }
 }

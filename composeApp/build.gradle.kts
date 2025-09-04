@@ -38,6 +38,8 @@ kotlin {
             implementation(libs.ktor.client.okhttp)
             implementation(libs.core.splashscreen)
 //            implementation("com.airbnb.android:lottie:6.4.0")
+            implementation("com.google.firebase:firebase-auth-ktx:22.1.1")
+            implementation("com.google.firebase:firebase-firestore-ktx:24.9.1")
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -65,6 +67,9 @@ kotlin {
             api(libs.koin.core)
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)
+            implementation("dev.gitlive:firebase-auth:2.3.0")
+            implementation("dev.gitlive:firebase-firestore:1.12.0")
+            implementation("org.jetbrains.compose.material:material-icons-extended:1.7.0")
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
@@ -107,4 +112,3 @@ dependencies {
 //    implementation("com.airbnb.android:lottie-compose:6.4.0")
 
 }
-

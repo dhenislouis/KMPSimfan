@@ -16,28 +16,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import simfan.composeapp.generated.resources.Res
 import simfan.composeapp.generated.resources.arrow_back
-
-// 🚀 Voyager Screen
-data class VerifikasiSMSScreen(
-    val phoneNumber: String
-) : Screen {
-
-    @Composable
-    override fun Content() {
-        VerifikasiSMSUI(
-            phoneNumber = phoneNumber,
-            onBackClick = { /* navigator.pop() */ },
-            onResendClick = { /* TODO: resend logic */ },
-            onVerifyClick = { code ->
-                // TODO: handle verification
-            }
-        )
-    }
-}
 
 @Composable
 fun VerifikasiSMSUI(
@@ -51,42 +35,43 @@ fun VerifikasiSMSUI(
     var digit3 by remember { mutableStateOf("") }
     var digit4 by remember { mutableStateOf("") }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color(0xFFF6F6F6))
-    ) {
-        // AppBar
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(Color.White)
-        ) {
-            IconButton(
-                onClick = onBackClick,
-                modifier = Modifier.align(Alignment.CenterStart)
+    Scaffold(
+        topBar = {
+            // ===== TOP BAR =====
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(Color.White)
+                    .padding(vertical = 12.dp, horizontal = 8.dp),
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Icon(
-                    painter = painterResource(Res.drawable.arrow_back),
-                    contentDescription = "Kembali",
-                    tint = Color.Black,
-                    modifier = Modifier.size(18.dp)
+                IconButton(onClick = onBackClick) {
+                    Icon(
+                        painter = painterResource(Res.drawable.arrow_back),
+                        contentDescription = "Kembali",
+                        tint = Color.Black,
+                        modifier = Modifier.size(20.dp)
+                    )
+                }
+                Spacer(modifier = Modifier.width(12.dp))
+                Text(
+                    text = "Verifikasi",
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    color = Color.Black,
+                    modifier = Modifier.weight(1f),
+                    textAlign = TextAlign.Center
                 )
+                Spacer(modifier = Modifier.width(36.dp)) // biar title tetap center
             }
-
-            Text(
-                text = "Verifikasi",
-                fontSize = 20.sp,
-                fontWeight = FontWeight.SemiBold,
-                color = Color.Black,
-                modifier = Modifier.align(Alignment.Center)
-            )
         }
-
-        // Body
+    ) { innerPadding ->
+        // ===== BODY =====
         Column(
             modifier = Modifier
-                .fillMaxWidth()
+                .fillMaxSize()
+                .background(Color(0xFFF6F6F6))
+                .padding(innerPadding)
                 .padding(horizontal = 24.dp, vertical = 36.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -169,7 +154,8 @@ fun SMSDigitTextField(
         singleLine = true,
         textStyle = LocalTextStyle.current.copy(
             fontSize = 20.sp,
-            fontWeight = FontWeight.Bold
+            fontWeight = FontWeight.Bold,
+            textAlign = TextAlign.Center
         ),
         modifier = Modifier.size(56.dp),
         shape = RoundedCornerShape(8.dp),
