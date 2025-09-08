@@ -9,7 +9,10 @@ sealed interface Routes {
     @Serializable
     data object Splash : Routes
 
+
     // OnBoarding
+    @Serializable
+    data object  Onboard: Routes
     @Serializable
     data object Onboard1 : Routes
     @Serializable

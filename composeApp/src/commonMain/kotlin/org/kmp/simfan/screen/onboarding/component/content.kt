@@ -25,8 +25,8 @@ fun ContentOnboarding(
     label: String,
     title: String,
     description: String,
-    buttonText: String,
-    onButtonClick: () -> Unit,
+    buttonText: String = "",
+    onButtonClick: () -> Unit = {},
     isLoading: Boolean = false,
 
     ) {
@@ -45,14 +45,7 @@ fun ContentOnboarding(
         Spacer(modifier = Modifier.height(32.dp)) // gap text ke button
 
         // Button
-        ComFilledButton(
-            onClick = onButtonClick,
-            text = buttonText,
-            textColor = Color(0xFF023FFC),
-            isLoading = isLoading,
-            enabled =  remember { mutableStateOf(true) },
-            modifier = Modifier.fillMaxWidth()
-        )
+
     }
 }
 
