@@ -195,7 +195,7 @@ fun Langkah3UI(
                 Text("Pilih", fontSize = 14.sp)
                 Spacer(Modifier.width(8.dp))
                 Text(
-                    "Tidak ada file yang dipilih",
+                    "Tidak ada files yang dipilih",
                     fontSize = 13.sp,
                     color = Color.Gray
                 )

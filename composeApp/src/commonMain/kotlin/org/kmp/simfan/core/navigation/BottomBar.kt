@@ -1,15 +1,24 @@
 package org.kmp.simfan.core.navigation
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
+import coil3.compose.AsyncImage
 import org.jetbrains.compose.resources.painterResource
 import org.kmp.simfan.Routes
 import org.kmp.simfan.core.Primary
@@ -36,82 +45,129 @@ fun BottomBar(
     currentRoute: Routes?,
     onNavigate: (Routes) -> Unit
 ) {
-    NavigationBar(  containerColor = Color.White,
-        tonalElevation = 4.dp) {
+    NavigationBar(
+        containerColor = Color.White,
+        tonalElevation = 4.dp
+    ) {
+        // --- HOME ---
+        val homeSelected = currentRoute == Routes.Home
+        val homeTint = animateColorAsState(
+            targetValue = if (homeSelected) Color.White else Color.Black,
+            label = "homeTintAnim"
+        ).value
         NavigationBarItem(
-            selected = currentRoute == Routes.Home,
+            selected = homeSelected,
             onClick = { onNavigate(Routes.Home) },
             icon = {
-                Icon(
-                    painter = painterResource(  if ( currentRoute == Routes.Home) Res.drawable.home_active else Res.drawable.home),
-                    contentDescription = "Home",
-                    modifier = Modifier.size(18.dp),
-                    tint = if ( currentRoute == Routes.Home) Color.White else Color.Black
-
-                )
+                AnimatedContent(targetState = homeSelected, label = "homeIconAnim") { selected ->
+                    AsyncImage(
+                        model = Res.getUri("files/ic_house.svg"),
+                        contentDescription = "House",
+                        modifier = Modifier.size(24.dp),
+                        colorFilter = ColorFilter.tint(homeTint)
+                    )
+                }
             },
-            label = { Text("Home") },
+            label = {
+                AnimatedContent(targetState = homeSelected, label = "homeLabelAnim") { selected ->
+                    Text("Home", color = if (selected) Primary else Color.Black,
+                        style = MaterialTheme.typography.labelMedium)
+                }
+            },
             colors = NavigationBarItemDefaults.colors(
-                indicatorColor = Primary,
-
-                )
+                indicatorColor = Color(0XFF668CFF)
+            ),
+            alwaysShowLabel = true
         )
 
+        // --- PRODUCT ---
+        val productSelected = currentRoute == Routes.Product
+        val productTint = animateColorAsState(
+            targetValue = if (productSelected) Color.White else Color.Black,
+            label = "productTintAnim"
+        ).value
         NavigationBarItem(
-            selected = currentRoute == Routes.Product,
+            selected = productSelected,
             onClick = { onNavigate(Routes.Product) },
             icon = {
-                Icon(
-                    painter = painterResource(  if ( currentRoute == Routes.Product) Res.drawable.product_active else Res.drawable.product),
-                    contentDescription = "Product",
-                    modifier = Modifier.size(18.dp),
-                    tint = if ( currentRoute == Routes.Product) Color.White else Color.Black
-                )
+                AnimatedContent(targetState = homeSelected, label = "homeIconAnim") { selected ->
+                    AsyncImage(
+                        model = Res.getUri("files/ic_vector.svg"),
+                        contentDescription = "House",
+                        modifier = Modifier.size(24.dp),
+                            colorFilter = ColorFilter.tint(productTint)
+                    )
+                }
             },
-            label = { Text("Product") },
+            label = {
+                AnimatedContent(targetState = productSelected, label = "productLabelAnim") { selected ->
+                    Text("Product", color = if (selected) Primary else Color.Black,style = MaterialTheme.typography.labelMedium)
+                }
+            },
             colors = NavigationBarItemDefaults.colors(
-                indicatorColor = Primary,
-
-                )
+                indicatorColor = Color(0XFF668CFF)
+            ),
+            alwaysShowLabel = true
         )
 
+        // --- SIMFANKU ---
+        val simfankuSelected = currentRoute == Routes.SimfankuDeposito || currentRoute == Routes.SimfankuTabungan
+        val simfankuTint = animateColorAsState(
+            targetValue = if (simfankuSelected) Color.White else Color.Black,
+            label = "simfankuTintAnim"
+        ).value
         NavigationBarItem(
-            selected = currentRoute == Routes.Simfanku,
+            selected = simfankuSelected,
             onClick = { onNavigate(Routes.Simfanku) },
             icon = {
-                Icon(
-                    painter = painterResource(  if ( currentRoute == Routes.Simfanku) Res.drawable.label_deposito else Res.drawable.deposito_active),
-
-                    contentDescription = "Simfanku",
-                    modifier = Modifier.size(18.dp),
-                    tint = if ( currentRoute == Routes.Simfanku) Color.White else Color.Black
-                )
+                AnimatedContent(targetState = simfankuSelected, label = "simfankuIconAnim") { selected ->
+                    AsyncImage(
+                        model = Res.getUri("files/ic_simfanku.svg"),
+                        contentDescription = "House",
+                        modifier = Modifier.size(24.dp),
+                        colorFilter = ColorFilter.tint(simfankuTint)
+                    )
+                }
             },
-            label = { Text("Simfanku") },
+            label = {
+                AnimatedContent(targetState = simfankuSelected, label = "simfankuLabelAnim") { selected ->
+                    Text("Simfanku", color = if (selected) Primary else Color.Black,style = MaterialTheme.typography.labelMedium)
+                }
+            },
             colors = NavigationBarItemDefaults.colors(
-                indicatorColor = Primary,
-
-                )
+                indicatorColor = Color(0XFF668CFF)
+            ),
+            alwaysShowLabel = true
         )
 
+        // --- PROFILE ---
+        val profileSelected = currentRoute == Routes.Profile
+        val profileTint = animateColorAsState(
+            targetValue = if (profileSelected) Color.White else Color.Black,
+            label = "profileTintAnim"
+        ).value
         NavigationBarItem(
-            selected = currentRoute == Routes.Profile,
+            selected = profileSelected,
             onClick = { onNavigate(Routes.Profile) },
             icon = {
-                Icon(
-                    painter = painterResource(  if ( currentRoute == Routes.Profile) Res.drawable.profile_active else Res.drawable.profile),
-
-                    contentDescription = "Profile",
-                    modifier = Modifier.size(18.dp),
-                    tint = if ( currentRoute == Routes.Profile) Color.White else Color.Black
-
-                )
+                AnimatedContent(targetState = homeSelected, label = "homeIconAnim") { selected ->
+                    AsyncImage(
+                        model = Res.getUri("files/ic_user.svg"),
+                        contentDescription = "House",
+                        modifier = Modifier.size(24.dp),
+                        colorFilter = ColorFilter.tint(profileTint)
+                    )
+                }
             },
-            label = { Text("Profile") },
+            label = {
+                AnimatedContent(targetState = profileSelected, label = "profileLabelAnim") { selected ->
+                    Text("Profile", color = if (selected) Primary else Color.Black,style = MaterialTheme.typography.labelMedium)
+                }
+            },
             colors = NavigationBarItemDefaults.colors(
-                indicatorColor = Primary,
-
-                )
+                indicatorColor = Color(0XFF668CFF)
+            ),
+            alwaysShowLabel = true
         )
     }
 }
