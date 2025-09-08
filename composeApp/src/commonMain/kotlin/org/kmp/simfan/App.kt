@@ -29,6 +29,7 @@ import org.kmp.simfan.screen.deposito.detail.detaildeposito.DetailDepositoScreen
 import org.kmp.simfan.screen.deposito.detail.detailtabungan.DetailTabunganScreen
 import org.kmp.simfan.screen.home.notification.NotificationScreen
 import org.kmp.simfan.screen.home.promo.PromoScreen
+import org.kmp.simfan.screen.onboarding.OnboardingScreen
 import org.kmp.simfan.screen.product.ProductDepositoScreen
 import org.kmp.simfan.screen.product.ProductTabunganScreen
 import org.kmp.simfan.screen.product.detail.DetailScreen
@@ -77,9 +78,18 @@ fun App() {
         ) { innerPadding ->
             NavHost(
                 navController = navController,
-                startDestination = Routes.Onboard1,
+                startDestination = Routes.Onboard,
 
                 ) {
+                composable<Routes.Onboard> {
+                    OnboardingScreen(
+                        onFinished = {
+                            navController.navigate(Routes.Home) {
+                                popUpTo(Routes.Onboard) { inclusive = true }
+                            }
+                        }
+                    )
+                }
                 composable<Routes.Onboard1> {
                     OnboardingStep1(
                         onNextClick = { navController.navigate(Routes.Onboard2) }
