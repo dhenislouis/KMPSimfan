@@ -4,7 +4,7 @@
     <item>
         <bitmap
             android:gravity="center"
-            android:src="@drawable/logo_simfan"
+            android:src="@drawable/logo_simfan_new"
             android:tileMode="disabled" />
     </item>
 </layer-list>

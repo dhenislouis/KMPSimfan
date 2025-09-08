@@ -19,9 +19,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.kmp.simfan.Routes
 import org.kmp.simfan.core.Button1
+import org.kmp.simfan.core.navigation.BottomBar
 import simfan.composeapp.generated.resources.Res
 import simfan.composeapp.generated.resources.aro
 import simfan.composeapp.generated.resources.arrow_upward
