@@ -278,17 +278,17 @@ fun DetailScreen(
     }
 }
 
-@Composable
-fun InfoRow(label: String, value: String) {
-    Row(
-        modifier = Modifier.fillMaxWidth().padding(vertical = 2.dp),
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        Text(label, fontSize = 12.sp, color = Color(0xFF22242F))
-        Text(value, fontSize = 13.sp, fontWeight = FontWeight.SemiBold, color = Color(0xFF22242F))
-    }
-}
-
+//@Composable
+//fun InfoRow(label: String, value: String) {
+//    Row(
+//        modifier = Modifier.fillMaxWidth().padding(vertical = 2.dp),
+//        horizontalArrangement = Arrangement.SpaceBetween
+//    ) {
+//        Text(label, fontSize = 12.sp, color = Color(0xFF22242F))
+//        Text(value, fontSize = 13.sp, fontWeight = FontWeight.SemiBold, color = Color(0xFF22242F))
+//    }
+//}
+//
 @Composable
 fun DividerLine(modifier: Modifier = Modifier) {
     Box(

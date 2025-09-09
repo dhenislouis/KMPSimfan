@@ -20,6 +20,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import coil3.compose.AsyncImage
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.kmp.simfan.Routes
@@ -45,172 +46,103 @@ private val StatusText = Color(0xFFF59E0B)
 
 @Composable
 fun ProductDepositoScreen(
-    navController: NavController,
-    currentRoute: Routes?,
+//    navController: NavController,
+//    currentRoute: Routes?,
     onFilterClick: () -> Unit = {},
-    onSaveClick: () -> Unit = {},
-    onScreenDeposito: () -> Unit = {},
-    onScreenTabungan: () -> Unit = {},
+//    onSaveClick: () -> Unit = {},
+//    onScreenDeposito: () -> Unit = {},
+//    onScreenTabungan: () -> Unit = {},
     AjukanPenempatan: () -> Unit
 ) {
-    Scaffold(
-        bottomBar = {
-            BottomBar(
-                currentRoute = currentRoute,
-                onNavigate = { navController.navigate(it) }
-            )
-        }
-    ) { paddingValues ->
+    Column {
+        // Cari Produk di bawah tombol sejajar
         Column(
             modifier = Modifier
-                .fillMaxSize()
                 .background(BgSecondary)
-                .padding(paddingValues)
+                .padding(horizontal = 16.dp, vertical = 16.dp)
         ) {
-            // TopBar
-            Box(
+            var search by remember { mutableStateOf("") }
+            Card(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(Color.White)
-                    .padding(top = 12.dp, bottom = 12.dp)
+                    .height(48.dp),
+                shape = RoundedCornerShape(100.dp),
+                elevation = CardDefaults.cardElevation(1.dp)
             ) {
-                Text(
-                    text = "Produk",
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.SemiBold,
-                    color = Color.Black,
-                    modifier = Modifier.align(Alignment.Center)
-                )
-            }
-
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(BgSecondary)
-                    .padding(horizontal = 24.dp, vertical = 8.dp),
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                Button(
-                    onClick = onScreenDeposito,
+                Row(
                     modifier = Modifier
-                        .weight(1f)
-                        .height(40.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = Button1),
-                    shape = RoundedCornerShape(50)
+                        .fillMaxSize()
+                        .background(Color(0xffFBFBF9))
+                        .padding(start = 16.dp, end = 12.dp),
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(
-                        "Deposito",
-                        fontSize = 12.sp,
-                        color = Color.White
+                    AsyncImage(
+                        model = Res.getUri("files/ic_magnifying.svg") ,
+                        contentDescription = "Search",
+                        modifier = Modifier.size(24.dp),
                     )
-                }
-
-                OutlinedButton(
-                    onClick = onScreenTabungan,
-                    modifier = Modifier
-                        .weight(1f)
-                        .height(40.dp),
-                    colors = ButtonDefaults.outlinedButtonColors(contentColor = Button1),
-                    border = BorderStroke(1.5.dp, Button1),
-                    shape = RoundedCornerShape(50)
-                ) {
-                    Text(
-                        "Tabungan",
-                        fontSize = 12.sp,
-                        color = Button1
-                    )
-                }
-            }
-
-            Column(
-                modifier = Modifier
-                    .background(BgSecondary)
-                    .padding(horizontal = 16.dp, vertical = 12.dp)
-            ) {
-                var search by remember { mutableStateOf("") }
-                Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(48.dp),
-                    shape = RoundedCornerShape(24.dp),
-                    elevation = CardDefaults.cardElevation(2.dp)
-                ) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .background(BgSecondary)
-                            .padding(start = 16.dp, end = 12.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Icon(
-                            painter = painterResource(Res.drawable.ic_search),
-                            contentDescription = null,
-                            tint = Color.Gray,
-                            modifier = Modifier.size(22.dp)
-                        )
-                        Spacer(Modifier.width(8.dp))
-                        BasicTextField(
-                            value = search,
-                            onValueChange = { search = it },
-                            modifier = Modifier.weight(1f),
-                            singleLine = true,
-                            decorationBox = { inner ->
-                                if (search.isEmpty()) {
-                                    Text("Cari produk", color = Color.Gray, fontSize = 16.sp)
-                                }
-                                inner()
+                    Spacer(Modifier.width(8.dp))
+                    BasicTextField(
+                        value = search,
+                        onValueChange = { search = it },
+                        modifier = Modifier.weight(1f),
+                        singleLine = true,
+                        decorationBox = { inner ->
+                            if (search.isEmpty()) {
+                                Text("Cari produk", color = Color.Gray, fontSize = 14.sp)
                             }
+                            inner()
+                        }
+                    )
+
+                    AsyncImage(
+                        model = Res.getUri("files/ic_filter.svg") ,
+                        contentDescription = "Filter",
+                        modifier = Modifier
+                            .size(24.dp)
+                            .clickable { onFilterClick() },
+
                         )
-                        Icon(
-                            painter = painterResource(Res.drawable.ic_filter),
-                            contentDescription = "Filter",
-                            tint = Color.Gray,
-                            modifier = Modifier
-                                .size(22.dp)
-                                .clickable { onFilterClick() }
-                        )
-                    }
                 }
-            }
-
-            // Daftar produk
-            Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .verticalScroll(rememberScrollState())
-                    .padding(horizontal = 16.dp, vertical = 18.dp)
-            ) {
-                ProductCard(
-                    title = "Simfan Websuite",
-                    subtitle = "DKI Jakarta - 3 Transaksi",
-                    minimumLabel = "Minimum Penempatan",
-                    duration = "3 Bulan",
-                    nominal = "Rp10.000.000",
-                    estimasi = "6%",
-                    showBilyet = true,
-                    showAro = true,
-                    AjukanPenempatan = AjukanPenempatan
-                )
-
-                Spacer(Modifier.height(12.dp))
-
-                ProductCard(
-                    title = "Simfan WebSuite",
-                    subtitle = "DKI Jakarta - 3 Transaksi",
-                    minimumLabel = "Minimum Penempatan",
-                    duration = "3 Bulan",
-                    nominal = "Rp10.000.000",
-                    estimasi = "6%",
-                    showBilyet = false,
-                    showAro = false,
-                    showStatusBar = true,
-                    statusTitle = "Belum dapat menerima transaksi.",
-                    statusSubtitle = "Data sedang diperbarui",
-                    AjukanPenempatan = AjukanPenempatan
-                )
             }
         }
+        // Daftar produk
+        Column(
+            modifier = Modifier
+                .verticalScroll(rememberScrollState())
+                .padding(horizontal = 16.dp, vertical = 18.dp)
+        ) {
+            ProductCard(
+                title = "Simfan Websuite",
+                subtitle = "DKI Jakarta - 3 Transaksi",
+                minimumLabel = "Minimum Penempatan",
+                duration = "3 Bulan",
+                nominal = "Rp10.000.000",
+                estimasi = "6%",
+                showBilyet = true,
+                showAro = true,
+                AjukanPenempatan = AjukanPenempatan
+            )
+
+            Spacer(Modifier.height(12.dp))
+
+            ProductCard(
+                title = "Simfan WebSuite",
+                subtitle = "DKI Jakarta - 3 Transaksi",
+                minimumLabel = "Minimum Penempatan",
+                duration = "3 Bulan",
+                nominal = "Rp10.000.000",
+                estimasi = "6%",
+                showBilyet = false,
+                showAro = false,
+                showStatusBar = true,
+                statusTitle = "Belum dapat menerima transaksi.",
+                statusSubtitle = "Data sedang diperbarui",
+                AjukanPenempatan = AjukanPenempatan
+            )
+        }
     }
+
 }
 
 @Composable

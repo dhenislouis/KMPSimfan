@@ -69,6 +69,8 @@ sealed interface Routes {
     data object SubDetailProductDeposito : Routes
     @Serializable
     data object DetailProductTabungan : Routes
+    @Serializable
+    data object DetailBpr : Routes
 
     //Sub Page Simfanku
     @Serializable

@@ -31,7 +31,9 @@ import org.kmp.simfan.screen.home.notification.NotificationScreen
 import org.kmp.simfan.screen.home.promo.PromoScreen
 import org.kmp.simfan.screen.onboarding.OnboardingScreen
 import org.kmp.simfan.screen.product.ProductDepositoScreen
+import org.kmp.simfan.screen.product.ProductScreen
 import org.kmp.simfan.screen.product.ProductTabunganScreen
+import org.kmp.simfan.screen.product.detail.DetailBprScreen
 import org.kmp.simfan.screen.product.detail.DetailScreen
 import org.kmp.simfan.screen.product.detail.subdetail.SubDetailScreen
 
@@ -169,13 +171,23 @@ fun App() {
 
 
                 composable<Routes.Product> {
-                    ProductDepositoScreen(
+//                    ProductDepositoScreen(
+//                        navController = navController,
+//                        currentRoute = Routes.Product,
+//                        onScreenDeposito = { navController.navigate(Routes.Product) },
+//                        onScreenTabungan = { navController.navigate(Routes.ProductTabungan) },
+//                        AjukanPenempatan = { navController.navigate(Routes.DetailProductDeposito) }
+//                    )
+                    ProductScreen(
                         navController = navController,
                         currentRoute = Routes.Product,
-                        onScreenDeposito = { navController.navigate(Routes.Product) },
-                        onScreenTabungan = { navController.navigate(Routes.ProductTabungan) },
-                        AjukanPenempatan = { navController.navigate(Routes.DetailProductDeposito) }
+                        onDetailDepositoClick = { navController.navigate(Routes.DetailProductDeposito) },
+                        onDetailTabunganClick = { navController.navigate(Routes.DetailTabungan) },
+                        onDetailBpr = {navController.navigate(Routes.DetailBpr) }
                     )
+                }
+                composable<Routes.DetailBpr> {
+                    DetailBprScreen("Simfan WebSuite", subtitle = "DKI Jakarta - 3 Transaksi", navController = navController)
                 }
 
                 composable<Routes.DetailProductDeposito> {
@@ -196,14 +208,15 @@ fun App() {
                     )
                 }
 
-                composable<Routes.ProductTabungan> {
-                    ProductTabunganScreen(
-                        navController = navController,
-                        currentRoute = Routes.ProductTabungan,
-                        onScreenDeposito = { navController.navigate(Routes.Product) },
-                        onScreenTabungan = { navController.navigate(Routes.ProductTabungan) }
-                    )
-                }
+//                composable<Routes.ProductTabungan> {
+//                    ProductTabunganScreen(
+//                        navController = navController,
+//                        currentRoute = Routes.ProductTabungan,
+//                        onScreenDeposito = { navController.navigate(Routes.Product) },
+//                        onScreenTabungan = { navController.navigate(Routes.ProductTabungan) },
+//                        onDetailClick = {navController.navigate(Routes.DetailTabungan)}
+//                    )
+//                }
 
 
                 composable<Routes.Simfanku> {
