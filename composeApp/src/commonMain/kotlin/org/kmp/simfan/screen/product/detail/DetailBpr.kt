@@ -36,6 +36,7 @@ import org.kmp.simfan.components.navbar.CustomAppBar
 import simfan.composeapp.generated.resources.Res
 import simfan.composeapp.generated.resources.simfan_websuite
 
+
 @Composable
 fun DetailBprScreen(
     title: String = "BPR Simfan",
@@ -173,3 +174,4 @@ fun InfoRow(label: String, value: String) {
         )
     }
 }
+

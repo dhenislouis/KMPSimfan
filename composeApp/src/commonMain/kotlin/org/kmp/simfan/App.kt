@@ -36,6 +36,7 @@ import org.kmp.simfan.screen.product.ProductTabunganScreen
 import org.kmp.simfan.screen.product.detail.DetailBprScreen
 import org.kmp.simfan.screen.product.detail.DetailScreen
 import org.kmp.simfan.screen.product.detail.subdetail.SubDetailScreen
+import org.kmp.simfan.screen.product.detail.DetailTabunganScreen
 
 //@Composable
 //@Preview
@@ -186,6 +187,13 @@ fun App() {
                         onDetailBpr = {navController.navigate(Routes.DetailBpr) }
                     )
                 }
+                composable<Routes.DetailTabungan> {
+                    DetailTabunganScreen(
+                        onDetailClick = {navController.navigate(Routes.DetailTabungan)},
+                        onDetailBprClick = {navController.navigate(Routes.DetailBpr)},
+                        navController = navController
+                    )
+                }
                 composable<Routes.DetailBpr> {
                     DetailBprScreen("Simfan WebSuite", subtitle = "DKI Jakarta - 3 Transaksi", navController = navController)
                 }
@@ -219,6 +227,7 @@ fun App() {
 //                }
 
 
+
                 composable<Routes.Simfanku> {
                     SimfankuDepositoScreen(
                         navController = navController,
@@ -248,14 +257,14 @@ fun App() {
                     )
                 }
 
-                composable<Routes.DetailTabungan> {
-                    DetailTabunganScreen(
-                        navController = navController,
-                        currentRoute = Routes.SimfankuDeposito,
-                        onBackClick = { navController.navigate(Routes.SimfankuTabungan) },
-                        onTandaTangan = { navController.navigate(Routes.DetailTabungan) }
-                    )
-                }
+//                composable<Routes.DetailTabungan> {
+//                    DetailTabunganScreen(
+//                        navController = navController,
+//                        currentRoute = Routes.SimfankuDeposito,
+//                        onBackClick = { navController.navigate(Routes.SimfankuTabungan) },
+//                        onTandaTangan = { navController.navigate(Routes.DetailTabungan) }
+//                    )
+//                }
 
                 composable<Routes.Profile> {
                     ProfileScreen(navController, Routes.Profile)
