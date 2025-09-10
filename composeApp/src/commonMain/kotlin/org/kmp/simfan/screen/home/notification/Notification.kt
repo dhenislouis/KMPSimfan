@@ -14,12 +14,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import org.jetbrains.compose.resources.painterResource
 import org.kmp.simfan.Routes
 import simfan.composeapp.generated.resources.Res
+import simfan.composeapp.generated.resources.arrow_back
 import simfan.composeapp.generated.resources.close
 import simfan.composeapp.generated.resources.notification
 
@@ -34,29 +36,30 @@ fun NotificationScreen(
         topBar = {
             TopAppBar(
                 title = {
-                    Text(
-                        text = "Notifikasi",
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight.SemiBold,
-                        color = Color.Black
-                    )
+                    Column(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            "Notifikasi",
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.SemiBold,
+                            color = Color.Black,
+                            textAlign = TextAlign.Center
+                        )
+                    }
                 },
                 navigationIcon = {
                     IconButton(onClick = onCloseClick) {
                         Icon(
                             painter = painterResource(Res.drawable.close),
-                            contentDescription = "Tutup",
+                            contentDescription = "Kembali",
                             tint = Color.Black,
-                            modifier = Modifier.size(18.dp)
+                            modifier = Modifier.size(20.dp)
                         )
                     }
                 },
-                actions = {
-                    IconButton(onClick = {}, enabled = false) {}
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Color.White
-                )
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.White)
             )
         },
         containerColor = Color(0xFFF5F6FA)

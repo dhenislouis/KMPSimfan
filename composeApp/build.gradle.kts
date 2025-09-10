@@ -70,6 +70,11 @@ kotlin {
             implementation("dev.gitlive:firebase-auth:2.3.0")
             implementation("dev.gitlive:firebase-firestore:1.12.0")
             implementation("org.jetbrains.compose.material:material-icons-extended:1.7.0")
+            implementation(libs.coil.compose.core)
+            implementation(libs.coil.mp)
+            implementation(libs.coil.network.ktor)
+            implementation(libs.coil.compose)
+            implementation(libs.coil.svg)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

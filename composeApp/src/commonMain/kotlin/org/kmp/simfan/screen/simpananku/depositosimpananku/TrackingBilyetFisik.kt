@@ -87,7 +87,7 @@ fun TrackingTimelineBilyetFisik(statusList: List<TrackingStatusBilyetFisik>) {
                         Box(
                             modifier = Modifier
                                 .width(2.dp)
-                                .height(48.dp)
+                                .height(64.dp)
                                 .background(Color(0xFFE0E0E0))
                         )
                     }

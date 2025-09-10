@@ -83,7 +83,7 @@ fun ProfileScreen(
                         icon = Res.drawable.ic_phone,
                         label = "Pengajuan Penempatan",
                         onClick = {
-//                            navController.navigate(Routes.PengajuanPenempatan)
+                            navController.navigate(Routes.Langkah)
                         }
                     )
                 }
@@ -98,7 +98,7 @@ fun ProfileScreen(
                         label = "Akun Saya",
                         subtitle = "Lakukan perubahan pada akun anda",
                         onClick = {
-                            navController.navigate(Routes.Langkah)
+                            navController.navigate(Routes.AkunSaya)
                         }
                     )
                     MenuItem(

@@ -11,6 +11,8 @@ sealed interface Routes {
 
     // OnBoarding
     @Serializable
+    data object  Onboard: Routes
+    @Serializable
     data object Onboard1 : Routes
     @Serializable
     data object Onboard2 : Routes
@@ -31,6 +33,12 @@ sealed interface Routes {
     @Serializable
     data object Register : Routes
     @Serializable
+    data object RegisterVerifikasi : Routes
+    @Serializable
+    data object BuatPin : Routes
+    @Serializable
+    data object KonfirmasiPin : Routes
+    @Serializable
     data object LupaPassword : Routes
     @Serializable
     data object VerifikasiSMS : Routes
@@ -45,6 +53,8 @@ sealed interface Routes {
     data object Home : Routes
     @Serializable
     data object Product : Routes
+    @Serializable
+    data object Simfanku : Routes
     @Serializable
     data object SimpanankuDeposito : Routes
     @Serializable
@@ -87,6 +97,8 @@ sealed interface Routes {
 
     @Serializable
     data object SyaratKetentuanProductDeposito : Routes
+    @Serializable
+    data object TandaTanganProductDeposito : Routes
 
     @Serializable
     data object InputPinAjukanPenempatanProductDeposito : Routes

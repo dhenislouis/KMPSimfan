@@ -16,8 +16,6 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         val splashScreen = installSplashScreen() // jangan kasih "this"!
         super.onCreate(savedInstanceState)
-//        FirebaseApp.initializeApp(this)
-//        FirebaseConfig.init()
 
         setContent {
             App()

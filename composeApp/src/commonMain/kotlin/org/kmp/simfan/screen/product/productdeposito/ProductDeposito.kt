@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.kmp.simfan.Routes
 import org.kmp.simfan.core.Button1
 import org.kmp.simfan.core.navigation.BottomBar
@@ -49,6 +50,7 @@ fun ProductDepositoScreen(
     onFilterClick: () -> Unit = {},
     onScreenDeposito: () -> Unit = {},
     onScreenTabungan: () -> Unit = {},
+    onDetail: () -> Unit,
     onAjukanPenempatan: () -> Unit
 ) {
     Scaffold(
@@ -82,8 +84,6 @@ fun ProductDepositoScreen(
             }
 
             Row(
-
-
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(BgSecondary)
@@ -189,7 +189,8 @@ fun ProductDepositoScreen(
                     estimasi = "6%",
                     showBilyet = true,
                     showAro = true,
-                    onAjukanPenempatan = onAjukanPenempatan
+                    onDetail = onDetail,
+                    onAjukanPenempatan = onAjukanPenempatan,
                 )
 
                 Spacer(Modifier.height(12.dp))
@@ -206,6 +207,7 @@ fun ProductDepositoScreen(
                     showStatusBar = true,
                     statusTitle = "Belum dapat menerima transaksi.",
                     statusSubtitle = "Data sedang diperbarui",
+                    onDetail = onDetail,
                     onAjukanPenempatan = onAjukanPenempatan
                 )
             }
@@ -226,6 +228,7 @@ fun ProductCard(
     showStatusBar: Boolean = false,
     statusTitle: String = "",
     statusSubtitle: String = "",
+    onDetail: () -> Unit = {},
     onAjukanPenempatan: () -> Unit = {}
 ) {
     Card(
@@ -236,7 +239,14 @@ fun ProductCard(
     ) {
         Column {
             Column(Modifier.padding(top = 18.dp, start = 16.dp, end = 16.dp, bottom = 8.dp)) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable {
+                            onDetail()
+                        }
+                ) {
                     Image(
                         painter = painterResource(Res.drawable.simfan_websuite),
                         contentDescription = null,

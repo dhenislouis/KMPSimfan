@@ -17,13 +17,19 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.kmp.simfan.Routes
+import org.kmp.simfan.core.Button1
+import org.kmp.simfan.screen.auth.login.LoginSuccessScreen
 import simfan.composeapp.generated.resources.Res
 import simfan.composeapp.generated.resources.arrow_back
 import simfan.composeapp.generated.resources.eye_off
@@ -32,6 +38,8 @@ import simfan.composeapp.generated.resources.ic_google
 
 @Composable
 fun RegisterScreenUI(
+    navController: NavController,
+    currentRoute: Routes?,
     onBackClick: () -> Unit = {},
     onRegisterClick: () -> Unit = {},
     onGoogleLoginClick: () -> Unit = {}
@@ -57,6 +65,8 @@ fun RegisterScreenUI(
                     .padding(horizontal = 16.dp, vertical = 8.dp)
             ) {
                 RegisterContent(
+                    navController = navController,
+                    currentRoute = currentRoute,
                     onRegisterClick = onRegisterClick,
                     onGoogleLoginClick = onGoogleLoginClick
                 )
@@ -73,16 +83,18 @@ fun RegisterAppBar(
 ) {
     TopAppBar(
         title = {
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(
                     "Buat Akun Baru",
                     fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
+                    textAlign = TextAlign.Center
                 )
                 Text(
                     "Silahkan daftar dengan akun Anda",
-                    fontSize = 13.sp,
-                    color = Color(0xFF7F909F)
+                    fontSize = 14.sp,
+                    color = Color(0xFF7F909F),
+                    textAlign = TextAlign.Center
                 )
             }
         },
@@ -91,7 +103,8 @@ fun RegisterAppBar(
                 Icon(
                     painter = painterResource(Res.drawable.arrow_back),
                     contentDescription = "Kembali",
-                    tint = Color.Black
+                    tint = Color.Black,
+                    modifier = Modifier.size(20.dp)
                 )
             }
         },
@@ -103,8 +116,11 @@ fun RegisterAppBar(
 }
 
 // ✅ Konten Register
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RegisterContent(
+    navController: NavController,
+    currentRoute: Routes?,
     onRegisterClick: () -> Unit,
     onGoogleLoginClick: () -> Unit
 ) {
@@ -117,80 +133,90 @@ fun RegisterContent(
     var passwordVisible by remember { mutableStateOf(false) }
     var confirmPasswordVisible by remember { mutableStateOf(false) }
     var acceptTerms by remember { mutableStateOf(false) }
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    var showSheet by remember { mutableStateOf(false) }
+    val scope = rememberCoroutineScope()
 
     Column(
         modifier = Modifier.fillMaxWidth()
     ) {
-        InputNama("Nama Lengkap", name, { name = it }, "Masukkan Nama Lengkap")
-        InputNoHp("Nomor Handphone", phone, { phone = it }, "Masukkan nomor handphone")
-        InputEmail("Email", email, { email = it }, "Masukkan email")
+        Spacer(Modifier.height(24.dp))
+        InputNama(name, { name = it }, "Masukkan Nama Lengkap")
+        Spacer(Modifier.height(16.dp))
+        InputNoHp(phone, { phone = it }, "Masukkan nomor handphone")
+        Spacer(Modifier.height(16.dp))
+        InputEmail(email, { email = it }, "Masukkan email")
 
+        Spacer(Modifier.height(16.dp))
         PasswordField(
-            "Password",
             password,
             { password = it },
             "Password",
             passwordVisible
         ) { passwordVisible = !passwordVisible }
 
+        Spacer(Modifier.height(16.dp))
         PasswordField(
-            "Konfirmasi Password",
             confirmPassword,
             { confirmPassword = it },
             "Konfirmasi Password",
             confirmPasswordVisible
         ) { confirmPasswordVisible = !confirmPasswordVisible }
 
-        InputReferal("Kode Referal", referal, { referal = it }, "Masukkan Kode Referal")
+        Spacer(Modifier.height(16.dp))
+        InputReferal(referal, { referal = it }, "Masukkan Kode Referal")
 
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 20.dp),
+            modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Checkbox(checked = acceptTerms, onCheckedChange = { acceptTerms = it })
+            Checkbox(
+                checked = acceptTerms,
+                onCheckedChange = { acceptTerms = it },
+                colors = CheckboxDefaults.colors(
+                    checkedColor = Button1,
+                    uncheckedColor = Color.Gray
+                )
+            )
             Text(
                 "Ingatkan Saya",
-                fontSize = 12.sp,
+                fontSize = 14.sp,
                 color = Color(0xFF999999),
+                fontWeight = FontWeight.SemiBold,
                 modifier = Modifier.padding(start = 6.dp)
             )
         }
 
+        Spacer(Modifier.height(20.dp))
+
         Button(
-            onClick = onRegisterClick,
+            onClick = { showSheet = true },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 8.dp),
-            shape = RoundedCornerShape(24.dp),
-            elevation = ButtonDefaults.buttonElevation(6.dp),
+                .height(50.dp),
+            shape = RoundedCornerShape(25.dp),
+            elevation = ButtonDefaults.buttonElevation( // 👈 ada shadow
+                defaultElevation = 6.dp,
+                pressedElevation = 10.dp
+            ),
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF668CFF))
         ) {
-            Text(
-                "Buat Akun",
-                fontSize = 16.sp,
-                color = Color.White,
-                fontWeight = FontWeight.SemiBold
-            )
+            Text("Buat Akun", fontSize = 16.sp, fontWeight = FontWeight.Bold, color = Color.White)
         }
+
+        Spacer(Modifier.height(20.dp))
 
         // Garis Pembatas
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 16.dp),
+            modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Divider(modifier = Modifier.weight(1f), color = Color(0xFFE0E0E0))
-            Text(
-                "atau",
-                fontSize = 10.sp,
-                color = Color(0xFF999999),
-                modifier = Modifier.padding(horizontal = 12.dp)
-            )
-            Divider(modifier = Modifier.weight(1f), color = Color(0xFFE0E0E0))
+            Divider(Modifier.weight(1f), color = Color(0xFFE0E0E0))
+            Text("  Atau  ", fontSize = 12.sp, color = Color.Gray)
+            Divider(Modifier.weight(1f), color = Color(0xFFE0E0E0))
         }
+
+        Spacer(Modifier.height(20.dp))
 
         // Tombol Google
         Row(
@@ -207,14 +233,30 @@ fun RegisterContent(
             Icon(
                 painter = painterResource(Res.drawable.ic_google),
                 contentDescription = "Google",
-                modifier = Modifier.size(28.dp),
+                modifier = Modifier.size(20.dp),
                 tint = Color.Unspecified
             )
-            Text(
-                "Masuk dengan Google",
-                fontSize = 13.sp,
-                color = Color(0xFF444444),
-                modifier = Modifier.padding(start = 12.dp)
+            Spacer(Modifier.width(12.dp))
+            Text("Masuk dengan Google", fontSize = 14.sp, color = Color.Black)
+        }
+    }
+    if (showSheet) {
+        ModalBottomSheet(
+            onDismissRequest = { showSheet = false },
+            sheetState = sheetState,
+            shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)
+        ) {
+            RegisterVerifikasiBottomSheet(
+                navController = navController,
+                currentRoute = Routes.RegisterVerifikasi,
+                onDismiss = { showSheet = false },
+                onSave = {
+                    scope.launch {
+                        sheetState.hide()
+                        showSheet = false
+                        navController.navigate(Routes.BuatPin)
+                    }
+                }
             )
         }
     }
@@ -222,76 +264,112 @@ fun RegisterContent(
 
 // ✅ Input Components
 @Composable
-fun InputNama(label: String, value: String, onValueChange: (String) -> Unit, placeholder: String) {
+fun InputNama(value: String, onValueChange: (String) -> Unit, placeholder: String) {
+    Text("Nama Lengkap", fontSize = 14.sp, color = Color.Black)
     OutlinedTextField(
         value = value,
         onValueChange = onValueChange,
-        label = { Text(label) },
-        placeholder = { Text(placeholder) },
+        placeholder = { Text(
+            placeholder,
+            fontSize = 12.sp,
+            color = Color.Gray
+        ) },
+        singleLine = true,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 8.dp)
+            .height(50.dp)
+            .background(Color.White, RoundedCornerShape(12.dp))
+            .border(1.dp, Color(0xFFE0E0E0), RoundedCornerShape(12.dp)),
+        shape = RoundedCornerShape(12.dp)
     )
 }
 
 @Composable
-fun InputNoHp(label: String, value: String, onValueChange: (String) -> Unit, placeholder: String) {
+fun InputNoHp(value: String, onValueChange: (String) -> Unit, placeholder: String) {
+    Text("Nomor Handphone", fontSize = 14.sp, color = Color.Black)
     OutlinedTextField(
         value = value,
         onValueChange = onValueChange,
-        label = { Text(label) },
-        placeholder = { Text(placeholder) },
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
+        placeholder = { Text(
+            placeholder,
+            fontSize = 12.sp,
+            color = Color.Gray
+        ) },
+        singleLine = true,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 8.dp)
+            .height(50.dp)
+            .background(Color.White, RoundedCornerShape(12.dp))
+            .border(1.dp, Color(0xFFE0E0E0), RoundedCornerShape(12.dp)),
+        shape = RoundedCornerShape(12.dp)
     )
 }
 
 @Composable
-fun InputEmail(label: String, value: String, onValueChange: (String) -> Unit, placeholder: String) {
+fun InputEmail(value: String, onValueChange: (String) -> Unit, placeholder: String) {
+    Text("Email", fontSize = 14.sp, color = Color.Black)
     OutlinedTextField(
         value = value,
         onValueChange = onValueChange,
-        label = { Text(label) },
-        placeholder = { Text(placeholder) },
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+        placeholder = { Text(
+            placeholder,
+            fontSize = 12.sp,
+            color = Color.Gray
+        ) },
+        singleLine = true,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 8.dp)
+            .height(50.dp)
+            .background(Color.White, RoundedCornerShape(12.dp))
+            .border(1.dp, Color(0xFFE0E0E0), RoundedCornerShape(12.dp)),
+        shape = RoundedCornerShape(12.dp)
     )
 }
 
 @Composable
-fun InputReferal(label: String, value: String, onValueChange: (String) -> Unit, placeholder: String) {
+fun InputReferal(value: String, onValueChange: (String) -> Unit, placeholder: String) {
+    Text("Kode Referal", fontSize = 14.sp, color = Color.Black)
     OutlinedTextField(
         value = value,
         onValueChange = onValueChange,
-        label = { Text(label) },
-        placeholder = { Text(placeholder) },
+        placeholder = { Text(
+            placeholder,
+            fontSize = 12.sp,
+            color = Color.Gray
+        ) },
+        singleLine = true,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 8.dp)
+            .height(50.dp)
+            .background(Color.White, RoundedCornerShape(12.dp))
+            .border(1.dp, Color(0xFFE0E0E0), RoundedCornerShape(12.dp)),
+        shape = RoundedCornerShape(12.dp)
     )
 }
 
 @Composable
 fun PasswordField(
-    label: String,
     value: String,
     onValueChange: (String) -> Unit,
     placeholder: String,
     visible: Boolean,
     onToggleVisibility: () -> Unit
 ) {
+    Text("Password", fontSize = 14.sp, color = Color.Black)
     OutlinedTextField(
         value = value,
         onValueChange = onValueChange,
-        label = { Text(label) },
-        placeholder = { Text(placeholder) },
+        placeholder = { Text(
+            placeholder,
+            fontSize = 12.sp,
+            color = Color.Gray
+        ) },
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 8.dp),
+            .height(50.dp)
+            .background(Color.White, RoundedCornerShape(12.dp))
+            .border(1.dp, Color(0xFFE0E0E0), RoundedCornerShape(12.dp)),
+        shape = RoundedCornerShape(12.dp),
         visualTransformation = if (visible) VisualTransformation.None else PasswordVisualTransformation(),
         trailingIcon = {
             IconButton(onClick = onToggleVisibility) {
@@ -299,7 +377,8 @@ fun PasswordField(
                     painter = painterResource(
                         if (visible) Res.drawable.eye_on else Res.drawable.eye_off
                     ),
-                    contentDescription = if (visible) "Hide password" else "Show password"
+                    contentDescription = if (visible) "Hide password" else "Show password",
+                    modifier = Modifier.size(18.dp)
                 )
             }
         },
@@ -308,8 +387,8 @@ fun PasswordField(
     )
 }
 
-@Preview
-@Composable
-fun RegisterPreview() {
-    RegisterScreenUI()
-}
+//@Preview
+//@Composable
+//fun RegisterPreview() {
+//    RegisterScreenUI()
+//}
