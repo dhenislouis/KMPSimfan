@@ -6,10 +6,13 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -22,6 +25,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -50,6 +54,7 @@ fun OnboardingScreen(
     val coroutineScope = rememberCoroutineScope()
 
     Box(modifier = Modifier.fillMaxSize()) {
+        // Pager utama
         HorizontalPager(
             state = pagerState,
             modifier = Modifier.fillMaxSize()
@@ -65,26 +70,65 @@ fun OnboardingScreen(
                     image = "files/onboard2.svg",
                     label = "Special Rate Offer",
                     title = "6.25% Bunga Kompetitif Keuntungan Maksimal",
-                    description = "Dapatkan bunga tinggi untuk hasil maksimal dari dana yang kamu simpan. Pilihan ideal untuk pertumbuhan keuanganmu.",
-
-                    )
+                    description = "Dapatkan bunga tinggi untuk hasil maksimal dari dana yang kamu simpan. Pilihan ideal untuk pertumbuhan keuanganmu."
+                )
                 2 -> OnboardingStep(
                     image = "files/onboard3.svg",
                     label = "Protected by LPS & Trusted Banks",
                     title = "100% Aman oleh LPS & Bank Terpercaya",
-                    description = "Dana dijamin LPS dan dikelola oleh bank mitra terpercaya untuk perlindungan dan ketenangan maksimal.",
+                    description = "Dana dijamin LPS dan dikelola oleh bank mitra terpercaya untuk perlindungan dan ketenangan maksimal."
                 )
                 3 -> OnboardingStep(
                     image = "files/onboard4.svg",
                     label = "Maksimalkan Pengalaman Pengguna",
                     title = "Jelajahi Fitur Aplikasi & Dapatkan Bantuan",
-                    description = "Nikmati layanan terbaik lewat aplikasi kami. Pilih paket sesuai kebutuhan, akses fitur unggulan.",
+                    description = "Nikmati layanan terbaik lewat aplikasi kami. Pilih paket sesuai kebutuhan, akses fitur unggulan."
                 )
-
             }
         }
 
-
+        // Overlay untuk klik kiri / kanan
+//        Row(
+//            modifier = Modifier.fillMaxSize()
+//        ) {
+//            // Area klik kiri
+//            Box(
+//                modifier = Modifier
+//                    .weight(1f)
+//                    .fillMaxHeight()
+//                    .background(Color.Transparent) // transparan
+//                    .clickable(
+//                        indication = null,
+//                        interactionSource = remember { MutableInteractionSource() }
+//                    ) {
+//                        coroutineScope.launch {
+//                            val prev = (pagerState.currentPage - 1).coerceAtLeast(0)
+//                            pagerState.animateScrollToPage(prev)
+//                        }
+//                    }
+//            )
+//
+//            // Area klik kanan
+//            Box(
+//                modifier = Modifier
+//                    .weight(1f)
+//                    .fillMaxHeight()
+//                    .background(Color.Transparent)
+//                    .clickable(
+//                        indication = null,
+//                        interactionSource = remember { MutableInteractionSource() }
+//                        )  {
+//                        coroutineScope.launch {
+//                            val next = (pagerState.currentPage + 1)
+//                                .coerceAtMost(pagerState.pageCount - 1)
+//
+//                            pagerState.animateScrollToPage(next)
+//                        }
+//                    }
+//            )
+//        }
+//
+//        // Skip + indikator
         Row(
             modifier = Modifier
                 .align(Alignment.TopEnd)
@@ -100,9 +144,8 @@ fun OnboardingScreen(
                 selectedIndex = pagerState.currentPage
             )
         }
-        Spacer(Modifier.height(50.dp))
 
-
+        // Tombol selesai
         if (pagerState.currentPage == pagerState.pageCount - 1) {
             AnimatedVisibility(
                 visible = true,
@@ -119,16 +162,33 @@ fun OnboardingScreen(
                     text = "Selesai"
                 )
             }
-        } else {
+        }else{
             AnimatedVisibility(
-                visible = false,
+                visible = true,
                 enter = fadeIn() + expandVertically(),
-                exit = fadeOut() + shrinkVertically()
-            ) { }
+                exit = fadeOut() + shrinkVertically(),
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(24.dp)
+                    .fillMaxWidth()
+            ) {
+                ComFilledButton(
+                    onClick = {
+                        coroutineScope.launch {
+                            val next = (pagerState.currentPage + 1)
+                                .coerceAtMost(pagerState.pageCount - 1)
+                            pagerState.animateScrollToPage(next)
+                        }
+                    },
+                    modifier = Modifier.fillMaxWidth(),
+                    text = "Lanjut"
+                )
+            }
         }
 
     }
 }
+
 
 @Composable
 fun OnboardingStep(
@@ -147,7 +207,9 @@ fun OnboardingStep(
         Column(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
-                .padding(horizontal = 24.dp, vertical = 40.dp)
+                .padding( start = 24.dp,
+                    end = 24.dp,
+                    bottom = 64.dp)
         ) {
             ContentOnboarding(
                 label = label,

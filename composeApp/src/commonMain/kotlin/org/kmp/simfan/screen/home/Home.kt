@@ -45,6 +45,7 @@ import org.kmp.simfan.extension.toRupiah
 import simfan.composeapp.generated.resources.Res
 import simfan.composeapp.generated.resources.*
 import androidx.compose.foundation.lazy.grid.items
+import coil3.compose.AsyncImage
 
 @Composable
 fun HomeScreen(
@@ -322,20 +323,20 @@ fun SaldoCard() {
 }
 
 data class MenuItem(
-    val icon: DrawableResource,
+    val icon: String,
     val title: String
 )
 
 object MenuData {
     val sampleMenu = listOf(
-        MenuItem(Res.drawable.ic_tabungan_home, "Tabungan"),
-        MenuItem(Res.drawable.ic_e_wallet_home, "E-Wallet"),
-        MenuItem(Res.drawable.ic_airgas_home, "Air dan Gas"),
-        MenuItem(Res.drawable.ic_listrik_home, "Listrik"),
-        MenuItem(Res.drawable.ic_pascabayar_home, "Tagihan Pascabayar"),
-        MenuItem(Res.drawable.ic_va_home, "Virtual Account"),
-        MenuItem(Res.drawable.ic_pulsa_home, "Pulsa/Paket Data"),
-        MenuItem(Res.drawable.ic_lainnya_home, "Lainnya"),
+        MenuItem("files/ic_tabungan.svg", "Tabungan"),
+        MenuItem("files/ic_e_wallet.svg", "E-Wallet"),
+        MenuItem("files/ic_air_dan_gas.svg", "Air dan Gas"),
+        MenuItem("files/ic_listrik.svg", "Listrik"),
+        MenuItem("files/ic_tagihan.svg", "Tagihan Pascabayar"),
+        MenuItem("files/ic_va.svg", "Virtual Account"),
+        MenuItem("files/ic_pulsa_paket.svg", "Pulsa/Paket Data"),
+        MenuItem("files/ic_lainya.svg", "Lainnya"),
     )
 }
 
@@ -363,8 +364,8 @@ fun MenuGrid() {
                     color = Color.White,
                     shadowElevation = 2.dp
                 ) {
-                    Image(
-                        painter = painterResource(item.icon),
+                    AsyncImage(
+                        model = Res.getUri(item.icon),
                         contentDescription = item.title,
                         contentScale = ContentScale.Fit,
                         modifier = Modifier.padding(8.dp)
