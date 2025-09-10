@@ -23,8 +23,7 @@ import org.kmp.simfan.screen.auth.password.NewPasswordUI
 import org.kmp.simfan.screen.auth.password.VerifikasiEmailScreenUI
 import org.kmp.simfan.screen.auth.password.VerifikasiSMSUI
 import org.kmp.simfan.screen.auth.register.RegisterScreenUI
-import org.kmp.simfan.screen.deposito.SimfankuDepositoScreen
-import org.kmp.simfan.screen.deposito.SimfankuTabunganScreen
+
 import org.kmp.simfan.screen.deposito.detail.detaildeposito.DetailDepositoScreen
 import org.kmp.simfan.screen.deposito.detail.detailtabungan.DetailTabunganScreen
 import org.kmp.simfan.screen.home.notification.NotificationScreen
@@ -37,6 +36,7 @@ import org.kmp.simfan.screen.product.detail.DetailBprScreen
 import org.kmp.simfan.screen.product.detail.DetailScreen
 import org.kmp.simfan.screen.product.detail.subdetail.SubDetailScreen
 import org.kmp.simfan.screen.product.detail.DetailTabunganScreen
+import org.kmp.simfan.screen.simfananku.SimfankuScreen
 
 //@Composable
 //@Preview
@@ -229,12 +229,12 @@ fun App() {
 
 
                 composable<Routes.Simfanku> {
-                    SimfankuDepositoScreen(
+                    SimfankuScreen(
                         navController = navController,
-                        currentRoute = Routes.SimfankuDeposito,
-                        onScreenDeposito = { navController.navigate(Routes.Simfanku) },
-                        onScreenTabungan = { navController.navigate(Routes.SimfankuTabungan) },
-                        onDetailDepositoSimfanku = { navController.navigate(Routes.DetailDeposito) }
+                        currentRoute = Routes.Simfanku,
+
+                        onDetailDepositoSimfanku = { navController.navigate(Routes.DetailDeposito) },
+                        onDetailTabunganSimfanku = { navController.navigate(Routes.DetailDeposito) }
                     )
                 }
 
@@ -247,15 +247,15 @@ fun App() {
                     )
                 }
 
-                composable<Routes.SimfankuTabungan> {
-                    SimfankuTabunganScreen(
-                        navController = navController,
-                        currentRoute = Routes.SimfankuTabungan,
-                        onScreenDeposito = { navController.navigate(Routes.Simfanku) },
-                        onScreenTabungan = { navController.navigate(Routes.SimfankuTabungan) },
-                        onDetailTabunganSimfanku = { navController.navigate(Routes.DetailTabungan) }
-                    )
-                }
+//                composable<Routes.SimfankuTabungan> {
+//                    SimfankuTabunganScreen(
+//                        navController = navController,
+//                        currentRoute = Routes.SimfankuTabungan,
+//                        onScreenDeposito = { navController.navigate(Routes.Simfanku) },
+//                        onScreenTabungan = { navController.navigate(Routes.SimfankuTabungan) },
+//                        onDetailTabunganSimfanku = { navController.navigate(Routes.DetailTabungan) }
+//                    )
+//                }
 
 //                composable<Routes.DetailTabungan> {
 //                    DetailTabunganScreen(

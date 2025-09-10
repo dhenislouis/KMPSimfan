@@ -1,5 +1,7 @@
-package org.kmp.simfan.screen.product
+package org.kmp.simfan.screen.simfananku
 
+import org.kmp.simfan.screen.product.ProductDepositoScreen
+import org.kmp.simfan.screen.product.ProductTabunganScreen
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -36,16 +38,16 @@ import org.kmp.simfan.core.Button1
 import org.kmp.simfan.core.navigation.BottomBar
 
 
+
 private val BgSecondary = Color(0xFFF1F2F6)
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ProductScreen(
+fun SimfankuScreen(
     navController: NavController,
     currentRoute: Routes?,
-    onFilterClick: () -> Unit = {},
-    onDetailBpr: () -> Unit = {},
-    onDetailDepositoClick: () -> Unit = {},
-    onDetailTabunganClick: () -> Unit = {}
+    onDetailDepositoSimfanku: () -> Unit = {},
+    onDetailTabunganSimfanku: () -> Unit = {},
+
 ) {
     val pagerState = rememberPagerState(initialPage = 0) { 2 } // 2 tab: Deposito, Tabungan
     val coroutineScope = rememberCoroutineScope()
@@ -72,7 +74,7 @@ fun ProductScreen(
                     .padding(vertical = 16.dp)
             ) {
                 Text(
-                    text = "Produk",
+                    text = "Simfanku",
                     fontSize = 20.sp,
                     fontWeight = FontWeight.SemiBold,
                     color = Color.Black,
@@ -89,40 +91,17 @@ fun ProductScreen(
                     }
                 }
             )
-//            TabRow(
-//                selectedTabIndex = pagerState.currentPage,
-//                containerColor = BgSecondary
-//            ) {
-//                tabTitles.forEachIndexed { index, title ->
-//                    Tab(
-//                        text = { Text(title) },
-//                        selected = pagerState.currentPage == index,
-//                        onClick = {
-//                            coroutineScope.launch {
-//                                pagerState.animateScrollToPage(index)
-//                            }
-//                        }
-//                    )
-//                }
-//            }
 
-            // Pager untuk konten
+
             HorizontalPager(state = pagerState, modifier = Modifier.weight(1f)) { page ->
                 when (page) {
                     0 -> {
                         // Deposito
-                        ProductDepositoScreen(
-                            onFilterClick = onFilterClick,
-                            AjukanPenempatan = onDetailDepositoClick
-                        )
+                        SimfankuDepositoScreen(onDetailDepositoSimfanku)
                     }
                     1 -> {
                         // Tabungan
-                        ProductTabunganScreen(
-                            onFilterClick = onFilterClick,
-                            onDetailBprClick = onDetailBpr,
-                            onDetailClick = onDetailTabunganClick
-                        )
+                        SimfankuTabunganScreen(onDetailTabunganSimfanku)
                     }
                 }
             }
