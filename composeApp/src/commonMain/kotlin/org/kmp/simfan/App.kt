@@ -3,34 +3,11 @@ package org.kmp.simfan
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.*
 import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.kmp.simfan.core.Theme
 import org.kmp.simfan.navigation.*
-import org.kmp.simfan.screen.home.HomeScreen
-import org.kmp.simfan.screen.onboarding.*
-import org.kmp.simfan.screen.profile.ProfileScreen
-import org.kmp.simfan.screen.auth.login.*
-import org.kmp.simfan.screen.auth.password.*
-import org.kmp.simfan.screen.auth.register.RegisterScreenUI
-import org.kmp.simfan.screen.auth.register.RegisterVerifikasiBottomSheet
-import org.kmp.simfan.screen.simpananku.depositosimpananku.SimpanankuDepositoScreen
-import org.kmp.simfan.screen.simpananku.SimfankuTabunganScreen
-import org.kmp.simfan.screen.simpananku.depositosimpananku.*
-import org.kmp.simfan.screen.simpananku.detail.detailtabungan.DetailTabunganScreen
-import org.kmp.simfan.screen.home.notification.NotificationScreen
-import org.kmp.simfan.screen.home.promo.PromoScreen
-import org.kmp.simfan.screen.product.productdeposito.ProductDepositoScreen
-import org.kmp.simfan.screen.product.productdeposito.productdeposito.*
-import org.kmp.simfan.screen.product.producttabungan.ProductTabunganScreen
-import org.kmp.simfan.screen.profile.akunbank.*
-import org.kmp.simfan.screen.profile.akunsaya.DataPribadiScreen
-import org.kmp.simfan.screen.profile.akunsaya.pengajuandata.*
-import org.kmp.simfan.screen.profile.pertanyaanumum.PertanyaanUmumScreen
-import org.kmp.simfan.screen.profile.syaratketentuan.SyaratKetentuanScreen
-import org.kmp.simfan.screen.simpananku.depositosimpananku.DetailDepositoSimpanankuScreen
 
 //@Composable
 //@Preview
@@ -75,7 +52,7 @@ fun App() {
         ) { innerPadding ->
             NavHost(
                 navController = navController,
-                startDestination = Routes.Login,
+                startDestination = Routes.Onboard,
 
                 ) {
 

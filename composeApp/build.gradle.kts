@@ -40,6 +40,7 @@ kotlin {
 //            implementation("com.airbnb.android:lottie:6.4.0")
             implementation("com.google.firebase:firebase-auth-ktx:22.1.1")
             implementation("com.google.firebase:firebase-firestore-ktx:24.9.1")
+            implementation("io.ktor:ktor-client-okhttp:2.3.2")
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -75,6 +76,9 @@ kotlin {
             implementation(libs.coil.network.ktor)
             implementation(libs.coil.compose)
             implementation(libs.coil.svg)
+            implementation("io.ktor:ktor-client-core:2.3.2")
+            implementation("io.ktor:ktor-client-content-negotiation:2.3.2")
+            implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.2")
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

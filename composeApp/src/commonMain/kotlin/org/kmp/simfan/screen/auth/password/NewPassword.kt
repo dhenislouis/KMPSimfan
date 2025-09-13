@@ -16,11 +16,13 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.kmp.simfan.presentation.auth.LupaPasswordViewModel
 import simfan.composeapp.generated.resources.Res
 import simfan.composeapp.generated.resources.arrow_back
 import simfan.composeapp.generated.resources.eye_off
@@ -28,13 +30,17 @@ import simfan.composeapp.generated.resources.eye_on
 
 @Composable
 fun NewPasswordUI(
-    onBackClick: () -> Unit,
-    onConfirmClick: () -> Unit
+    navController: NavController,
+    onBackClick: () -> Unit = {},
+    onConfirmClick: () -> Unit = {}
 ) {
+    val viewModel = remember { LupaPasswordViewModel() }
     var password by remember { mutableStateOf("") }
     var confirmPassword by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
     var confirmPasswordVisible by remember { mutableStateOf(false) }
+    val isLoading = viewModel.isLoading
+    val errorMessage = viewModel.errorMessage
 
     Scaffold(
         topBar = {
@@ -54,13 +60,14 @@ fun NewPasswordUI(
                         modifier = Modifier.size(24.dp)
                     )
                 }
-                Spacer(modifier = Modifier.width(12.dp))
+                Spacer(modifier = Modifier.weight(1f))
                 Text(
                     text = "Ubah Kata Sandi",
                     fontSize = 20.sp,
                     fontWeight = FontWeight.SemiBold,
                     color = Color.Black
                 )
+                Spacer(modifier = Modifier.weight(1f)) // biar title center
             }
         }
     ) { innerPadding ->
@@ -75,7 +82,14 @@ fun NewPasswordUI(
             onConfirmPasswordChange = { confirmPassword = it },
             confirmPasswordVisible = confirmPasswordVisible,
             onToggleConfirmPasswordVisibility = { confirmPasswordVisible = !confirmPasswordVisible },
-            onConfirmClick = onConfirmClick
+            isLoading = isLoading.value,
+            errorMessage = errorMessage.value,
+            onConfirmClick = {
+                if (password == confirmPassword && password.isNotBlank()) {
+                    viewModel.changePassword(password)
+                    onConfirmClick()
+                }
+            }
         )
     }
 }
@@ -91,6 +105,8 @@ fun NewPasswordContent(
     onConfirmPasswordChange: (String) -> Unit,
     confirmPasswordVisible: Boolean,
     onToggleConfirmPasswordVisibility: () -> Unit,
+    isLoading: Boolean,
+    errorMessage: String?,
     onConfirmClick: () -> Unit
 ) {
     Column(
@@ -127,6 +143,24 @@ fun NewPasswordContent(
             onToggleVisibility = onToggleConfirmPasswordVisibility
         )
 
+        if (password != confirmPassword && password.isNotBlank() && confirmPassword.isNotBlank()) {
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = "Password tidak cocok",
+                color = Color.Red,
+                fontSize = 14.sp
+            )
+        }
+
+        errorMessage?.let {
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = it,
+                color = Color.Red,
+                fontSize = 14.sp
+            )
+        }
+
         Spacer(modifier = Modifier.height(35.dp))
 
         Button(
@@ -136,14 +170,22 @@ fun NewPasswordContent(
                 .padding(vertical = 8.dp),
             shape = RoundedCornerShape(24.dp),
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF668CFF)),
-            elevation = ButtonDefaults.buttonElevation(6.dp)
+            elevation = ButtonDefaults.buttonElevation(6.dp),
+            enabled = !isLoading &&
+                    password.isNotBlank() &&
+                    confirmPassword.isNotBlank() &&
+                    password == confirmPassword
         ) {
-            Text(
-                text = "Konfirmasi",
-                fontSize = 16.sp,
-                color = Color.White,
-                fontWeight = FontWeight.SemiBold
-            )
+            if (isLoading) {
+                CircularProgressIndicator(color = Color.White, strokeWidth = 2.dp)
+            } else {
+                Text(
+                    text = "Konfirmasi",
+                    fontSize = 16.sp,
+                    color = Color.White,
+                    fontWeight = FontWeight.SemiBold
+                )
+            }
         }
     }
 }
@@ -191,11 +233,11 @@ fun PasswordInputField(
     }
 }
 
-@Preview
-@Composable
-fun NewPasswordScreenPreview() {
-    NewPasswordUI(
-        onBackClick = {},
-        onConfirmClick = {}
-    )
-}
+//@Preview
+//@Composable
+//fun NewPasswordScreenPreview() {
+//    NewPasswordUI(
+//        onBackClick = {},
+//        onConfirmClick = {}
+//    )
+//}

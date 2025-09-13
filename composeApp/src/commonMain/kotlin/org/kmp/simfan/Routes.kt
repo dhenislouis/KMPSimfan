@@ -173,4 +173,7 @@ sealed interface Routes {
     @Serializable
     data object KeluarAplikasi : Routes
 
+    @Serializable
+    data object DetailBPRProductDeposito : Routes
+
 }

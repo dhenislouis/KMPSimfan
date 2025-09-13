@@ -1,7 +1,7 @@
 package org.kmp.simfan.extension
 
-fun Double.toRupiah(): String {
-    val number = this.toLong()
+fun toRupiah(d: Double): String {
+    val number = d.toLong()
     val formatted = number.toString()
         .reversed()
         .chunked(3)

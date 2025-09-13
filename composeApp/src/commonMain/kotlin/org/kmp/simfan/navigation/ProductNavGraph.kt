@@ -6,10 +6,8 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import org.kmp.simfan.Routes
-import org.kmp.simfan.screen.product.filter.*
+import org.kmp.simfan.screen.product.ProductScreen
 import org.kmp.simfan.screen.product.productdeposito.*
-import org.kmp.simfan.screen.product.productdeposito.productdeposito.*
-import org.kmp.simfan.screen.product.producttabungan.*
 
 @Composable
 expect fun SyaratKetentuanProductDepositoRoute(navController: NavHostController)
@@ -20,26 +18,28 @@ expect fun TandaTanganProductDepositoRoute(navController: NavHostController)
 fun NavGraphBuilder.productGraph(navController: NavController) {
     // PRODUK DEPOSITO
     composable<Routes.Product> {
-        ProductDepositoScreen(
+        ProductScreen(
             navController = navController,
             currentRoute = Routes.Product,
-            onScreenDeposito = { navController.navigate(Routes.Product) },
-            onScreenTabungan = { navController.navigate(Routes.ProductTabungan) },
-            onDetail = { navController.navigate(Routes.DetailProductDeposito) },
-            onAjukanPenempatan = { navController.navigate(Routes.PengajuanProductDeposito) }
+            onFilterDeposito = { navController.navigate(Routes.DetailBPRProductDeposito) },
+            onFilterTabungan = { navController.navigate(Routes.DetailProductDeposito) },
+            onDetailBprDeposito = { navController.navigate(Routes.DetailProductDeposito) },
+            onDetailBprTabungan = { navController.navigate(Routes.DetailProductDeposito) },
+            onDetailDepositoClick = { navController.navigate(Routes.DetailProductDeposito) },
+            onDetailTabunganClick = { navController.navigate(Routes.PengajuanProductDeposito) }
         )
     }
-    composable<Routes.DetailProductDeposito> {
-        DetailProductDeposito(
+    composable<Routes.DetailBPRProductDeposito> {
+        DetailBPRProductDeposito(
             navController = navController,
             currentRoute = Routes.DetailProductDeposito,
             onBackClick = { navController.navigate(Routes.Product) }
         )
     }
-    composable<Routes.PengajuanProductDeposito> {
-        PengajuanProductDepositoScreen(
+    composable<Routes.DetailProductDeposito> {
+        DetailProductDepositoScreen(
             navController = navController,
-            currentRoute = Routes.PengajuanProductDeposito,
+            currentRoute = Routes.DetailProductDeposito,
             onBackClick = { navController.navigate(Routes.Product) },
             onDetailProdukLainnya = { navController.navigate(Routes.PengajuanProductDeposito) }
         )
@@ -100,12 +100,5 @@ fun NavGraphBuilder.productGraph(navController: NavController) {
     }
 
     // PRODUK TABUNGAN
-    composable<Routes.ProductTabungan> {
-        ProductTabunganScreen(
-            navController = navController,
-            currentRoute = Routes.ProductTabungan,
-            onScreenDeposito = { navController.navigate(Routes.Product) },
-            onScreenTabungan = { navController.navigate(Routes.ProductTabungan) }
-        )
-    }
+
 }

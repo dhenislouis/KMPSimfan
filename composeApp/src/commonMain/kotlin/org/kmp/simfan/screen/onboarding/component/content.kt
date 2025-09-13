@@ -53,7 +53,7 @@ fun ContentOnboarding(
 @Composable
 fun TextContent(title: String, description: String) {
     Column(
-        verticalArrangement = Arrangement.spacedBy(16.dp) // Gap 16px
+        verticalArrangement = Arrangement.spacedBy(12.dp) // Gap 16px
     ) {
         Text(
             text = title,
@@ -64,7 +64,7 @@ fun TextContent(title: String, description: String) {
         Text(
             text = description,
             fontSize = 15.sp,
-            fontWeight = FontWeight.Medium,
+            fontWeight = FontWeight.Light,
             color = Color.White.copy(alpha = 0.90f)
         )
     }
@@ -90,3 +90,6 @@ fun LabelInfo(text: String) {
         )
     }
 }
+
+
+

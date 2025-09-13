@@ -15,25 +15,31 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.kmp.simfan.presentation.auth.LupaPasswordViewModel
 import simfan.composeapp.generated.resources.Res
 import simfan.composeapp.generated.resources.arrow_back
 
 @Composable
 fun VerifikasiEmailScreenUI(
     email: String,
+    navController: NavController,
     onBackClick: () -> Unit = {},
     onResendClick: () -> Unit = {},
     onVerifyClick: (String) -> Unit = {}
 ) {
+    val viewModel = remember { LupaPasswordViewModel() }
     var digit1 by remember { mutableStateOf("") }
     var digit2 by remember { mutableStateOf("") }
     var digit3 by remember { mutableStateOf("") }
     var digit4 by remember { mutableStateOf("") }
+    val isLoading = viewModel.isLoading
+    val errorMessage = viewModel.errorMessage
 
     Scaffold(
         topBar = {
@@ -101,10 +107,27 @@ fun VerifikasiEmailScreenUI(
                     .padding(bottom = 55.dp)
                     .align(Alignment.CenterHorizontally)
             ) {
-                EmailDigitTextField(digit1) { digit1 = it }
-                EmailDigitTextField(digit2) { digit2 = it }
-                EmailDigitTextField(digit3) { digit3 = it }
-                EmailDigitTextField(digit4) { digit4 = it }
+                EmailDigitTextField(digit1) {
+                    digit1 = it
+                    if (it.isNotEmpty() && digit2.isEmpty()) {
+                        // Focus next field
+                    }
+                }
+                EmailDigitTextField(digit2) {
+                    digit2 = it
+                    if (it.isNotEmpty() && digit3.isEmpty()) {
+                        // Focus next field
+                    }
+                }
+                EmailDigitTextField(digit3) {
+                    digit3 = it
+                    if (it.isNotEmpty() && digit4.isEmpty()) {
+                        // Focus next field
+                    }
+                }
+                EmailDigitTextField(digit4) {
+                    digit4 = it
+                }
             }
 
             Text(
@@ -112,27 +135,49 @@ fun VerifikasiEmailScreenUI(
                 fontSize = 13.sp,
                 color = Color.Black,
                 modifier = Modifier
-                    .clickable { onResendClick() }
+                    .clickable {
+                        viewModel.requestOTP("Email")
+                        onResendClick()
+                    }
                     .padding(bottom = 16.dp)
             )
+
+            errorMessage.value?.let {
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = it,
+                    color = Color.Red,
+                    fontSize = 14.sp
+                )
+            }
 
             // Tombol Lanjut
             Button(
                 onClick = {
                     val code = digit1 + digit2 + digit3 + digit4
+                    viewModel.validateOTP(code)
                     onVerifyClick(code)
                 },
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(24.dp),
                 elevation = ButtonDefaults.buttonElevation(6.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF668CFF))
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF668CFF)),
+                enabled = !isLoading.value &&
+                        digit1.isNotBlank() &&
+                        digit2.isNotBlank() &&
+                        digit3.isNotBlank() &&
+                        digit4.isNotBlank()
             ) {
-                Text(
-                    text = "Lanjut",
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.SemiBold,
-                    color = Color.White
-                )
+                if (isLoading.value) {
+                    CircularProgressIndicator(color = Color.White, strokeWidth = 2.dp)
+                } else {
+                    Text(
+                        text = "Lanjut",
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        color = Color.White
+                    )
+                }
             }
         }
     }
@@ -161,8 +206,8 @@ fun EmailDigitTextField(
     )
 }
 
-@Preview
-@Composable
-fun VerifikasiEmailPreview() {
-    VerifikasiEmailScreenUI(email = "ayucinta@gmail.com")
-}
+//@Preview
+//@Composable
+//fun VerifikasiEmailPreview() {
+//    VerifikasiEmailScreenUI(email = "ayucinta@gmail.com")
+//}

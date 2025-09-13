@@ -4,7 +4,6 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import kotlinx.cinterop.ExperimentalForeignApi
 import org.kmp.simfan.Routes
-import org.kmp.simfan.screen.product.productdeposito.productdeposito.SyaratKetentuanProdukDepositoScreen
 import org.kmp.simfan.screen.profile.tandatangan.TandaTanganScreen
 import org.kmp.simfan.utils.savePlatformBitmapToFile
 import org.kmp.simfan.utils.toPlatformBitmap

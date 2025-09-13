@@ -4,10 +4,9 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import org.kmp.simfan.Routes
-import org.kmp.simfan.screen.simpananku.*
-import org.kmp.simfan.screen.simpananku.detail.*
-import org.kmp.simfan.screen.simpananku.detail.detailtabungan.*
-import org.kmp.simfan.screen.simpananku.depositosimpananku.*
+import org.kmp.simfan.screen.simfananku.*
+import org.kmp.simfan.screen.simfananku.detail.detailtabungan.*
+import org.kmp.simfan.screen.simfananku.depositosimpananku.*
 
 fun NavGraphBuilder.simpanankuGraph(navController: NavController) {
     //DEPOSITO
@@ -57,10 +56,6 @@ fun NavGraphBuilder.simpanankuGraph(navController: NavController) {
     //TABUNGAN
     composable<Routes.SimpanankuTabungan> {
         SimfankuTabunganScreen(
-            navController = navController,
-            currentRoute = Routes.SimpanankuTabungan,
-            onScreenDeposito = { navController.navigate(Routes.SimpanankuDeposito) },
-            onScreenTabungan = { navController.navigate(Routes.SimpanankuTabungan) },
             onDetailTabunganSimfanku = { navController.navigate(Routes.DetailTabunganSimpananku) }
         )
     }

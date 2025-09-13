@@ -15,21 +15,27 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.kmp.simfan.presentation.auth.LupaPasswordViewModel
 import simfan.composeapp.generated.resources.Res
 import simfan.composeapp.generated.resources.arrow_back
 
 @Composable
 fun LupaPasswordScreenUI(
+    navController: NavController,
     onBackClick: () -> Unit = {},
     onNextClick: (String) -> Unit = {}
 ) {
+    val viewModel = remember { LupaPasswordViewModel() }
     var selectedOption by remember { mutableStateOf("SMS") }
     val scrollState = rememberScrollState()
+    val isLoading = viewModel.isLoading
+    val errorMessage = viewModel.errorMessage
 
     Scaffold(
         topBar = {
@@ -71,18 +77,26 @@ fun LupaPasswordScreenUI(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Button(
-                    onClick = { onNextClick(selectedOption) },
+                    onClick = {
+                        viewModel.requestOTP(selectedOption)
+                        onNextClick(selectedOption)
+                    },
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(24.dp),
                     elevation = ButtonDefaults.buttonElevation(6.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF668CFF))
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF668CFF)),
+                    enabled = isLoading.value
                 ) {
-                    Text(
-                        text = "Lanjut",
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.SemiBold,
-                        color = Color.White
-                    )
+                    if (isLoading.value) {
+                        CircularProgressIndicator(color = Color.White, strokeWidth = 2.dp)
+                    } else {
+                        Text(
+                            text = "Lanjut",
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.SemiBold,
+                            color = Color.White
+                        )
+                    }
                 }
             }
         }
@@ -133,6 +147,15 @@ fun LupaPasswordScreenUI(
                 selected = selectedOption == "Email",
                 onClick = { selectedOption = "Email" }
             )
+
+            errorMessage.value?.let {
+                Spacer(modifier = Modifier.height(12.dp))
+                Text(
+                    text = it,
+                    color = Color.Red,
+                    fontSize = 14.sp
+                )
+            }
         }
     }
 }
@@ -168,8 +191,8 @@ fun OptionCard(
     }
 }
 
-@Preview
-@Composable
-fun LupaPasswordPreview() {
-    LupaPasswordScreenUI()
-}
+//@Preview
+//@Composable
+//fun LupaPasswordPreview() {
+//    LupaPasswordScreenUI()
+//}

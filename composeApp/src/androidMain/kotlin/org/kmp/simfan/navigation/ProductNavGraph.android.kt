@@ -5,7 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import org.kmp.simfan.Routes
-import org.kmp.simfan.screen.product.productdeposito.productdeposito.SyaratKetentuanProdukDepositoScreen
+import org.kmp.simfan.screen.product.productdeposito.SyaratKetentuanProdukDepositoScreen
 import org.kmp.simfan.screen.profile.tandatangan.TandaTanganScreen
 import org.kmp.simfan.utils.savePlatformBitmapToFile
 import org.kmp.simfan.utils.toPlatformBitmap

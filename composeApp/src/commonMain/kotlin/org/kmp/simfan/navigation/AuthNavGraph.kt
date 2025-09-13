@@ -13,8 +13,8 @@ fun NavGraphBuilder.authGraph(navController: NavController) {
         LoginScreenUI(
             navController = navController,
             currentRoute = Routes.Login,
-//                        onLoginClick = { navController.navigate(Routes.LoginSuccess) },
-            onForgotPasswordClick = { navController.navigate(Routes.Login) },
+            onBackClick = { navController.popBackStack() },
+            onForgotPasswordClick = { navController.navigate(Routes.LupaPassword) },
             onRegisterClick = { navController.navigate(Routes.Register) }
         )
     }
@@ -22,7 +22,7 @@ fun NavGraphBuilder.authGraph(navController: NavController) {
         LoginSuccessScreen(
             navController = navController,
             currentRoute = Routes.LoginSuccess,
-            onDismiss = { navController.navigate(Routes.LoginSuccess) },
+            onDismiss = { navController.popBackStack() },
             onContinueClick = { navController.navigate(Routes.LoginSyaratKetentuan) }
         )
     }
@@ -37,16 +37,15 @@ fun NavGraphBuilder.authGraph(navController: NavController) {
         RegisterScreenUI(
             navController = navController,
             currentRoute = Routes.Login,
-            onBackClick = { navController.navigate(Routes.Login) },
-//                        onRegisterClick = { navController.navigate(Routes.Login) },
-            onGoogleLoginClick = { navController.navigate(Routes.Register) }
+            onBackClick = { navController.popBackStack() },
+            onGoogleLoginClick = { /* Handle Google login */ }
         )
     }
     composable<Routes.RegisterVerifikasi> {
         RegisterVerifikasiBottomSheet(
             navController = navController,
             currentRoute = Routes.RegisterVerifikasi,
-            onDismiss = { navController.navigate(Routes.RegisterVerifikasi) },
+            onDismiss = { navController.popBackStack() },
             onSave = { navController.navigate(Routes.BuatPin) }
         )
     }
@@ -61,16 +60,57 @@ fun NavGraphBuilder.authGraph(navController: NavController) {
         KonfirmasiPin(
             navController = navController,
             currentRoute = Routes.KonfirmasiPin,
-            onBackClick = { navController.navigate(Routes.BuatPin) },
+            onBackClick = { navController.popBackStack() },
             onKonfirmasiPin = { navController.navigate(Routes.Login) }
         )
     }
+    composable<Routes.LupaPassword> {
+        LupaPasswordScreenUI(
+            navController = navController,
+            onBackClick = { navController.popBackStack() },
+            onNextClick = { method ->
+                when (method) {
+                    "SMS" -> navController.navigate(Routes.VerifikasiSMS)
+                    "Email" -> navController.navigate(Routes.VerifikasiEmail)
+                    else -> navController.navigate(Routes.VerifikasiSMS)
+                }
+            }
+        )
+    }
 
+    composable<Routes.VerifikasiSMS> {
+        VerifikasiSMSUI(
+            phoneNumber = "081234567899",
+            navController = navController,
+            onBackClick = { navController.popBackStack() },
+            onResendClick = { /* Handle resend */ },
+            onVerifyClick = { navController.navigate(Routes.NewPassword) }
+        )
+    }
+
+    composable<Routes.VerifikasiEmail> {
+        VerifikasiEmailScreenUI(
+            email = "user@example.com",
+            navController = navController,
+            onBackClick = { navController.popBackStack() },
+            onResendClick = { /* Handle resend */ },
+            onVerifyClick = { navController.navigate(Routes.NewPassword) }
+        )
+    }
 
     composable<Routes.NewPassword> {
         NewPasswordUI(
-            onBackClick = { navController.navigate(Routes.NewPassword) },
+            navController = navController,
+            onBackClick = { navController.popBackStack() },
             onConfirmClick = { navController.navigate(Routes.Login) }
+        )
+    }
+
+    composable<Routes.UbahPassword> {
+        UbahPasswordUI(
+            navController = navController,
+            onBackClick = { navController.popBackStack() },
+            onSaveClick = { navController.popBackStack() }
         )
     }
 }

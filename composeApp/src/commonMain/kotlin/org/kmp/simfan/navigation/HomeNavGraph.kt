@@ -21,15 +21,15 @@ fun NavGraphBuilder.homeGraph(navController: NavController) {
         NotificationScreen(
             navController = navController,
             currentRoute = Routes.Notification,
-            onCloseClick = { navController.navigate(Routes.Home) }
+            onCloseClick = { navController.popBackStack() }
         )
     }
     composable<Routes.Promo> {
         PromoScreen(
             navController = navController,
             currentRoute = Routes.Home,
-            onBackClick = { navController.navigate(Routes.Home) },
-            onMenuClick = { navController.navigate(Routes.Promo) }
+            onBackClick = { navController.popBackStack() },
+            onMenuClick = { /* Handle menu click */ }
         )
     }
 }

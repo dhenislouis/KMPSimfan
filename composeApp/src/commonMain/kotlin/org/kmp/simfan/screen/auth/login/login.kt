@@ -19,18 +19,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import cafe.adriel.voyager.core.screen.Screen
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
-import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.kmp.simfan.Routes
 import org.kmp.simfan.core.Button1
-import org.kmp.simfan.screen.product.productdeposito.productdeposito.BottomSheetTTDBerhasilScreen
+import org.kmp.simfan.presentation.auth.LoginViewModel
 import simfan.composeapp.generated.resources.Res
-import simfan.composeapp.generated.resources.arrow_back
-import simfan.composeapp.generated.resources.eye_off
-import simfan.composeapp.generated.resources.eye_on
-import simfan.composeapp.generated.resources.ic_google
+import simfan.composeapp.generated.resources.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -39,18 +34,28 @@ fun LoginScreenUI(
     currentRoute: Routes?,
     onBackClick: () -> Unit = {},
     onLoginClick: () -> Unit = {},
-//    onLoginClick: (String, String) -> Unit = { _, _ -> },
     onGoogleLoginClick: () -> Unit = {},
     onForgotPasswordClick: () -> Unit = {},
     onRegisterClick: () -> Unit = {}
 ) {
+    val viewModel = remember { LoginViewModel() }
     var identifier by remember { mutableStateOf("") } // email/nomor HP
     var password by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
     var rememberMe by remember { mutableStateOf(false) }
+    val isLoading = viewModel.isLoading
+    val loginResult = viewModel.loginResult
+    val errorMessage = viewModel.errorMessage
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var showSheet by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
+
+    // Handle login result
+    LaunchedEffect(loginResult.value) {
+        if (loginResult.value != null) {
+            showSheet = true
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -182,7 +187,9 @@ fun LoginScreenUI(
 
             // Tombol masuk
             Button(
-                onClick = { showSheet = true },
+                onClick = {
+                    viewModel.login(identifier, password)
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(50.dp),
@@ -191,9 +198,25 @@ fun LoginScreenUI(
                     defaultElevation = 6.dp,
                     pressedElevation = 10.dp
                 ),
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF668CFF))
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF668CFF)),
+                enabled = !isLoading.value && identifier.isNotBlank() && password.isNotBlank()
             ) {
-                Text("Masuk", fontSize = 16.sp, fontWeight = FontWeight.Bold, color = Color.White)
+                if (isLoading.value) {
+                    CircularProgressIndicator(color = Color.White, strokeWidth = 2.dp)
+                } else {
+                    Text("Masuk", fontSize = 16.sp, fontWeight = FontWeight.Bold, color = Color.White)
+                }
+            }
+            // Error handling
+            errorMessage.value?.let {
+                Spacer(Modifier.height(12.dp))
+                Text("Login gagal: $it", color = Color.Red, fontSize = 14.sp)
+            }
+            // Jika berhasil login → tampilkan bottom sheet
+            if (showSheet) {
+                LaunchedEffect(Unit) {
+                    showSheet = true
+                }
             }
 
             Spacer(Modifier.height(20.dp))
@@ -251,18 +274,28 @@ fun LoginScreenUI(
         }
         if (showSheet) {
             ModalBottomSheet(
-                onDismissRequest = { showSheet = false },
+                onDismissRequest = {
+                    showSheet = false
+                    viewModel.clearLoginResult()
+                },
                 sheetState = sheetState,
                 shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)
             ) {
                 LoginSuccessScreen(
                     navController = navController,
                     currentRoute = Routes.Login,
-                    onDismiss = { showSheet = false },
+                    onDismiss = {
+                        scope.launch {
+                            sheetState.hide()
+                            showSheet = false
+                            viewModel.clearLoginResult()
+                        }
+                    },
                     onContinueClick = {
                         scope.launch {
                             sheetState.hide()
                             showSheet = false
+                            viewModel.clearLoginResult()
                             navController.navigate(Routes.LoginSyaratKetentuan)
                         }
                     }

@@ -29,6 +29,7 @@ import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.kmp.simfan.Routes
 import org.kmp.simfan.core.Button1
+import org.kmp.simfan.presentation.auth.RegisterViewModel
 import org.kmp.simfan.screen.auth.login.LoginSuccessScreen
 import simfan.composeapp.generated.resources.Res
 import simfan.composeapp.generated.resources.arrow_back
@@ -36,6 +37,7 @@ import simfan.composeapp.generated.resources.eye_off
 import simfan.composeapp.generated.resources.eye_on
 import simfan.composeapp.generated.resources.ic_google
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RegisterScreenUI(
     navController: NavController,
@@ -45,6 +47,29 @@ fun RegisterScreenUI(
     onGoogleLoginClick: () -> Unit = {}
 ) {
     val scrollState = rememberScrollState()
+    val viewModel = remember { RegisterViewModel() }
+    var name by remember { mutableStateOf("") }
+    var phone by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+    var confirmPassword by remember { mutableStateOf("") }
+    var referal by remember { mutableStateOf("") }
+    var passwordVisible by remember { mutableStateOf(false) }
+    var confirmPasswordVisible by remember { mutableStateOf(false) }
+    var acceptTerms by remember { mutableStateOf(false) }
+    val isLoading = viewModel.isLoading
+    val registerResult = viewModel.registerResult
+    val errorMessage = viewModel.errorMessage
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    var showSheet by remember { mutableStateOf(false) }
+    val scope = rememberCoroutineScope()
+
+    // Handle register result
+    LaunchedEffect(registerResult.value) {
+        if (registerResult.value != null) {
+            showSheet = true
+        }
+    }
 
     MaterialTheme(
         colorScheme = lightColorScheme(
@@ -67,10 +92,63 @@ fun RegisterScreenUI(
                 RegisterContent(
                     navController = navController,
                     currentRoute = currentRoute,
-                    onRegisterClick = onRegisterClick,
+                    name = name,
+                    onNameChange = { name = it },
+                    phone = phone,
+                    onPhoneChange = { phone = it },
+                    email = email,
+                    onEmailChange = { email = it },
+                    password = password,
+                    onPasswordChange = { password = it },
+                    confirmPassword = confirmPassword,
+                    onConfirmPasswordChange = { confirmPassword = it },
+                    referal = referal,
+                    onReferalChange = { referal = it },
+                    passwordVisible = passwordVisible,
+                    onPasswordVisibleChange = { passwordVisible = it },
+                    confirmPasswordVisible = confirmPasswordVisible,
+                    onConfirmPasswordVisibleChange = { confirmPasswordVisible = it },
+                    acceptTerms = acceptTerms,
+                    onAcceptTermsChange = { acceptTerms = it },
+                    isLoading = isLoading.value,
+                    errorMessage = errorMessage.value,
+                    onRegister = {
+                        viewModel.register(name, email, phone, password)
+                    },
                     onGoogleLoginClick = onGoogleLoginClick
                 )
             }
+        }
+    }
+
+    if (showSheet) {
+        ModalBottomSheet(
+            onDismissRequest = {
+                showSheet = false
+                viewModel.clearRegisterResult()
+            },
+            sheetState = sheetState,
+            shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)
+        ) {
+            RegisterVerifikasiBottomSheet(
+                navController = navController,
+                currentRoute = Routes.RegisterVerifikasi,
+                onDismiss = {
+                    scope.launch {
+                        sheetState.hide()
+                        showSheet = false
+                        viewModel.clearRegisterResult()
+                    }
+                },
+                onSave = {
+                    scope.launch {
+                        sheetState.hide()
+                        showSheet = false
+                        viewModel.clearRegisterResult()
+                        navController.navigate(Routes.BuatPin)
+                    }
+                }
+            )
         }
     }
 }
@@ -121,7 +199,27 @@ fun RegisterAppBar(
 fun RegisterContent(
     navController: NavController,
     currentRoute: Routes?,
-    onRegisterClick: () -> Unit,
+    name: String,
+    onNameChange: (String) -> Unit,
+    phone: String,
+    onPhoneChange: (String) -> Unit,
+    email: String,
+    onEmailChange: (String) -> Unit,
+    password: String,
+    onPasswordChange: (String) -> Unit,
+    confirmPassword: String,
+    onConfirmPasswordChange: (String) -> Unit,
+    referal: String,
+    onReferalChange: (String) -> Unit,
+    passwordVisible: Boolean,
+    onPasswordVisibleChange: (Boolean) -> Unit,
+    confirmPasswordVisible: Boolean,
+    onConfirmPasswordVisibleChange: (Boolean) -> Unit,
+    acceptTerms: Boolean,
+    onAcceptTermsChange: (Boolean) -> Unit,
+    isLoading: Boolean,
+    errorMessage: String?,
+    onRegister: () -> Unit,
     onGoogleLoginClick: () -> Unit
 ) {
     var name by remember { mutableStateOf("") }
@@ -141,30 +239,27 @@ fun RegisterContent(
         modifier = Modifier.fillMaxWidth()
     ) {
         Spacer(Modifier.height(24.dp))
-        InputNama(name, { name = it }, "Masukkan Nama Lengkap")
+        InputNama(name, onNameChange, "Masukkan Nama Lengkap")
         Spacer(Modifier.height(16.dp))
-        InputNoHp(phone, { phone = it }, "Masukkan nomor handphone")
+        InputNoHp(phone, onPhoneChange, "Masukkan nomor handphone")
         Spacer(Modifier.height(16.dp))
-        InputEmail(email, { email = it }, "Masukkan email")
-
+        InputEmail(email, onEmailChange, "Masukkan email")
         Spacer(Modifier.height(16.dp))
         PasswordField(
             password,
-            { password = it },
+            onPasswordChange,
             "Password",
             passwordVisible
-        ) { passwordVisible = !passwordVisible }
-
+        ) { onPasswordVisibleChange(!passwordVisible) }
         Spacer(Modifier.height(16.dp))
         PasswordField(
             confirmPassword,
-            { confirmPassword = it },
+            onConfirmPasswordChange,
             "Konfirmasi Password",
             confirmPasswordVisible
-        ) { confirmPasswordVisible = !confirmPasswordVisible }
-
+        ) { onConfirmPasswordVisibleChange(!confirmPasswordVisible) }
         Spacer(Modifier.height(16.dp))
-        InputReferal(referal, { referal = it }, "Masukkan Kode Referal")
+        InputReferal(referal, onReferalChange, "Masukkan Kode Referal")
 
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -172,7 +267,7 @@ fun RegisterContent(
         ) {
             Checkbox(
                 checked = acceptTerms,
-                onCheckedChange = { acceptTerms = it },
+                onCheckedChange = onAcceptTermsChange,
                 colors = CheckboxDefaults.colors(
                     checkedColor = Button1,
                     uncheckedColor = Color.Gray
@@ -186,11 +281,19 @@ fun RegisterContent(
                 modifier = Modifier.padding(start = 6.dp)
             )
         }
+        errorMessage?.let {
+            Spacer(Modifier.height(8.dp))
+            Text(
+                text = it,
+                color = Color.Red,
+                fontSize = 14.sp
+            )
+        }
 
         Spacer(Modifier.height(20.dp))
 
         Button(
-            onClick = { showSheet = true },
+            onClick = onRegister,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(50.dp),
@@ -199,9 +302,21 @@ fun RegisterContent(
                 defaultElevation = 6.dp,
                 pressedElevation = 10.dp
             ),
-            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF668CFF))
+            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF668CFF)),
+            enabled = !isLoading &&
+                    name.isNotBlank() &&
+                    phone.isNotBlank() &&
+                    email.isNotBlank() &&
+                    password.isNotBlank() &&
+                    confirmPassword.isNotBlank() &&
+                    password == confirmPassword &&
+                    acceptTerms
         ) {
-            Text("Buat Akun", fontSize = 16.sp, fontWeight = FontWeight.Bold, color = Color.White)
+            if (isLoading) {
+                CircularProgressIndicator(color = Color.White, strokeWidth = 2.dp)
+            } else {
+                Text("Buat Akun", fontSize = 16.sp, fontWeight = FontWeight.Bold, color = Color.White)
+            }
         }
 
         Spacer(Modifier.height(20.dp))
