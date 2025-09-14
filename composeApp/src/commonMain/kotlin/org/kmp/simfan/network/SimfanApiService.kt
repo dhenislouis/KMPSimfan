@@ -18,14 +18,22 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.jsonPrimitive
+import org.kmp.simfan.model.ApiResponse
 import org.kmp.simfan.model.BPR
 import org.kmp.simfan.model.BankAccount
 import org.kmp.simfan.model.Deposit
 import org.kmp.simfan.model.DepositRequest
 import org.kmp.simfan.model.FirebaseTokenRequest
+import org.kmp.simfan.model.IndustrialSectorsData
+import org.kmp.simfan.model.InvestmentObjectivesData
+import org.kmp.simfan.model.JobData
+import org.kmp.simfan.model.JobTitlesData
+import org.kmp.simfan.model.MonthlySalariesData
 import org.kmp.simfan.model.Product
 import org.kmp.simfan.model.Profile
+import org.kmp.simfan.model.ProfileSubmissionRequest
 import org.kmp.simfan.model.Promotion
+import org.kmp.simfan.model.RevenueData
 import org.kmp.simfan.model.SaldoResponse
 import org.kmp.simfan.model.SignInRequest
 import org.kmp.simfan.model.SignInResponse
@@ -69,14 +77,14 @@ class SimfanApiService(
 
 
     // Base URL - sesuaikan dengan konfigurasi backend
-    private val baseUrl = "https://api-simfan.easydemo.monster/v1/mobile"
+    private val baseUrl = "https://api-simfan.staging.prosesin.easydemo.monster/v1/mobile"
 
     // Auth
     suspend fun signIn(request: SignInRequest): SignInResponse {
         val resp: SignInResponse = client.post("$baseUrl/sign-in") {
             setBody(request)
         }.body()
-        authToken = resp.data.accessToken
+        authToken = resp.data?.accessToken
         return resp
     }
 
@@ -218,27 +226,27 @@ class SimfanApiService(
     }
 
     // Profile Submission
-    suspend fun getInvestmentObjectives(): List<InvestmentObjective> {
+    suspend fun getInvestmentObjectives(): ApiResponse<InvestmentObjectivesData> {
         return client.get("$baseUrl/profile-submission/list-investment-objectives").body()
     }
 
-    suspend fun getRevenues(): List<Revenue> {
+    suspend fun getRevenues(): ApiResponse<RevenueData> {
         return client.get("$baseUrl/profile-submission/list-revenues").body()
     }
 
-    suspend fun getJobs(): List<Job> {
+    suspend fun getJobs():ApiResponse<JobData> {
         return client.get("$baseUrl/profile-submission/list-jobs").body()
     }
 
-    suspend fun getJobTitles(): List<JobTitle> {
+    suspend fun getJobTitles(): ApiResponse<JobTitlesData> {
         return client.get("$baseUrl/profile-submission/list-job-titles").body()
     }
 
-    suspend fun getMonthlySalaries(): List<MonthlySalary> {
+    suspend fun getMonthlySalaries(): ApiResponse<MonthlySalariesData> {
         return client.get("$baseUrl/profile-submission/list-monthly-salaries").body()
     }
 
-    suspend fun getIndustrialSectors(): List<IndustrialSector> {
+    suspend fun getIndustrialSectors(): ApiResponse<IndustrialSectorsData> {
         return client.get("$baseUrl/profile-submission/list-industrial-sectors").body()
     }
 
@@ -249,52 +257,4 @@ class SimfanApiService(
     }
 }
 
-// Data class untuk profile submission
-@Serializable
-data class ProfileSubmissionRequest(
-    val investmentObjectiveId: UInt,
-    val revenueId: UInt,
-    val jobId: UInt,
-    val jobTitleId: UInt,
-    val monthlySalaryId: UInt,
-    val industrialSectorId: UInt,
-    val workPhone: String,
-    val workAddress: String,
-    val motherMaidenName: String
-)
 
-@Serializable
-data class InvestmentObjective(
-    val id: UInt,
-    val name: String
-)
-
-@Serializable
-data class Revenue(
-    val id: UInt,
-    val name: String
-)
-
-@Serializable
-data class Job(
-    val id: UInt,
-    val name: String
-)
-
-@Serializable
-data class JobTitle(
-    val id: UInt,
-    val name: String
-)
-
-@Serializable
-data class MonthlySalary(
-    val id: UInt,
-    val range: String
-)
-
-@Serializable
-data class IndustrialSector(
-    val id: UInt,
-    val name: String
-)
