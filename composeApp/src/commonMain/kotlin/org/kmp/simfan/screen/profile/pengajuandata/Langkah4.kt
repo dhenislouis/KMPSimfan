@@ -34,9 +34,9 @@ fun Langkah4Screen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFF4F4F4)) // bg_secondary
+            .background(Color(0xFFF4F4F4))
     ) {
-        // 🔹 TopBar
+        // TopBar
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -69,7 +69,7 @@ fun Langkah4Screen(
             )
         }
 
-        // 🔹 Konten scroll
+        // Konten scroll
         Column(
             modifier = Modifier
                 .weight(1f)
@@ -83,10 +83,10 @@ fun Langkah4Screen(
             ) {
                 Text(
                     "Langkah 4 dari 5",
-                    fontSize = 11.sp,
+                    fontSize = 12.sp,
                     color = Color.Black,
                     modifier = Modifier
-                        .clip(RoundedCornerShape(6.dp))
+                        .clip(RoundedCornerShape(24.dp))
                         .background(Label_Langkah)
                         .padding(horizontal = 12.dp, vertical = 3.dp)
                 )
@@ -105,7 +105,7 @@ fun Langkah4Screen(
                 )
             }
 
-            // 🔹 Form
+            // Form
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -126,7 +126,7 @@ fun Langkah4Screen(
             }
         }
 
-        // 🔹 Bottom button
+        // Bottom button
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -161,7 +161,7 @@ fun DropdownField(label: String, hint: String) {
             onValueChange = { value = it },
             modifier = Modifier
                 .fillMaxWidth()
-                .height(48.dp),
+                .height(50.dp),
             placeholder = { Text(hint, fontSize = 13.sp, color = Color(0xFF9CA3AF)) },
             trailingIcon = {
                 Icon(
@@ -192,7 +192,7 @@ fun InputField(label: String, hint: String, keyboardType: KeyboardType = Keyboar
             onValueChange = { value = it },
             modifier = Modifier
                 .fillMaxWidth()
-                .height(48.dp),
+                .height(50.dp),
             placeholder = { Text(hint, fontSize = 13.sp, color = Color(0xFF9CA3AF)) },
             shape = RoundedCornerShape(8.dp),
             textStyle = LocalTextStyle.current.copy(fontSize = 13.sp),

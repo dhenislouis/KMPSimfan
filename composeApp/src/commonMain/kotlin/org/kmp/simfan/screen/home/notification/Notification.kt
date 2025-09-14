@@ -55,9 +55,12 @@ fun NotificationScreen(
                             painter = painterResource(Res.drawable.close),
                             contentDescription = "Kembali",
                             tint = Color.Black,
-                            modifier = Modifier.size(20.dp)
+                            modifier = Modifier.size(18.dp)
                         )
                     }
+                },
+                actions = {
+                    Spacer(Modifier.size(48.dp))
                 },
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.White)
             )

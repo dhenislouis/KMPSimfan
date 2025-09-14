@@ -41,6 +41,7 @@ kotlin {
             implementation("com.google.firebase:firebase-auth-ktx:22.1.1")
             implementation("com.google.firebase:firebase-firestore-ktx:24.9.1")
             implementation("io.ktor:ktor-client-okhttp:2.3.2")
+            implementation("co.id.privy:privy-android:1.0.0")
         }
         commonMain.dependencies {
             implementation(compose.runtime)

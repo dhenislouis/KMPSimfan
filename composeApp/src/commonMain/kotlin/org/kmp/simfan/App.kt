@@ -52,16 +52,16 @@ fun App() {
         ) { innerPadding ->
             NavHost(
                 navController = navController,
-                startDestination = Routes.Onboard,
+                startDestination = Routes.Home,
 
                 ) {
 
                 onboardingGraph(navController)
                 authGraph(navController)
                 homeGraph(navController)
-                profileGraph(navController)
-                simpanankuGraph(navController)
                 productGraph(navController)
+                simpanankuGraph(navController)
+                profileGraph(navController)
 
                 // ONBOARDING
 //                composable<Routes.Onboard1> {

@@ -34,7 +34,6 @@ import org.kmp.simfan.Routes
 import org.kmp.simfan.components.CustomTabRow
 import org.kmp.simfan.core.Button1
 import org.kmp.simfan.core.navigation.BottomBar
-import org.kmp.simfan.screen.product.productdeposito.ProductDepositoScreen
 
 
 private val BgSecondary = Color(0xFFF1F2F6)
@@ -50,7 +49,7 @@ fun ProductScreen(
     onDetailDepositoClick: () -> Unit = {},
     onDetailTabunganClick: () -> Unit = {}
 ) {
-    val pagerState = rememberPagerState(initialPage = 0) { 2 } // 2 tab: Deposito, Tabungan
+    val pagerState = rememberPagerState(initialPage = 0) { 2 }
     val coroutineScope = rememberCoroutineScope()
     val tabTitles = listOf("Deposito", "Tabungan")
 
@@ -118,8 +117,8 @@ fun ProductScreen(
                             navController = navController,
                             currentRoute = Routes.ProductDeposito,
                             onFilterClick = onFilterDeposito,
-                            onDetail = onDetailBprDeposito,
-                            onAjukanPenempatan = onDetailDepositoClick,
+                            onDetailBPRClick = onDetailBprDeposito,
+                            onDetailClick = onDetailDepositoClick,
                         )
                     }
                     1 -> {

@@ -108,10 +108,10 @@ fun Langkah1Screen(
             ) {
                 Text(
                     "Langkah 1 dari 5",
-                    fontSize = 11.sp,
+                    fontSize = 12.sp,
                     color = Color.Black,
                     modifier = Modifier
-                        .clip(RoundedCornerShape(6.dp))
+                        .clip(RoundedCornerShape(24.dp))
                         .background(Label_Langkah)
                         .padding(horizontal = 12.dp, vertical = 3.dp)
                 )
