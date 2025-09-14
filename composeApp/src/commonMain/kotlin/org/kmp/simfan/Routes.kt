@@ -87,27 +87,18 @@ sealed interface Routes {
     data object DetailBPRProductDeposito : Routes
     @Serializable
     data object DetailProductDeposito : Routes
-
-    @Serializable
-    data object PengajuanProductDeposito : Routes
-
     @Serializable
     data object BottomSheetPengajuanProductDeposito : Routes
-
     @Serializable
     data object AjukanPenempatanProductDeposito : Routes
-
     @Serializable
     data object SyaratKetentuanProductDeposito : Routes
     @Serializable
     data object TandaTanganProductDeposito : Routes
-
     @Serializable
     data object InputPinAjukanPenempatanProductDeposito : Routes
-
     @Serializable
     data object BottomSheetTTDBerhasil : Routes
-
     @Serializable
     data object BerhasilPenempatanProductDeposito : Routes
     @Serializable
@@ -119,6 +110,20 @@ sealed interface Routes {
     data object DetailProductTabungan : Routes
     @Serializable
     data object DetailBPRProductTabungan : Routes
+    @Serializable
+    data object BottomSheetPengajuanProductTabungan : Routes
+    @Serializable
+    data object AjukanPenempatanProductTabungan : Routes
+    @Serializable
+    data object SyaratKetentuanProductTabungan : Routes
+    @Serializable
+    data object TandaTanganProductTabungan : Routes
+    @Serializable
+    data object InputPinAjukanPenempatanProductTabungan : Routes
+    @Serializable
+    data object BottomSheetTTDBerhasilTabungan : Routes
+    @Serializable
+    data object BerhasilPenempatanProductTabungan : Routes
 
 
 
@@ -133,10 +138,22 @@ sealed interface Routes {
     data object TrackingEBilyetDepositoSimpananku : Routes
     @Serializable
     data object TrackingDetailStatusDepositoSimpananku : Routes
+    @Serializable
+    data object InputPinTabunganSimpananku : Routes
+    @Serializable
+    data object PenempatanTabunganBerhasil : Routes
+    @Serializable
+    data object TrackingStatusPencairanTabungan : Routes
 
     //Tabungan
     @Serializable
     data object DetailTabunganSimpananku : Routes
+    @Serializable
+    data object TrackingBilyetFisikTabunganSimpananku : Routes
+    @Serializable
+    data object TrackingEBilyetTabunganSimpananku : Routes
+    @Serializable
+    data object TrackingDetailStatusTabunganSimpananku : Routes
 
 
 

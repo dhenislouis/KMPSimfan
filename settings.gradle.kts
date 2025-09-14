@@ -11,6 +11,7 @@ pluginManagement {
             }
         }
         mavenCentral()
+        maven { url = uri("https://repo.privy.id/repository/maven-public/") }
         maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
         maven("https://maven.pkg.jetbrains.space/kotlin/p/wasm/experimental")
         maven( "https://androidx.dev/storage/compose-compiler/repository")
@@ -32,6 +33,7 @@ dependencyResolutionManagement {
             }
         }
         mavenCentral()
+        maven { url = uri("https://repo.privy.id/repository/maven-public/") }
         maven("https://maven.pkg.jetbrains.space/public/p/firebase-kotlin-sdk")
         maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
         maven("https://maven.pkg.jetbrains.space/kotlin/p/wasm/experimental")
