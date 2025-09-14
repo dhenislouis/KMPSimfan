@@ -8,6 +8,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -226,9 +227,9 @@ fun LoginScreenUI(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Divider(Modifier.weight(1f), color = Color(0xFFE0E0E0))
+                HorizontalDivider(Modifier.weight(1f), color = Color(0xFFE0E0E0))
                 Text("  Masuk dengan  ", fontSize = 12.sp, color = Color.Gray)
-                Divider(Modifier.weight(1f), color = Color(0xFFE0E0E0))
+                HorizontalDivider(Modifier.weight(1f), color = Color(0xFFE0E0E0))
             }
 
             Spacer(Modifier.height(20.dp))
