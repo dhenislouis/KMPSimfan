@@ -79,7 +79,7 @@ fun Langkah5InputPinScreen(
             )
         }
 
-        // 🔹 Content
+        // Content
         Column(
             modifier = Modifier
                 .weight(1f)
@@ -88,10 +88,10 @@ fun Langkah5InputPinScreen(
         ) {
             Text(
                 "Langkah 5 dari 5",
-                fontSize = 11.sp,
+                fontSize = 12.sp,
                 color = Color.Black,
                 modifier = Modifier
-                    .clip(RoundedCornerShape(6.dp))
+                    .clip(RoundedCornerShape(24.dp))
                     .background(Label_Langkah)
                     .padding(horizontal = 12.dp, vertical = 3.dp)
             )
@@ -120,7 +120,7 @@ fun Langkah5InputPinScreen(
                 .padding(vertical = 24.dp, horizontal = 16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // 🔹 PIN Display
+            // PIN Display
             Row(
                 horizontalArrangement = Arrangement.Center,
                 modifier = Modifier.fillMaxWidth()
@@ -128,27 +128,36 @@ fun Langkah5InputPinScreen(
                 repeat(6) { index ->
                     val char = pin.getOrNull(index)?.toString() ?: ""
                     val animatedScale by animateFloatAsState(
-                        if (char.isNotEmpty()) 1f else 0.8f, label = ""
+                        if (char.isNotEmpty()) 1f else 0.9f, label = ""
                     )
-                    Box(
+                    Card(
                         modifier = Modifier
-                            .size(40.dp)
+                            .size(50.dp)
                             .padding(4.dp)
-                            .clip(CircleShape)
-                            .background(Color(0xFFE0E7FF))
-                            .graphicsLayer(scaleX = animatedScale, scaleY = animatedScale),
-                        contentAlignment = Alignment.Center
+                            .graphicsLayer(
+                                scaleX = animatedScale,
+                                scaleY = animatedScale
+                            ),
+                        shape = CircleShape,
+                        elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
+                        colors = CardDefaults.cardColors(containerColor = Color.White)
                     ) {
-                        Text(
-                            text = if (showPin) char else if (char.isNotEmpty()) "•" else "",
-                            fontSize = 22.sp,
-                            fontWeight = FontWeight.Bold
-                        )
+                        Box(
+                            modifier = Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(
+                                text = if (showPin) char else if (char.isNotEmpty()) "•" else "",
+                                fontSize = 28.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = Color.Black
+                            )
+                        }
                     }
                 }
             }
 
-            // 🔹 Eye Icon
+            // Eye Icon
             IconButton(onClick = { showPin = !showPin }) {
                 Icon(
                     painter = painterResource(
@@ -161,7 +170,7 @@ fun Langkah5InputPinScreen(
 
             Spacer(Modifier.height(16.dp))
 
-            // 🔹 Numpad
+            // Numpad
             val buttons = listOf(
                 listOf("1", "2", "3"),
                 listOf("4", "5", "6"),

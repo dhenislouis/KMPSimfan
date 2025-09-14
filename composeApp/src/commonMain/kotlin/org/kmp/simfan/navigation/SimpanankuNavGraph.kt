@@ -10,13 +10,12 @@ import org.kmp.simfan.screen.simfananku.depositosimpananku.*
 
 fun NavGraphBuilder.simpanankuGraph(navController: NavController) {
     //DEPOSITO
-    composable<Routes.SimpanankuDeposito> {
-        SimpanankuDepositoScreen(
+    composable<Routes.Simfanku> {
+        SimfankuScreen(
             navController = navController,
-            currentRoute = Routes.SimpanankuDeposito,
-            onScreenDeposito = { navController.navigate(Routes.SimpanankuDeposito) },
-            onScreenTabungan = { navController.navigate(Routes.SimpanankuTabungan) },
-            onDetailDepositoSimfanku = { navController.navigate(Routes.DetailDepositoSimpananku) }
+            currentRoute = Routes.Simfanku,
+            onDetailDepositoSimfanku = { navController.navigate(Routes.DetailDepositoSimpananku) },
+            onDetailTabunganSimfanku = { navController.navigate(Routes.SimpanankuTabungan) }
         )
     }
     composable<Routes.DetailDepositoSimpananku> {
@@ -30,7 +29,7 @@ fun NavGraphBuilder.simpanankuGraph(navController: NavController) {
         DetailDepositoSimpanankuScreen(
             navController = navController,
             currentRoute = Routes.DetailDepositoSimpananku,
-            onBackClick = { navController.navigate(Routes.SimpanankuDeposito) },
+            onBackClick = { navController.navigate(Routes.Simfanku) },
             onLihatDetail = { navController.navigate(Routes.TrackingDetailStatusDepositoSimpananku) },
             onLacakPengirimanBillyet = { navController.navigate(Routes.TrackingBilyetFisikDepositoSimpananku) },
             statusList = trackingDataDetailDeposito,

@@ -33,13 +33,7 @@ import org.kmp.simfan.core.Button1
 import org.kmp.simfan.core.Primary
 import org.kmp.simfan.core.navigation.BottomBar
 import simfan.composeapp.generated.resources.Res
-import simfan.composeapp.generated.resources.aro
-import simfan.composeapp.generated.resources.arrow_upward
-import simfan.composeapp.generated.resources.ic_filter
-import simfan.composeapp.generated.resources.ic_more
-import simfan.composeapp.generated.resources.ic_refresh
-import simfan.composeapp.generated.resources.ic_search
-import simfan.composeapp.generated.resources.simfan_websuite
+import simfan.composeapp.generated.resources.*
 
 private val BgSecondary = Color(0xFFF1F2F6)
 private val AppBarBg = Color(0xFFF8F9FE)
@@ -110,11 +104,12 @@ fun ProductTabunganScreen(
                         modifier = Modifier
                             .size(24.dp)
                             .clickable { onFilterClick() },
-
-                        )
+                    )
                 }
             }
         }
+
+
         Column(
             modifier = Modifier
                 .verticalScroll(rememberScrollState())
@@ -131,8 +126,7 @@ fun ProductTabunganScreen(
                 showAro = true,
                 onDetailClick = onDetailClick,
                 onDetailBprClick = onDetailBprClick,
-
-                )
+            )
 
             Spacer(Modifier.height(12.dp))
 
@@ -150,8 +144,7 @@ fun ProductTabunganScreen(
                 statusSubtitle = "Data sedang diperbarui",
                 onDetailClick = onDetailClick,
                 onDetailBprClick = onDetailBprClick,
-
-                )
+            )
         }
     }
 
@@ -274,7 +267,7 @@ private fun ProductTabunganCard(
                     colors = ButtonDefaults.buttonColors(containerColor = Primary),
                     shape = RoundedCornerShape(15.dp)
                 ) {
-                    Text("Detail Product", color = Color.White)
+                    Text("Detail Produk", color = Color.White)
                 }
 
                 Spacer(Modifier.height(8.dp))

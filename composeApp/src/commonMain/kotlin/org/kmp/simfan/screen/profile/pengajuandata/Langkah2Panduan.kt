@@ -63,7 +63,7 @@ fun Langkah2PanduanScreen(
                     }
                 },
                 actions = {
-                    Spacer(Modifier.size(48.dp)) // biar balance
+                    Spacer(Modifier.size(48.dp))
                 },
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.White)
             )
@@ -109,10 +109,10 @@ fun Langkah2PanduanScreen(
             ) {
                 Text(
                     "Langkah 2 dari 5",
-                    fontSize = 11.sp,
+                    fontSize = 12.sp,
                     color = Color.Black,
                     modifier = Modifier
-                        .clip(RoundedCornerShape(6.dp))
+                        .clip(RoundedCornerShape(24.dp))
                         .background(Label_Langkah)
                         .padding(horizontal = 12.dp, vertical = 3.dp)
                 )
@@ -146,18 +146,12 @@ fun Langkah2PanduanScreen(
                         .padding(horizontal = 12.dp, vertical = 6.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Row(
-                        modifier = Modifier
-                            .clip(RoundedCornerShape(25))
-                            .background(Secondary)
-                            .padding(8.dp)
-                    ) {
                     Icon(
                         painter = painterResource(Res.drawable.ic_tips),
                         contentDescription = null,
-                        tint = Color.White,
+                        tint = Color.Black,
                         modifier = Modifier.size(20.dp)
-                    ) }
+                    )
                     Spacer(Modifier.width(6.dp))
                     Text("Tips", color = Color.Black, fontWeight = FontWeight.Bold)
                 }

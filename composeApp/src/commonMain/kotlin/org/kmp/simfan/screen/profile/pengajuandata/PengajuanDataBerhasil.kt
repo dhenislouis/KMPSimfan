@@ -18,6 +18,7 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.kmp.simfan.Routes
+import org.kmp.simfan.core.Button1
 import simfan.composeapp.generated.resources.Res
 import simfan.composeapp.generated.resources.ic_rekening_berhasil
 
@@ -32,12 +33,18 @@ fun LangkahBerhasilScreen(
         topBar = {
             TopAppBar(
                 title = {
-                    Text(
-                        text = "Pengajuan Data",
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight.SemiBold,
-                        color = Color.Black
-                    )
+                    Box(
+                        modifier = Modifier.fillMaxWidth(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = "Pengajuan Data",
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.SemiBold,
+                            color = Color.Black,
+                            textAlign = TextAlign.Center
+                        )
+                    }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = Color.White
@@ -45,23 +52,22 @@ fun LangkahBerhasilScreen(
             )
         },
         bottomBar = {
-            Row(
+            Column(
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(Color.White)
                     .padding(16.dp),
-                horizontalArrangement = Arrangement.Center
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Button(
-                    onClick = {
-                        onMulaiClick()
-                        // navigator.replaceAll(LoginScreen)
-                    },
-                    modifier = Modifier.fillMaxWidth(),
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF668CFF))
+                    onClick = onMulaiClick,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(48.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = Button1)
                 ) {
                     Text(
-                        text = "Mulai",
+                        "Mulai",
                         fontSize = 16.sp,
                         fontWeight = FontWeight.SemiBold,
                         color = Color.White
@@ -89,7 +95,7 @@ fun LangkahBerhasilScreen(
 
             Text(
                 text = "Pengajuan Data Diri\nBerhasil!",
-                fontSize = 24.sp,
+                fontSize = 26.sp,
                 fontWeight = FontWeight.SemiBold,
                 color = Color(0xFF0D120E),
                 textAlign = TextAlign.Center,
@@ -98,7 +104,7 @@ fun LangkahBerhasilScreen(
 
             Text(
                 text = "Kini kamu bisa mulai menabung,\nbertransaksi, dan menikmati layanan\ndeposito digital tanpa ribet!",
-                fontSize = 14.sp,
+                fontSize = 16.sp,
                 color = Color(0xFF6B7280),
                 textAlign = TextAlign.Center,
                 lineHeight = 18.sp
