@@ -14,6 +14,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -21,6 +22,14 @@ import org.jetbrains.compose.resources.painterResource
 import org.kmp.simfan.Routes
 import org.kmp.simfan.core.Button1
 import org.kmp.simfan.core.Label_Langkah
+import org.kmp.simfan.model.IndustrialSectorsData
+import org.kmp.simfan.model.InvestmentObjectivesData
+import org.kmp.simfan.model.JobData
+import org.kmp.simfan.model.JobTitlesData
+import org.kmp.simfan.model.MonthlySalariesData
+import org.kmp.simfan.model.RevenueData
+import org.kmp.simfan.presentation.auth.LoginViewModel
+import org.kmp.simfan.presentation.profileSubmission.ProfileSubmissionViewModel
 import simfan.composeapp.generated.resources.Res
 import simfan.composeapp.generated.resources.arrow_back
 import simfan.composeapp.generated.resources.arrow_down
@@ -31,6 +40,31 @@ fun Langkah4Screen(
     onBackClick: () -> Unit = {},
     onNext: () -> Unit = {}
 ) {
+    val viewModel = remember { ProfileSubmissionViewModel() }
+
+    val isLoading by viewModel.isLoading
+    val errorMessage by viewModel.errorMessage
+    val investmentObjectives by viewModel.investmentObjectives
+    val revenues by viewModel.revenues
+    val jobs by viewModel.jobs
+    val jobTitles by viewModel.jobTitles
+    val monthlySalaries by viewModel.monthlySalaries
+    val industrialSectors by viewModel.industrialSectors
+
+
+    var selectedObjective by remember { mutableStateOf<InvestmentObjectivesData?>(null) }
+    var selectedRevenue by remember { mutableStateOf<RevenueData?>(null) }
+    var selectedJob by remember { mutableStateOf<JobData?>(null) }
+    var selectedJobTitle by remember { mutableStateOf<JobTitlesData?>(null) }
+    var selectedSalary by remember { mutableStateOf<MonthlySalariesData?>(null) }
+    var selectedSector by remember { mutableStateOf<IndustrialSectorsData?>(null) }
+
+
+    var workAddress by remember { mutableStateOf("") }
+    var workPhone by remember { mutableStateOf("") }
+    var motherName by remember { mutableStateOf("") }
+    var npwp by remember { mutableStateOf("") }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -68,64 +102,143 @@ fun Langkah4Screen(
                     .align(Alignment.CenterEnd)
             )
         }
-
-        // 🔹 Konten scroll
-        Column(
-            modifier = Modifier
-                .weight(1f)
-                .verticalScroll(rememberScrollState())
-        ) {
+        Box(modifier = Modifier.weight(1f)) {
+            // 🔹 Konten scroll
             Column(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .background(Color(0xFFF4F4F4))
-                    .padding(16.dp)
+                    .verticalScroll(rememberScrollState())
             ) {
-                Text(
-                    "Langkah 4 dari 5",
-                    fontSize = 11.sp,
-                    color = Color.Black,
+                Column(
                     modifier = Modifier
-                        .clip(RoundedCornerShape(6.dp))
-                        .background(Label_Langkah)
-                        .padding(horizontal = 12.dp, vertical = 3.dp)
-                )
-                Spacer(Modifier.height(8.dp))
-                Text(
-                    "Ceritakan Lebih Banyak Tentang Dirimu",
-                    fontSize = 15.sp,
-                    fontWeight = FontWeight.SemiBold,
-                    color = Color.Black,
-                    modifier = Modifier.padding(bottom = 8.dp)
-                )
-                Text(
-                    "Isilah informasi berikut agar kami bisa mempersonalisasi layanan deposito untukmu.",
-                    fontSize = 12.sp,
-                    color = Color.Black
-                )
+                        .fillMaxWidth()
+                        .background(Color(0xFFF4F4F4))
+                        .padding(16.dp)
+                ) {
+                    Text(
+                        "Langkah 4 dari 5",
+                        fontSize = 11.sp,
+                        color = Color.Black,
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(6.dp))
+                            .background(Label_Langkah)
+                            .padding(horizontal = 12.dp, vertical = 3.dp)
+                    )
+                    Spacer(Modifier.height(8.dp))
+                    Text(
+                        "Ceritakan Lebih Banyak Tentang Dirimu",
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        color = Color.Black,
+                        modifier = Modifier.padding(bottom = 8.dp)
+                    )
+                    Text(
+                        "Isilah informasi berikut agar kami bisa mempersonalisasi layanan deposito untukmu.",
+                        fontSize = 12.sp,
+                        color = Color.Black
+                    )
+                }
+
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(Color.White)
+                        .padding(16.dp)
+                ) {
+                    DropdownField(
+                        label = "Tujuan membuka rekening*",
+                        hint = "Pilih kategori",
+                        options = investmentObjectives.map { it.name },
+                        selectedOption = selectedObjective?.name ?: "",
+                        onOptionSelected = { selectedName ->
+                            selectedObjective = investmentObjectives.find { it.name == selectedName }
+                        }
+                    )
+
+                    DropdownField(
+                        label = "Sumber Dana",
+                        hint = "Pilih kategori",
+                        options = revenues.map { it.name },
+                        selectedOption = selectedRevenue?.name ?: "",
+                        onOptionSelected = { selectedName ->
+                            selectedRevenue = revenues.find { it.name == selectedName }
+                        }
+                    )
+
+                    DropdownField(
+                        label = "Pekerjaan",
+                        hint = "Pilih kategori",
+                        options = jobs.map { it.name },
+                        selectedOption = selectedJob?.name ?: "",
+                        onOptionSelected = { selectedName ->
+                            selectedJob = jobs.find { it.name == selectedName }
+                        }
+                    )
+
+                    DropdownField(
+                        label = "Jabatan di pekerjaan",
+                        hint = "Pilih kategori",
+                        options = jobTitles.map { it.name },
+                        selectedOption = selectedJobTitle?.name ?: "",
+                        onOptionSelected = { selectedName ->
+                            selectedJobTitle = jobTitles.find { it.name == selectedName }
+                        }
+                    )
+
+                    DropdownField(
+                        label = "Penghasilan Bulanan",
+                        hint = "Pilih kategori",
+                        options = monthlySalaries.map { it.range },
+                        selectedOption = selectedSalary?.range ?: "",
+                        onOptionSelected = { selectedName ->
+                            selectedSalary = monthlySalaries.find { it.range == selectedName }
+                        }
+                    )
+
+                    DropdownField(
+                        label = "Sektor Industri",
+                        hint = "Pilih kategori",
+                        options = industrialSectors.map { it.name },
+                        selectedOption = selectedSector?.name ?: "",
+                        onOptionSelected = { selectedName ->
+                            selectedSector = industrialSectors.find { it.name == selectedName }
+                        }
+                    )
+
+                    InputField("Alamat Tempat Bekerja", "Masukkan alamat tempat kerja", workAddress, { workAddress = it })
+                    InputField("Nomor Telepon Tempat Bekerja", "Masukkan Nomor Telepon Tempat Bekerja", workPhone, { workPhone = it }, KeyboardType.Phone)
+                    InputField("Nama Ibu Kandung", "Masukkan nama ibu kandung", motherName, { motherName = it })
+                    InputField("NPWP", "Masukkan NPWP", npwp, { npwp = it }, KeyboardType.Number)
+                }
             }
-
-            // 🔹 Form
-            Column(
+        }
+        if (isLoading) {
+            Box(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .background(Color.White)
-                    .padding(16.dp)
+                    .fillMaxSize()
+                    .background(Color.Black.copy(alpha = 0.5f)),
+                contentAlignment = Alignment.Center
             ) {
-                DropdownField("Tujuan membuka rekening*", "Pilih kategori")
-                DropdownField("Sumber Dana", "Pilih kategori")
-                DropdownField("Pekerjaan", "Pilih kategori")
-                DropdownField("Jabatan di pekerjaan", "Pilih kategori")
-                DropdownField("Penghasilan Bulanan", "Pilih kategori")
-                DropdownField("Sektor Industri", "Pilih kategori")
-
-                InputField("Alamat Tempat Bekerja", "Masukkan alamat tempat kerja")
-                InputField("Nomor Telepon Tempat Bekerja", "Masukkan Nomor Telepon Tempat Bekerja", KeyboardType.Phone)
-                InputField("Nama Ibu Kandung", "Masukkan nama ibu kandung")
-                InputField("NPWP", "Masukkan NPWP", KeyboardType.Number)
+                CircularProgressIndicator(color = Color.White)
             }
         }
 
+        // 7. Tampilkan pesan error jika ada
+        errorMessage?.let { message ->
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = "Gagal memuat data:\n$message",
+                    color = Color.Red,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .background(Color.White, RoundedCornerShape(8.dp))
+                        .padding(16.dp)
+                )
+            }
+        }
         // 🔹 Bottom button
         Column(
             modifier = Modifier
@@ -146,42 +259,75 @@ fun Langkah4Screen(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DropdownField(label: String, hint: String) {
-    var value by remember { mutableStateOf("") }
+fun DropdownField(
+    label: String,
+    hint: String,
+    options: List<String>,
+    selectedOption: String,
+    onOptionSelected: (String) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    var expanded by remember { mutableStateOf(false) }
+
     Column(
-        Modifier
+        modifier
             .fillMaxWidth()
             .padding(bottom = 16.dp)
     ) {
         Text(label, fontSize = 14.sp, color = Color(0xFF505559))
         Spacer(Modifier.height(4.dp))
-        OutlinedTextField(
-            value = value,
-            onValueChange = { value = it },
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(48.dp),
-            placeholder = { Text(hint, fontSize = 13.sp, color = Color(0xFF9CA3AF)) },
-            trailingIcon = {
-                Icon(
-                    painter = painterResource(Res.drawable.arrow_down),
-                    contentDescription = null,
-                    tint = Color.Gray
-                )
-            },
-            shape = RoundedCornerShape(8.dp),
-            textStyle = LocalTextStyle.current.copy(fontSize = 13.sp),
-            singleLine = true
-        )
+
+        ExposedDropdownMenuBox(
+            expanded = expanded,
+            onExpandedChange = { expanded = !expanded }
+        ) {
+            OutlinedTextField(
+                value = selectedOption,
+                onValueChange = {},
+                readOnly = true, // Penting agar tidak bisa diketik
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(48.dp)
+                    .menuAnchor(),
+                placeholder = { Text(hint, fontSize = 13.sp, color = Color(0xFF9CA3AF)) },
+                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
+                shape = RoundedCornerShape(8.dp),
+                textStyle = LocalTextStyle.current.copy(fontSize = 13.sp),
+                singleLine = true,
+                colors = ExposedDropdownMenuDefaults.outlinedTextFieldColors()
+            )
+
+            ExposedDropdownMenu(
+                expanded = expanded,
+                onDismissRequest = { expanded = false }
+            ) {
+                options.forEach { selectionOption ->
+                    DropdownMenuItem(
+                        text = { Text(selectionOption) },
+                        onClick = {
+                            onOptionSelected(selectionOption)
+                            expanded = false
+                        }
+                    )
+                }
+            }
+        }
     }
 }
 
 @Composable
-fun InputField(label: String, hint: String, keyboardType: KeyboardType = KeyboardType.Text) {
-    var value by remember { mutableStateOf("") }
+fun InputField(
+    label: String,
+    hint: String,
+    value: String,
+    onValueChange: (String) -> Unit,
+    keyboardType: KeyboardType = KeyboardType.Text,
+    modifier: Modifier = Modifier
+) {
     Column(
-        Modifier
+        modifier
             .fillMaxWidth()
             .padding(bottom = 16.dp)
     ) {
@@ -189,7 +335,7 @@ fun InputField(label: String, hint: String, keyboardType: KeyboardType = Keyboar
         Spacer(Modifier.height(4.dp))
         OutlinedTextField(
             value = value,
-            onValueChange = { value = it },
+            onValueChange = onValueChange,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(48.dp),

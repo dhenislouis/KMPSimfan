@@ -226,27 +226,27 @@ class SimfanApiService(
     }
 
     // Profile Submission
-    suspend fun getInvestmentObjectives(): ApiResponse<InvestmentObjectivesData> {
+    suspend fun getInvestmentObjectives():  ApiResponse<List<InvestmentObjectivesData>> {
         return client.get("$baseUrl/profile-submission/list-investment-objectives").body()
     }
 
-    suspend fun getRevenues(): ApiResponse<RevenueData> {
+    suspend fun getRevenues(): ApiResponse<List<RevenueData>> {
         return client.get("$baseUrl/profile-submission/list-revenues").body()
     }
 
-    suspend fun getJobs():ApiResponse<JobData> {
+    suspend fun getJobs():ApiResponse<List<JobData>> {
         return client.get("$baseUrl/profile-submission/list-jobs").body()
     }
 
-    suspend fun getJobTitles(): ApiResponse<JobTitlesData> {
+    suspend fun getJobTitles(): ApiResponse<List<JobTitlesData>> {
         return client.get("$baseUrl/profile-submission/list-job-titles").body()
     }
 
-    suspend fun getMonthlySalaries(): ApiResponse<MonthlySalariesData> {
+    suspend fun getMonthlySalaries(): ApiResponse<List<MonthlySalariesData>> {
         return client.get("$baseUrl/profile-submission/list-monthly-salaries").body()
     }
 
-    suspend fun getIndustrialSectors(): ApiResponse<IndustrialSectorsData> {
+    suspend fun getIndustrialSectors(): ApiResponse<List<IndustrialSectorsData>> {
         return client.get("$baseUrl/profile-submission/list-industrial-sectors").body()
     }
 

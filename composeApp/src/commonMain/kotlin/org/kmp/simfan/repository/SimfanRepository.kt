@@ -274,7 +274,7 @@ class SimfanRepository(
     }
 
     // Profile Submission
-    suspend fun getInvestmentObjectives(): Result<ApiResponse<InvestmentObjectivesData>> {
+    suspend fun getInvestmentObjectives(): Result<ApiResponse<List<InvestmentObjectivesData>>> {
         return try {
             val response = apiService.getInvestmentObjectives()
             Result.success(response)
@@ -283,7 +283,7 @@ class SimfanRepository(
         }
     }
 
-    suspend fun getRevenues(): Result<ApiResponse<RevenueData>> {
+    suspend fun getRevenues(): Result<ApiResponse<List<RevenueData>>> {
         return try {
             val response = apiService.getRevenues()
             Result.success(response)
@@ -292,7 +292,7 @@ class SimfanRepository(
         }
     }
 
-    suspend fun getJobs(): Result<ApiResponse<JobData>> {
+    suspend fun getJobs(): Result<ApiResponse<List<JobData>>> {
         return try {
             val response = apiService.getJobs()
             Result.success(response)
@@ -301,7 +301,7 @@ class SimfanRepository(
         }
     }
 
-    suspend fun getJobTitles(): Result<ApiResponse<JobTitlesData>> {
+    suspend fun getJobTitles(): Result<ApiResponse<List<JobTitlesData>>> {
         return try {
             val response = apiService.getJobTitles()
             Result.success(response)
@@ -310,7 +310,7 @@ class SimfanRepository(
         }
     }
 
-    suspend fun getMonthlySalaries(): Result<ApiResponse<MonthlySalariesData>> {
+    suspend fun getMonthlySalaries(): Result<ApiResponse<List<MonthlySalariesData>>> {
         return try {
             val response = apiService.getMonthlySalaries()
             Result.success(response)
@@ -319,7 +319,7 @@ class SimfanRepository(
         }
     }
 
-    suspend fun getIndustrialSectors(): Result<ApiResponse<IndustrialSectorsData>> {
+    suspend fun getIndustrialSectors(): Result<ApiResponse<List<IndustrialSectorsData>>> {
         return try {
             val response = apiService.getIndustrialSectors()
             Result.success(response)

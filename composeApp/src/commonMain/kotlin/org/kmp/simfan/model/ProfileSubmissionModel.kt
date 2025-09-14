@@ -4,6 +4,72 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 // Data class untuk profile submission
+/**
+ * STEP: privy
+ * Data class ini kosong karena kedua field (ktp & selfie) adalah file.
+ * File akan dikirim terpisah di layer repository/network.
+ */
+//@Serializable
+//data class PrivyStepRequest(
+//
+//)
+
+/**
+ * STEP: npwp
+ * Hanya berisi nomor NPWP. File gambar NPWP akan dikirim terpisah.
+ */
+@Serializable
+data class NpwpStepRequest(
+    @SerialName("npwp_number")
+    val npwpNumber: String
+)
+
+/**
+ * STEP: identity
+ * Berisi semua data identitas diri.
+ * Saya mengganti tipe data ID dari UInt ke Int karena lebih umum.
+ * Serializer akan mengubahnya menjadi String saat dikirim sebagai form-data.
+ */
+@Serializable
+data class IdentityStepRequest(
+    @SerialName("investment_objective_id")
+    val investmentObjectiveId: Int,
+
+    @SerialName("revenue_id")
+    val revenueId: Int,
+
+    @SerialName("job_id")
+    val jobId: Int,
+
+    @SerialName("job_title_id")
+    val jobTitleId: Int,
+
+    @SerialName("monthly_salary_id")
+    val monthlySalaryId: Int,
+
+    @SerialName("industrial_sector_id")
+    val industrialSectorId: Int,
+
+    @SerialName("work_phone")
+    val workPhone: String,
+
+    @SerialName("work_address")
+    val workAddress: String,
+
+    @SerialName("mother_maiden_name")
+    val motherMaidenName: String
+)
+
+/**
+ * STEP: pin & confirm-pin
+ * Model ini bisa digunakan untuk kedua step yang berhubungan dengan PIN.
+ */
+@Serializable
+data class PinStepRequest(
+    @SerialName("pin")
+    val pin: String
+)
+
 @Serializable
 data class ProfileSubmissionRequest(
     val investmentObjectiveId: UInt,
@@ -48,8 +114,8 @@ data class  JobData(
 data class  MonthlySalariesData(
     @SerialName("ID")
     val id: Int,
-    @SerialName("Name")
-    val name: String,
+    @SerialName("Range")
+    val range: String,
 )
 @Serializable
 data class  RevenueData(
