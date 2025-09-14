@@ -1,9 +1,14 @@
 package org.kmp.simfan.screen.product
 
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -11,11 +16,12 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.*
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
@@ -23,14 +29,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import coil3.compose.AsyncImage
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.kmp.simfan.Routes
 import org.kmp.simfan.core.Button1
-import org.kmp.simfan.core.Primary
 import org.kmp.simfan.core.navigation.BottomBar
 import simfan.composeapp.generated.resources.Res
 import simfan.composeapp.generated.resources.*
@@ -44,20 +47,14 @@ private val LabelOrange = Color(0xFFFF8A00)
 private val StatusBgYellow = Color(0xFFFFF7E0)
 private val StatusText = Color(0xFFF59E0B)
 
-@Preview
 @Composable
 fun ProductTabunganScreen(
     navController: NavController,
     currentRoute: Routes?,
     onFilterClick: () -> Unit = {},
-    onDetailClick: () -> Unit = {},
-    onDetailBprClick: () -> Unit = {},
-//    onSaveClick: () -> Unit = {},
-//    onScreenDeposito: () -> Unit = {},
-//    onScreenTabungan: () -> Unit = {}
+    onDetailBPRClick: () -> Unit,
+    onDetailClick: () -> Unit
 ) {
-// Daftar produk
-    // Cari Produk di bawah tombol sejajar
     Column {
         Column(
             modifier = Modifier
@@ -109,7 +106,6 @@ fun ProductTabunganScreen(
             }
         }
 
-
         Column(
             modifier = Modifier
                 .verticalScroll(rememberScrollState())
@@ -122,10 +118,10 @@ fun ProductTabunganScreen(
                 duration = "3 Bulan",
                 nominal = "Rp10.000.000",
                 estimasi = "6%",
-                showBilyet = true,
-                showAro = true,
+                showBilyet = false,
+                showAro = false,
+                onDetailBPRClick = onDetailBPRClick,
                 onDetailClick = onDetailClick,
-                onDetailBprClick = onDetailBprClick,
             )
 
             Spacer(Modifier.height(12.dp))
@@ -142,16 +138,15 @@ fun ProductTabunganScreen(
                 showStatusBar = true,
                 statusTitle = "Belum dapat menerima transaksi.",
                 statusSubtitle = "Data sedang diperbarui",
-                onDetailClick = onDetailClick,
-                onDetailBprClick = onDetailBprClick,
+                onDetailBPRClick = onDetailBPRClick,
+                onDetailClick = onDetailClick
             )
         }
     }
-
 }
 
 @Composable
-private fun ProductTabunganCard(
+fun ProductTabunganCard(
     title: String,
     subtitle: String,
     minimumLabel: String,
@@ -163,9 +158,8 @@ private fun ProductTabunganCard(
     showStatusBar: Boolean = false,
     statusTitle: String = "",
     statusSubtitle: String = "",
-    onDetailClick: () -> Unit,
-    onDetailBprClick: () -> Unit
-
+    onDetailBPRClick: () -> Unit = {},
+    onDetailClick: () -> Unit = {}
 ) {
     Card(
         modifier = Modifier.fillMaxWidth(),
@@ -175,24 +169,22 @@ private fun ProductTabunganCard(
     ) {
         Column {
             Column(Modifier.padding(top = 18.dp, start = 16.dp, end = 16.dp, bottom = 8.dp)) {
-                // Header: gambar, judul, subjudul + label
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .clickable(onClick = onDetailBprClick)
+                        .clickable(onClick = onDetailBPRClick)
                 ) {
                     Column {
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
                             modifier = Modifier
                                 .fillMaxWidth()
-
                         ) {
                             Image(
                                 painter = painterResource(Res.drawable.simfan_websuite),
                                 contentDescription = null,
                                 modifier = Modifier
-                                    .size(36.dp)
+                                    .size(40.dp)
                                     .clip(RoundedCornerShape(5.dp)),
                                 contentScale = ContentScale.FillWidth
                             )
@@ -201,17 +193,30 @@ private fun ProductTabunganCard(
                                     .weight(1f)
                                     .padding(start = 12.dp)
                             ) {
-                                Text(
-                                    title,
-                                    fontSize = 13.sp,
-                                    color = Color.Black,
-                                    fontWeight = FontWeight.Medium
-                                )
-                                Spacer(Modifier.height(2.dp))
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    Text(
+                                        title,
+                                        fontSize = 13.sp,
+                                        color = Color.Black,
+                                        fontWeight = FontWeight.Medium
+                                    )
+                                    Spacer(Modifier.width(8.dp))
+                                    if (showBilyet) {
+                                        PillLabel(
+                                            text = "Bilyet Fisik",
+                                            bg = LabelOrange,
+                                            fg = Color.White
+                                        )
+                                        Spacer(Modifier.width(6.dp))
+                                    }
+                                    if (showAro) {
+                                        AroLabel()
+                                    }
+                                }
                                 Text(subtitle, fontSize = 11.sp, color = Color(0xFF999999))
                             }
                             AsyncImage(
-                                model = Res.getUri("files/ic_arrow_left.svg") ,
+                                model = Res.getUri("files/ic_arrow_left.svg"),
                                 contentDescription = "Arrow",
                                 modifier = Modifier.size(16.dp),
                                 colorFilter = ColorFilter.tint(Color.Black)
@@ -225,16 +230,11 @@ private fun ProductTabunganCard(
                     }
                 }
                 Spacer(Modifier.height(14.dp))
-
-                // Minimum Penempatan | Durasi
                 Row {
                     Text(minimumLabel, fontSize = 12.sp, color = Color(0xFF22242F), modifier = Modifier.weight(1f))
-                    Text(duration, fontSize = 12.sp, color = Color(0xFF22242F), )
+                    Text(duration, fontSize = 12.sp, color = Color(0xFF22242F))
                 }
-
                 Spacer(Modifier.height(4.dp))
-
-                // Nominal | Estimasi (dengan ikon panah hijau)
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text(
                         nominal,
@@ -245,7 +245,7 @@ private fun ProductTabunganCard(
                     )
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         AsyncImage(
-                            model = Res.getUri("files/ic_arrow_up.svg") ,
+                            model = Res.getUri("files/ic_arrow_up.svg"),
                             contentDescription = "House",
                             modifier = Modifier.size(15.dp),
                             colorFilter = ColorFilter.tint(PositiveGreen)
@@ -261,25 +261,77 @@ private fun ProductTabunganCard(
                 }
                 Spacer(Modifier.height(14.dp))
 
-                Button(
-                    onClick = { onDetailClick() },
-                    modifier = Modifier.fillMaxWidth(),
-                    colors = ButtonDefaults.buttonColors(containerColor = Primary),
-                    shape = RoundedCornerShape(15.dp)
-                ) {
-                    Text("Detail Produk", color = Color.White)
-                }
+                // Tombol Detail Produk yang dimodifikasi
+                TabunganAnimatedDetailButton(
+                    onClick = onDetailClick,
+                    modifier = Modifier.fillMaxWidth()
+                )
 
                 Spacer(Modifier.height(8.dp))
             }
-
-            // Status bar (khusus kartu kedua)
             if (showStatusBar) {
                 StatusInfoBar(
                     title = statusTitle,
                     subtitle = statusSubtitle
                 )
             }
+        }
+    }
+}
+
+@Composable
+fun TabunganAnimatedDetailButton(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    // Interaction source untuk mendeteksi status klik
+    val interactionSource = remember { MutableInteractionSource() }
+    val isPressed by interactionSource.collectIsPressedAsState()
+
+    // Animasi untuk elevasi bayangan
+    val elevation by animateFloatAsState(
+        targetValue = if (isPressed) 12.dp.value else 6.dp.value,
+        animationSpec = spring(stiffness = 400f, dampingRatio = 0.6f),
+        label = "elevation"
+    )
+
+    // Animasi skala saat ditekan
+    val scale by animateFloatAsState(
+        targetValue = if (isPressed) 0.98f else 1f,
+        animationSpec = spring(stiffness = 400f, dampingRatio = 0.6f),
+        label = "scale"
+    )
+
+    // Animasi untuk warna background
+    val buttonColor by animateColorAsState(
+        targetValue = if (isPressed) Color(0xFF5578EE) else org.kmp.simfan.core.Button1,
+        animationSpec = spring(stiffness = 400f, dampingRatio = 0.6f),
+        label = "buttonColor"
+    )
+
+    Surface(
+        onClick = onClick,
+        modifier = modifier
+            .scale(scale)
+            .height(40.dp),
+        shape = RoundedCornerShape(15.dp),
+        color = buttonColor,
+        shadowElevation = elevation.dp,
+        interactionSource = interactionSource
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = "Detail Produk",
+                color = Color.White,
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Medium
+            )
         }
     }
 }
@@ -309,7 +361,6 @@ private fun AroLabel() {
             .padding(horizontal = 8.dp, vertical = 3.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        // lingkaran biru kecil dengan ikon panah white
         Box(
             modifier = Modifier
                 .size(18.dp)
@@ -364,8 +415,7 @@ private fun StatusInfoBar(
     }
 }
 
-//@Preview
 //@Composable
-//private fun ProductTabunganPreview() {
+//private fun ProductTabunganScreenPreview() {
 //    ProductTabunganScreen()
 //}

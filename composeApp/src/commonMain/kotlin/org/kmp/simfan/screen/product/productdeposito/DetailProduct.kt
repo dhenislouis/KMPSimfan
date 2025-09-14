@@ -216,12 +216,13 @@ fun MinimumPenempatanCard(
                 }
                 Spacer(Modifier.height(4.dp))
                 // Nominal | Estimasi (dengan ikon panah hijau)
-                Row(verticalAlignment = Alignment.CenterVertically) {
+                Row {
                     Text(
                         nominal,
                         fontSize = 15.sp,
                         color = Color(0xFF22242F),
                         fontWeight = FontWeight.Bold,
+                        modifier = Modifier.weight(1f)
                     )
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         AsyncImage(

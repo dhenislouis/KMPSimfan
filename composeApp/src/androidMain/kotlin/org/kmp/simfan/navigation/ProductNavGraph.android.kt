@@ -6,6 +6,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import org.kmp.simfan.Routes
 import org.kmp.simfan.screen.product.productdeposito.SyaratKetentuanProdukDepositoScreen
+import org.kmp.simfan.screen.product.producttabungan.SyaratKetentuanProdukTabunganScreen
 import org.kmp.simfan.screen.profile.tandatangan.TandaTanganScreen
 import org.kmp.simfan.utils.savePlatformBitmapToFile
 import org.kmp.simfan.utils.toPlatformBitmap
@@ -51,6 +52,46 @@ actual fun TandaTanganProductDepositoRoute(navController: NavHostController) {
             // ✅ langsung ke Input PIN
             navController.navigate(Routes.InputPinAjukanPenempatanProductDeposito) {
                 popUpTo(Routes.SyaratKetentuanProductDeposito) { inclusive = true }
+            }
+        }
+    )
+}
+
+@Composable
+actual fun SyaratKetentuanProductTabunganRoute(navController: NavHostController) {
+    val context = LocalContext.current
+
+    SyaratKetentuanProdukTabunganScreen(
+        navController = navController,
+        currentRoute = Routes.SyaratKetentuanProductTabungan,
+        onBack = { navController.navigate(Routes.AjukanPenempatanProductTabungan) },
+        onContinue = {
+            if (isSignatureSaved(context)) {
+                // ✅ jika tanda tangan sudah ada
+                navController.navigate(Routes.InputPinAjukanPenempatanProductTabungan)
+            } else {
+                // ❌ jika tanda tangan belum ada
+                navController.navigate(Routes.TandaTanganProductTabungan)
+            }
+        }
+    )
+}
+
+@Composable
+actual fun TandaTanganProductTabunganRoute(navController: NavHostController) {
+    val context = LocalContext.current
+
+    TandaTanganScreen(
+        navController = navController,
+        currentRoute = Routes.TandaTanganElektronik,
+        onBackClick = { navController.navigate(Routes.SyaratKetentuanProductTabungan) },
+        onSave = { imageBitmap ->
+            val platformBitmap = imageBitmap.toPlatformBitmap()
+            savePlatformBitmapToFile(platformBitmap, "signature.png", context)
+
+            // ✅ langsung ke Input PIN
+            navController.navigate(Routes.InputPinAjukanPenempatanProductTabungan) {
+                popUpTo(Routes.SyaratKetentuanProductTabungan) { inclusive = true }
             }
         }
     )

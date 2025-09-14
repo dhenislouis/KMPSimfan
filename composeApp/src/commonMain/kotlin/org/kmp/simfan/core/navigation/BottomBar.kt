@@ -111,7 +111,7 @@ fun BottomBar(
         )
 
         // --- SIMFANKU ---
-        val simfankuSelected = currentRoute == Routes.SimpanankuDeposito || currentRoute == Routes.SimpanankuTabungan
+        val simfankuSelected = currentRoute == Routes.Simfanku
         val simfankuTint = animateColorAsState(
             targetValue = if (simfankuSelected) Color.White else Color.Black,
             label = "simfankuTintAnim"
@@ -120,7 +120,7 @@ fun BottomBar(
             selected = simfankuSelected,
             onClick = { onNavigate(Routes.Simfanku) },
             icon = {
-                AnimatedContent(targetState = simfankuSelected, label = "simfankuIconAnim") { selected ->
+                AnimatedContent(targetState = homeSelected, label = "homeIconAnim") { selected ->
                     AsyncImage(
                         model = Res.getUri("files/ic_simfanku.svg"),
                         contentDescription = "House",

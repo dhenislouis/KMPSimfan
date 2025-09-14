@@ -127,7 +127,7 @@ fun ProductScreen(
                             navController = navController,
                             currentRoute = Routes.ProductTabungan,
                             onFilterClick = onFilterTabungan,
-                            onDetailBprClick = onDetailBprTabungan,
+                            onDetailBPRClick = onDetailBprTabungan,
                             onDetailClick = onDetailTabunganClick
                         )
                     }

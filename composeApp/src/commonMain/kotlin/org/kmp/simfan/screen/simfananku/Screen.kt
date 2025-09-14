@@ -1,5 +1,7 @@
 package org.kmp.simfan.screen.simfananku
 
+import org.kmp.simfan.screen.product.ProductDepositoScreen
+import org.kmp.simfan.screen.product.ProductTabunganScreen
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background

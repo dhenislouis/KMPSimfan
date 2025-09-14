@@ -1,4 +1,4 @@
-package org.kmp.simfan.screen.product.productdeposito
+package org.kmp.simfan.screen.product.producttabungan
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -15,9 +15,9 @@ import org.kmp.simfan.core.Button1
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun InputNominalBottomSheet(
+fun InputNominalBottomSheetTabungan(
     navController: NavController,
-    currentRoute: Routes.BottomSheetPengajuanProductDeposito?,
+    currentRoute: Routes?,
     onDismiss: () -> Unit = {},
     onSave: (String) -> Unit = {}
 ) {

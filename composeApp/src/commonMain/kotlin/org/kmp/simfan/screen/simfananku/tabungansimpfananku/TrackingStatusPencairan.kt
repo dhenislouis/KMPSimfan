@@ -1,4 +1,4 @@
-package org.kmp.simfan.screen.simfananku.depositosimpananku
+package org.kmp.simfan.screen.simfananku.tabungansimpfananku
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -21,7 +21,7 @@ import org.kmp.simfan.core.Button1
 import simfan.composeapp.generated.resources.Res
 import simfan.composeapp.generated.resources.ic_truck
 
-data class TrackingStatusBilyetFisik(
+data class TrackingStatusPencairanTabungan(
     val title: String,
     val description: String,
     val date: String? = null,
@@ -30,7 +30,7 @@ data class TrackingStatusBilyetFisik(
 )
 
 @Composable
-fun TrackingTimelineBilyetFisik(statusList: List<TrackingStatusBilyetFisik>) {
+fun TrackingPencairanTabungan(statusList: List<TrackingStatusPencairanTabungan>) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -122,36 +122,36 @@ fun TrackingTimelineBilyetFisik(statusList: List<TrackingStatusBilyetFisik>) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TrackingBilyetFisikDeposito(
+fun TrackingPencairanTabungan(
     navController: NavController,
     currentRoute: Routes?,
     onClose: () -> Unit = {}
 ) {
-    val trackingDataBilyetFisik = listOf(
-        TrackingStatusBilyetFisik(
+    val trackingDataPencairanTabungan = listOf(
+        TrackingStatusPencairanTabungan(
             title = "Selesai",
             description = "Menunggu konfirmasi penerimaan",
             isActive = true
         ),
-        TrackingStatusBilyetFisik(
+        TrackingStatusPencairanTabungan(
             title = "Bilyet tiba di Kota Tujuan",
             description = "Kurir sedang mengantar ke Lokasi Nasabah"
         ),
-        TrackingStatusBilyetFisik(
+        TrackingStatusPencairanTabungan(
             title = "Bilyet Sampai di DC Cakung",
             description = "Paket sedang disortir"
         ),
-        TrackingStatusBilyetFisik(
+        TrackingStatusPencairanTabungan(
             title = "Dikirim",
             description = "Kurir mengirimkan bilyet\nResi: JNE123456",
             date = "22 Agustus 2025, 13:30"
         ),
-        TrackingStatusBilyetFisik(
+        TrackingStatusPencairanTabungan(
             title = "Proses",
             description = "Bilyet sedang dicetak",
             date = "20 Agustus 2025, 14:20"
         ),
-        TrackingStatusBilyetFisik(
+        TrackingStatusPencairanTabungan(
             title = "Pending",
             description = "Pengajuan bilyet diterima bank",
             date = "20 Agustus 2025, 14:20"
@@ -167,7 +167,7 @@ fun TrackingBilyetFisikDeposito(
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
-                            "Tracking Billyet",
+                            "Status Pencairan",
                             fontSize = 20.sp,
                             fontWeight = FontWeight.SemiBold,
                             color = Color.Black,
@@ -214,7 +214,7 @@ fun TrackingBilyetFisikDeposito(
                 .padding(16.dp)
                 .verticalScroll(rememberScrollState())
         ) {
-            TrackingTimelineBilyetFisik(statusList = trackingDataBilyetFisik)
+            TrackingPencairanTabungan(statusList = trackingDataPencairanTabungan)
         }
     }
 }
@@ -224,7 +224,7 @@ fun TrackingBilyetFisikDeposito(
 //fun PreviewTrackingBilyetFisikScreen() {
 //    MaterialTheme {
 //        Surface(modifier = Modifier.fillMaxSize().padding(16.dp)) {
-//            TrackingBilyetFisikScreen()
+//            TrackingBilyetFisikTabungan()
 //        }
 //    }
 //}

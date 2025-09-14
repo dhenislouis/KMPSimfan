@@ -185,7 +185,7 @@ fun ProductCard(
                                 painter = painterResource(Res.drawable.simfan_websuite),
                                 contentDescription = null,
                                 modifier = Modifier
-                                    .size(36.dp)
+                                    .size(40.dp)
                                     .clip(RoundedCornerShape(5.dp)),
                                 contentScale = ContentScale.FillWidth
                             )

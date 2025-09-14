@@ -9,8 +9,13 @@ import org.kmp.simfan.Routes
 import org.kmp.simfan.screen.product.ProductScreen
 import org.kmp.simfan.screen.product.filter.FilterScreen
 import org.kmp.simfan.screen.product.productdeposito.*
+import org.kmp.simfan.screen.product.producttabungan.AjukanPenempatanProdukTabunganScreen
+import org.kmp.simfan.screen.product.producttabungan.BottomSheetTTDBerhasilTabunganScreen
 import org.kmp.simfan.screen.product.producttabungan.DetailBprTabunganScreen
 import org.kmp.simfan.screen.product.producttabungan.DetailTabunganScreen
+import org.kmp.simfan.screen.product.producttabungan.InputNominalBottomSheetTabungan
+import org.kmp.simfan.screen.product.producttabungan.InputPinTabunganScreen
+import org.kmp.simfan.screen.product.producttabungan.PenempatanTabunganBerhasilScreen
 
 @Composable
 expect fun SyaratKetentuanProductDepositoRoute(navController: NavHostController)
@@ -18,8 +23,13 @@ expect fun SyaratKetentuanProductDepositoRoute(navController: NavHostController)
 @Composable
 expect fun TandaTanganProductDepositoRoute(navController: NavHostController)
 
+@Composable
+expect fun SyaratKetentuanProductTabunganRoute(navController: NavHostController)
+
+@Composable
+expect fun TandaTanganProductTabunganRoute(navController: NavHostController)
+
 fun NavGraphBuilder.productGraph(navController: NavController) {
-    // PRODUK DEPOSITO
     composable<Routes.Product> {
         ProductScreen(
             navController = navController,
@@ -30,6 +40,16 @@ fun NavGraphBuilder.productGraph(navController: NavController) {
             onDetailBprTabungan = { navController.navigate(Routes.DetailBPRProductTabungan) },
             onDetailDepositoClick = { navController.navigate(Routes.DetailProductDeposito) },
             onDetailTabunganClick = { navController.navigate(Routes.DetailProductTabungan) }
+        )
+    }
+
+
+    // PRODUK DEPOSITO
+    composable<Routes.FilterTabungan> {
+        FilterScreen(
+            navController = navController,
+            currentRoute = Routes.FilterTabungan,
+            onClose = { navController.navigate(Routes.Product) }
         )
     }
     composable<Routes.DetailBPRProductDeposito> {
@@ -89,7 +109,7 @@ fun NavGraphBuilder.productGraph(navController: NavController) {
             navController = navController,
             currentRoute = Routes.BerhasilPenempatanProductDeposito,
             onBack = { navController.navigate(Routes.ProductDeposito) },
-            onLihatSimpanan = { navController.navigate(Routes.SimpanankuDeposito) },
+            onLihatSimpanan = { navController.navigate(Routes.Simfanku) },
             onKembaliBeranda = { navController.navigate(Routes.Home) }
         )
     }
@@ -107,16 +127,56 @@ fun NavGraphBuilder.productGraph(navController: NavController) {
     }
     composable<Routes.DetailProductTabungan> {
         DetailTabunganScreen(
-            onDetailClick = {navController.navigate(Routes.DetailProductTabungan)},
-            onDetailBprClick = {navController.navigate(Routes.DetailBPRProductTabungan)},
-            navController = navController
+            navController = navController,
+            currentRoute = Routes.DetailProductTabungan,
+            onBackClick = {navController.navigate(Routes.DetailProductTabungan)},
+            onDetailProdukLainnya = {navController.navigate(Routes.Product)}
         )
     }
-    composable<Routes.FilterTabungan> {
-        FilterScreen(
+    composable<Routes.BottomSheetPengajuanProductTabungan> {
+        InputNominalBottomSheetTabungan(
             navController = navController,
-            currentRoute = Routes.FilterTabungan,
-            onClose = { navController.navigate(Routes.Product) }
+            currentRoute = Routes.BottomSheetPengajuanProductTabungan,
+            onSave = { navController.navigate(Routes.AjukanPenempatanProductTabungan) },
+            onDismiss = { navController.navigate(Routes.DetailProductDeposito) }
+        )
+    }
+    composable<Routes.AjukanPenempatanProductTabungan> {
+        AjukanPenempatanProdukTabunganScreen(
+            navController = navController,
+            currentRoute = Routes.AjukanPenempatanProductTabungan,
+            onBackClick = { navController.navigate(Routes.DetailProductTabungan) },
+            onAjukanClick = { navController.navigate(Routes.SyaratKetentuanProductTabungan) }
+        )
+    }
+    composable<Routes.SyaratKetentuanProductTabungan> {
+        SyaratKetentuanProductTabunganRoute(navController as NavHostController)
+    }
+    composable<Routes.TandaTanganProductTabungan> {
+        TandaTanganProductTabunganRoute(navController as NavHostController)
+    }
+    composable<Routes.InputPinAjukanPenempatanProductTabungan> {
+        InputPinTabunganScreen(
+            navController = navController,
+            currentRoute = Routes.InputPinAjukanPenempatanProductTabungan,
+            onBackClick = { navController.navigate(Routes.AjukanPenempatanProductTabungan) }
+        )
+    }
+    composable<Routes.BottomSheetTTDBerhasilTabungan> {
+        BottomSheetTTDBerhasilTabunganScreen(
+            navController = navController,
+            currentRoute = Routes.BottomSheetTTDBerhasilTabungan,
+            onDismiss = { navController.navigate(Routes.BottomSheetTTDBerhasilTabungan) },
+            onContinue = { navController.navigate(Routes.BerhasilPenempatanProductTabungan) }
+        )
+    }
+    composable<Routes.BerhasilPenempatanProductTabungan> {
+        PenempatanTabunganBerhasilScreen(
+            navController = navController,
+            currentRoute = Routes.BerhasilPenempatanProductTabungan,
+            onBack = { navController.navigate(Routes.Product) },
+            onLihatSimpanan = { navController.navigate(Routes.Simfanku) },
+            onKembaliBeranda = { navController.navigate(Routes.Home) }
         )
     }
 }
