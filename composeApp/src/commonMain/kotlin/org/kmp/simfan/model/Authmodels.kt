@@ -24,7 +24,12 @@ data class SignUpRequest(
 data class SignInResponse(
     val status: Boolean,
     val message: String,
-    val data: SignInData
+    val data: SignInData? = null
+)
+@Serializable
+data class ErrorResponse(
+    val status: Boolean,
+    val message: String,
 )
 
 @Serializable
