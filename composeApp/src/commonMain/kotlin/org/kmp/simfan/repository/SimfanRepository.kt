@@ -1,27 +1,29 @@
 package org.kmp.simfan.repository
 
 import org.kmp.simfan.auth.AuthManager
+import org.kmp.simfan.model.ApiResponse
 import org.kmp.simfan.model.BPR
 import org.kmp.simfan.model.BankAccount
 import org.kmp.simfan.model.Deposit
 import org.kmp.simfan.model.DepositRequest
 import org.kmp.simfan.model.FirebaseTokenRequest
+import org.kmp.simfan.model.IndustrialSectorsData
+import org.kmp.simfan.model.InvestmentObjectivesData
+import org.kmp.simfan.model.JobData
+import org.kmp.simfan.model.JobTitlesData
+import org.kmp.simfan.model.MonthlySalariesData
 import org.kmp.simfan.model.Product
 import org.kmp.simfan.model.Profile
+import org.kmp.simfan.model.ProfileSubmissionRequest
 import org.kmp.simfan.model.Promotion
+import org.kmp.simfan.model.RevenueData
 import org.kmp.simfan.model.SaldoResponse
 import org.kmp.simfan.model.SignInRequest
 import org.kmp.simfan.model.SignInResponse
 import org.kmp.simfan.model.SignUpRequest
 import org.kmp.simfan.model.SimulasiDepositoResponse
 import org.kmp.simfan.model.UserProfile
-import org.kmp.simfan.network.IndustrialSector
-import org.kmp.simfan.network.InvestmentObjective
-import org.kmp.simfan.network.Job
-import org.kmp.simfan.network.JobTitle
-import org.kmp.simfan.network.MonthlySalary
-import org.kmp.simfan.network.ProfileSubmissionRequest
-import org.kmp.simfan.network.Revenue
+
 import org.kmp.simfan.network.SimfanApiService
 
 class SimfanRepository(
@@ -33,7 +35,7 @@ class SimfanRepository(
         return try {
             val request = SignInRequest(userId, password, rememberMe)
             val response = apiService.signIn(request)
-            apiService.setToken(response.data.accessToken)
+            apiService.setToken(response.data?.accessToken)
             Result.success(response)
         } catch (e: Exception) {
             Result.failure(e)
@@ -44,7 +46,7 @@ class SimfanRepository(
         return try {
             val request = SignUpRequest(name, email, phone, password)
             val response = apiService.signUp(request)
-            apiService.setToken(response.data.accessToken)
+            apiService.setToken(response.data?.accessToken)
             Result.success(response)
         } catch (e: Exception) {
             Result.failure(e)
@@ -55,7 +57,7 @@ class SimfanRepository(
         return try {
             val request = FirebaseTokenRequest(token, name)
             val response = apiService.firebaseLogin(request)
-            apiService.setToken(response.data.accessToken)
+            apiService.setToken(response.data?.accessToken)
             Result.success(response)
         } catch (e: Exception) {
             Result.failure(e)
@@ -272,7 +274,7 @@ class SimfanRepository(
     }
 
     // Profile Submission
-    suspend fun getInvestmentObjectives(): Result<List<InvestmentObjective>> {
+    suspend fun getInvestmentObjectives(): Result<ApiResponse<List<InvestmentObjectivesData>>> {
         return try {
             val response = apiService.getInvestmentObjectives()
             Result.success(response)
@@ -281,7 +283,7 @@ class SimfanRepository(
         }
     }
 
-    suspend fun getRevenues(): Result<List<Revenue>> {
+    suspend fun getRevenues(): Result<ApiResponse<List<RevenueData>>> {
         return try {
             val response = apiService.getRevenues()
             Result.success(response)
@@ -290,7 +292,7 @@ class SimfanRepository(
         }
     }
 
-    suspend fun getJobs(): Result<List<Job>> {
+    suspend fun getJobs(): Result<ApiResponse<List<JobData>>> {
         return try {
             val response = apiService.getJobs()
             Result.success(response)
@@ -299,7 +301,7 @@ class SimfanRepository(
         }
     }
 
-    suspend fun getJobTitles(): Result<List<JobTitle>> {
+    suspend fun getJobTitles(): Result<ApiResponse<List<JobTitlesData>>> {
         return try {
             val response = apiService.getJobTitles()
             Result.success(response)
@@ -308,7 +310,7 @@ class SimfanRepository(
         }
     }
 
-    suspend fun getMonthlySalaries(): Result<List<MonthlySalary>> {
+    suspend fun getMonthlySalaries(): Result<ApiResponse<List<MonthlySalariesData>>> {
         return try {
             val response = apiService.getMonthlySalaries()
             Result.success(response)
@@ -317,7 +319,7 @@ class SimfanRepository(
         }
     }
 
-    suspend fun getIndustrialSectors(): Result<List<IndustrialSector>> {
+    suspend fun getIndustrialSectors(): Result<ApiResponse<List<IndustrialSectorsData>>> {
         return try {
             val response = apiService.getIndustrialSectors()
             Result.success(response)
