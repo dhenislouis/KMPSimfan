@@ -32,10 +32,15 @@ import org.kmp.simfan.model.SignInResponse
 import org.kmp.simfan.model.SignUpRequest
 import org.kmp.simfan.model.SimulasiDepositoResponse
 import org.kmp.simfan.model.UserProfile
+import kotlin.concurrent.Volatile
 
 class SimfanApiService(
     private val tokenProvider: () -> String? = { null }
 ) {
+
+    @Volatile
+    private var authToken: String? = null
+
     private val client = HttpClient {
         install(ContentNegotiation) {
             json(Json {
@@ -48,116 +53,127 @@ class SimfanApiService(
         }
         defaultRequest {
             header("Content-Type", "application/json")
-            tokenProvider()?.let { token ->
+            authToken?.let { token ->
                 header("Authorization", "Bearer $token")
             }
         }
     }
 
+    fun setToken(token: String?) {
+        authToken = token
+    }
+
+    fun clearToken() {
+        authToken = null
+    }
+
+
     // Base URL - sesuaikan dengan konfigurasi backend
-    private val baseUrl = "http://10.0.2.2:8080/v1"
+    private val baseUrl = "https://api-simfan.easydemo.monster/v1/mobile"
 
     // Auth
     suspend fun signIn(request: SignInRequest): SignInResponse {
-        return client.post("$baseUrl/mobile/sign-in") {
+        val resp: SignInResponse = client.post("$baseUrl/sign-in") {
             setBody(request)
         }.body()
+        authToken = resp.data.accessToken
+        return resp
     }
 
     suspend fun signUp(request: SignUpRequest): SignInResponse {
-        return client.post("$baseUrl/mobile/sign-up") {
+        return client.post("$baseUrl/sign-up") {
             setBody(request)
         }.body()
     }
 
     suspend fun firebaseLogin(request: FirebaseTokenRequest): SignInResponse {
-        return client.post("$baseUrl/mobile/auth/verify") {
+        return client.post("$baseUrl/auth/verify") {
             setBody(request)
         }.body()
     }
 
     suspend fun requestOTP(method: String): Boolean {
-        return client.get("$baseUrl/mobile/otp-request") {
+        return client.get("$baseUrl/otp-request") {
             parameter("method", method)
         }.body()
     }
 
     suspend fun validateOTP(otp: String): Boolean {
-        return client.post("$baseUrl/mobile/validate-otp") {
+        return client.post("$baseUrl/validate-otp") {
             setBody(mapOf("otp" to otp))
         }.body()
     }
 
     suspend fun changePassword(newPassword: String): Boolean {
-        return client.get("$baseUrl/mobile/change-password") {
+        return client.get("$baseUrl/change-password") {
             parameter("new_password", newPassword)
         }.body()
     }
 
     // Beranda
     suspend fun getUserProfile(): UserProfile {
-        return client.get("$baseUrl/mobile/beranda/user-profile").body()
+        return client.get("$baseUrl/beranda/user-profile").body()
     }
 
     suspend fun getSaldo(): SaldoResponse {
-        return client.get("$baseUrl/mobile/beranda/saldo").body()
+        return client.get("$baseUrl/beranda/saldo").body()
     }
 
     suspend fun getSimulasiDeposito(amount: Double, tenor: Int): SimulasiDepositoResponse {
-        return client.get("$baseUrl/mobile/beranda/simulasi-deposito") {
+        return client.get("$baseUrl/beranda/simulasi-deposito") {
             parameter("amount", amount)
             parameter("tenor", tenor)
         }.body()
     }
 
     suspend fun getPromosiBeranda(): List<Promotion> {
-        return client.get("$baseUrl/mobile/beranda/promosi").body()
+        return client.get("$baseUrl/beranda/promosi").body()
     }
 
     // Product
     suspend fun getProducts(): List<Product> {
-        return client.get("$baseUrl/mobile/product").body()
+        return client.get("$baseUrl/product").body()
     }
 
     suspend fun getProductDetail(id: UInt): Product {
-        return client.get("$baseUrl/mobile/product/$id").body()
+        return client.get("$baseUrl/product/$id").body()
     }
 
     suspend fun getSubDetailProduct(id: UInt): Product {
-        return client.get("$baseUrl/mobile/product/sub-detail-product/$id").body()
+        return client.get("$baseUrl/product/sub-detail-product/$id").body()
     }
 
     suspend fun getBPRDetail(bprId: UInt): BPR {
-        return client.get("$baseUrl/mobile/bpr/$bprId").body()
+        return client.get("$baseUrl/bpr/$bprId").body()
     }
 
     // Tambahkan metode untuk mendapatkan BPR berdasarkan nama
     suspend fun getBPRByName(bprName: String): BPR {
-        return client.get("$baseUrl/mobile/bpr") {
+        return client.get("$baseUrl/bpr") {
             parameter("name", bprName)
         }.body()
     }
 
     // Promotion
     suspend fun getPromotions(): List<Promotion> {
-        return client.get("$baseUrl/mobile/promotion").body()
+        return client.get("$baseUrl/promotion").body()
     }
 
     suspend fun getPromotionDetail(id: UInt): Promotion {
-        return client.get("$baseUrl/mobile/promotion/$id").body()
+        return client.get("$baseUrl/promotion/$id").body()
     }
 
     // Profile Setting
     suspend fun getProfile(): Profile {
-        return client.get("$baseUrl/mobile/profile-setting").body()
+        return client.get("$baseUrl/profile-setting").body()
     }
 
     suspend fun getBankAccounts(): List<BankAccount> {
-        return client.get("$baseUrl/mobile/profile-setting/akun-bank").body()
+        return client.get("$baseUrl/profile-setting/akun-bank").body()
     }
 
     suspend fun addBankAccount(bankName: String, accountNumber: String, accountHolder: String): BankAccount {
-        return client.post("$baseUrl/mobile/profile-setting/akun-bank") {
+        return client.post("$baseUrl/profile-setting/akun-bank") {
             setBody(mapOf(
                 "bank_name" to bankName,
                 "account_number" to accountNumber,
@@ -167,7 +183,7 @@ class SimfanApiService(
     }
 
     suspend fun setPrimaryBankAccount(id: UInt): BankAccount {
-        return client.patch("$baseUrl/mobile/profile-setting/akun-bank/$id") {
+        return client.patch("$baseUrl/profile-setting/akun-bank/$id") {
             setBody(mapOf(
                 "is_primary" to true
             ))
@@ -175,59 +191,59 @@ class SimfanApiService(
     }
 
     suspend fun deleteBankAccount(id: UInt) {
-        client.delete("$baseUrl/mobile/profile-setting/akun-bank/$id")
+        client.delete("$baseUrl/profile-setting/akun-bank/$id")
     }
 
     // Deposit
     suspend fun applyDeposit(request: DepositRequest): Deposit {
-        return client.post("$baseUrl/mobile/deposit/apply") {
+        return client.post("$baseUrl/deposit/apply") {
             setBody(request)
         }.body()
     }
 
     suspend fun generateDepositDocument(id: UInt): Deposit {
-        return client.post("$baseUrl/mobile/deposit/$id/document").body()
+        return client.post("$baseUrl/deposit/$id/document").body()
     }
 
     // Perbaikan untuk requestSignDeposit
     suspend fun requestSignDeposit(id: UInt): String {
-        val response = client.post("$baseUrl/mobile/deposit/$id/sign-request")
+        val response = client.post("$baseUrl/deposit/$id/sign-request")
         return response.body<JsonObject>()["sign_url"]?.jsonPrimitive?.content ?: ""
     }
 
     // Perbaikan untuk getDepositSignStatus
     suspend fun getDepositSignStatus(id: UInt): String {
-        val response = client.get("$baseUrl/mobile/deposit/$id/sign-status")
+        val response = client.get("$baseUrl/deposit/$id/sign-status")
         return response.body<JsonObject>()["status"]?.jsonPrimitive?.content ?: ""
     }
 
     // Profile Submission
     suspend fun getInvestmentObjectives(): List<InvestmentObjective> {
-        return client.get("$baseUrl/mobile/profile-submission/list-investment-objectives").body()
+        return client.get("$baseUrl/profile-submission/list-investment-objectives").body()
     }
 
     suspend fun getRevenues(): List<Revenue> {
-        return client.get("$baseUrl/mobile/profile-submission/list-revenues").body()
+        return client.get("$baseUrl/profile-submission/list-revenues").body()
     }
 
     suspend fun getJobs(): List<Job> {
-        return client.get("$baseUrl/mobile/profile-submission/list-jobs").body()
+        return client.get("$baseUrl/profile-submission/list-jobs").body()
     }
 
     suspend fun getJobTitles(): List<JobTitle> {
-        return client.get("$baseUrl/mobile/profile-submission/list-job-titles").body()
+        return client.get("$baseUrl/profile-submission/list-job-titles").body()
     }
 
     suspend fun getMonthlySalaries(): List<MonthlySalary> {
-        return client.get("$baseUrl/mobile/profile-submission/list-monthly-salaries").body()
+        return client.get("$baseUrl/profile-submission/list-monthly-salaries").body()
     }
 
     suspend fun getIndustrialSectors(): List<IndustrialSector> {
-        return client.get("$baseUrl/mobile/profile-submission/list-industrial-sectors").body()
+        return client.get("$baseUrl/profile-submission/list-industrial-sectors").body()
     }
 
     suspend fun submitProfile(request: ProfileSubmissionRequest): Profile {
-        return client.post("$baseUrl/mobile/profile-submission") {
+        return client.post("$baseUrl/profile-submission") {
             setBody(request)
         }.body()
     }

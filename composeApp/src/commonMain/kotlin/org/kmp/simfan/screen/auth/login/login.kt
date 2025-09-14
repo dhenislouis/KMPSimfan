@@ -188,7 +188,7 @@ fun LoginScreenUI(
             // Tombol masuk
             Button(
                 onClick = {
-                    viewModel.login(identifier, password)
+                    viewModel.login(identifier, password, rememberMe)
                 },
                 modifier = Modifier
                     .fillMaxWidth()

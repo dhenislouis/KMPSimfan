@@ -29,11 +29,11 @@ class SimfanRepository(
     private val authManager: AuthManager
 ) {
     // Auth
-    suspend fun signIn(userId: String, password: String): Result<SignInResponse> {
+    suspend fun signIn(userId: String, password: String, rememberMe: Boolean): Result<SignInResponse> {
         return try {
-            val request = SignInRequest(userId, password)
+            val request = SignInRequest(userId, password, rememberMe)
             val response = apiService.signIn(request)
-            authManager.saveToken(response.accessToken)
+            apiService.setToken(response.data.accessToken)
             Result.success(response)
         } catch (e: Exception) {
             Result.failure(e)
@@ -44,7 +44,7 @@ class SimfanRepository(
         return try {
             val request = SignUpRequest(name, email, phone, password)
             val response = apiService.signUp(request)
-            authManager.saveToken(response.accessToken)
+            apiService.setToken(response.data.accessToken)
             Result.success(response)
         } catch (e: Exception) {
             Result.failure(e)
@@ -55,7 +55,7 @@ class SimfanRepository(
         return try {
             val request = FirebaseTokenRequest(token, name)
             val response = apiService.firebaseLogin(request)
-            authManager.saveToken(response.accessToken)
+            apiService.setToken(response.data.accessToken)
             Result.success(response)
         } catch (e: Exception) {
             Result.failure(e)
