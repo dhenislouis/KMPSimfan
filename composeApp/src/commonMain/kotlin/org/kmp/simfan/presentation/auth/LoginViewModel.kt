@@ -25,13 +25,13 @@ class LoginViewModel : ViewModel() {
     private val _errorMessage = mutableStateOf<String?>(null)
     val errorMessage: State<String?> = _errorMessage
 
-    fun login(identifier: String, password: String) {
+    fun login(identifier: String, password: String, rememberMe: Boolean) {
         viewModelScope.launch {
             _isLoading.value = true
             _errorMessage.value = null
 
             try {
-                val result = repository.signIn(identifier, password)
+                val result = repository.signIn(identifier, password, rememberMe)
                 if (result.isSuccess) {
                     _loginResult.value = result.getOrNull()
                 } else {

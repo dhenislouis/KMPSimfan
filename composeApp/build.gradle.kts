@@ -69,7 +69,7 @@ kotlin {
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)
             implementation("dev.gitlive:firebase-auth:2.3.0")
-            implementation("dev.gitlive:firebase-firestore:1.12.0")
+            implementation("dev.gitlive:firebase-firestore:2.3.0")
             implementation("org.jetbrains.compose.material:material-icons-extended:1.7.0")
             implementation(libs.coil.compose.core)
             implementation(libs.coil.mp)

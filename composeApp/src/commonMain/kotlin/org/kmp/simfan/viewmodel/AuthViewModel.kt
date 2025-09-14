@@ -34,11 +34,11 @@ class AuthViewModel : ViewModel() {
         }
     }
 
-    fun signIn(userId: String, password: String) {
+    fun signIn(userId: String, password: String, rememberMe: Boolean) {
         viewModelScope.launch {
             _authState.value = AuthState.Loading
             try {
-                val result = repository.signIn(userId, password)
+                val result = repository.signIn(userId, password, rememberMe)
                 if (result.isSuccess) {
                     _authState.value = AuthState.Authenticated
                 } else {
