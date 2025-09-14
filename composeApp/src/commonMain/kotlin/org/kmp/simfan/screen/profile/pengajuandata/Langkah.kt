@@ -61,7 +61,7 @@ fun LangkahScreen(
                     }
                 },
                 actions = {
-                    Spacer(Modifier.size(48.dp)) // balance kanan
+                    Spacer(Modifier.size(48.dp))
                 },
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.White)
             )

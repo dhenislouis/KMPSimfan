@@ -3,13 +3,17 @@ package org.kmp.simfan.screen.home
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -45,6 +49,7 @@ import org.kmp.simfan.extension.toRupiah
 import simfan.composeapp.generated.resources.Res
 import simfan.composeapp.generated.resources.*
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.ui.draw.scale
 
 @Composable
 fun HomeScreen(
@@ -65,8 +70,7 @@ fun HomeScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .background(Color(0xFFF5F6FA))
-                .padding(innerPadding),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+                .padding(innerPadding)
         ) {
             item {
                 AppBarSection(
@@ -76,7 +80,20 @@ fun HomeScreen(
             }
             item { ProfileHeader() }
             item { SaldoCard() }
-            item { MenuGrid() }
+            item { MenuGrid(
+                onMenuClick = { menuItem ->
+                    when (menuItem.title) {
+                        "Tabungan" -> { /* Navigasi ke tabungan */ }
+                        "E-Wallet" -> { /* Navigasi ke e-wallet */ }
+                        "Air dan Gas" -> { /* Navigasi ke tabungan */ }
+                        "Listrik" -> { /* Navigasi ke e-wallet */ }
+                        "Tagihan Pascabayar" -> { /* Navigasi ke tabungan */ }
+                        "Virtual Account" -> { /* Navigasi ke e-wallet */ }
+                        "Pulsa/Paket Data" -> { /* Navigasi ke tabungan */ }
+                        "Lainnya" -> { /* Navigasi ke e-wallet */ }
+                    }
+                }
+            ) }
             item { SimulasiDeposito() }
             item { PromoSection(
                 onPromoClick = onScreenPromo
@@ -115,7 +132,7 @@ fun AppBarSection(
         // Notifikasi
         IconButton(
             onClick = onNotificationClick,
-            modifier = Modifier.size(36.dp)
+            modifier = Modifier.size(32.dp)
         ) {
             Icon(
                 painter = painterResource(Res.drawable.notification),
@@ -128,10 +145,12 @@ fun AppBarSection(
             )
         }
 
+        Spacer(modifier = Modifier.width(10.dp))
+
         // Help
         IconButton(
             onClick = onHelpClick,
-            modifier = Modifier.size(36.dp)
+            modifier = Modifier.size(32.dp)
         ) {
             Icon(
                 painter = painterResource(Res.drawable.ic_headset),
@@ -151,12 +170,13 @@ fun ProfileHeader() {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .background(
-                brush = Brush.horizontalGradient(
-                    listOf(Color(0xFFEEF2FF), Color(0xFFEFF6FF))
-                )
-            )
-            .padding(12.dp),
+            .background(Color.White)
+            .padding(
+                top = 16.dp,
+                bottom = 16.dp,
+                start = 16.dp,
+                end = 24.dp
+            ),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Image(
@@ -167,7 +187,7 @@ fun ProfileHeader() {
                 .size(40.dp)
                 .clip(CircleShape)
         )
-        Spacer(modifier = Modifier.width(8.dp))
+        Spacer(modifier = Modifier.width(12.dp))
         Column(modifier = Modifier.weight(1f)) {
             Text("Good Morning!", fontSize = 12.sp, color = Color.Gray)
             Text("Cahaya Ayu Cantika", fontSize = 14.sp, color = Color.Black)
@@ -339,46 +359,76 @@ object MenuData {
 }
 
 @Composable
-fun MenuGrid() {
-    // ✅ Tambah tinggi biar tidak infinite
+fun MenuGrid(onMenuClick: (MenuItem) -> Unit = {}) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(4),
         modifier = Modifier
             .fillMaxWidth()
-            .height(220.dp) // <- tinggi grid fix
+            .height(220.dp)
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         items(MenuData.sampleMenu) { item ->
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.width(72.dp)
-            ) {
-                Surface(
-                    modifier = Modifier
-                        .size(40.dp)
-                        .clip(CircleShape),
-                    color = Color.White,
-                    shadowElevation = 2.dp
-                ) {
-                    Image(
-                        painter = painterResource(item.icon),
-                        contentDescription = item.title,
-                        contentScale = ContentScale.Fit,
-                        modifier = Modifier.padding(8.dp)
-                    )
-                }
-                Spacer(modifier = Modifier.height(6.dp))
-                Text(
-                    text = item.title,
-                    fontSize = 12.sp,
-                    fontWeight = FontWeight.Normal,
-                    color = Color.Black,
-                    textAlign = TextAlign.Center
-                )
-            }
+            MenuItemCard(
+                item = item,
+                onClick = { onMenuClick(item) }
+            )
         }
+    }
+}
+
+@Composable
+fun MenuItemCard(
+    item: MenuItem,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    val interactionSource = remember { MutableInteractionSource() }
+    val isPressed by interactionSource.collectIsPressedAsState()
+
+    val scale by animateFloatAsState(
+        targetValue = if (isPressed) 0.95f else 1f,
+        animationSpec = spring(stiffness = 400f, dampingRatio = 0.6f),
+        label = "scale"
+    )
+
+    Column(
+        modifier = modifier
+            .width(72.dp)
+            .clickable(
+                interactionSource = interactionSource,
+                indication = null,
+                onClick = onClick
+            )
+            .scale(scale),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Surface(
+            modifier = Modifier.size(48.dp),
+            shape = CircleShape,
+            color = Color(0xFFF0F6FF),
+            shadowElevation = if (isPressed) 4.dp else 1.dp
+        ) {
+            Image(
+                painter = painterResource(item.icon),
+                contentDescription = item.title,
+                contentScale = ContentScale.Fit,
+                modifier = Modifier.padding(8.dp)
+            )
+        }
+
+        Spacer(modifier = Modifier.height(6.dp))
+
+        Text(
+            text = item.title,
+            fontSize = 12.sp,
+            fontWeight = FontWeight.Normal,
+            color = if (isPressed) Color(0xFF003FFC) else Color.Black,
+            textAlign = TextAlign.Center,
+            maxLines = 2
+        )
     }
 }
 
@@ -432,8 +482,8 @@ fun SimulasiDeposito() {
                             val result = jumlah + bunga
                             Triple(
                                 bulan.toString(),
-                                formatRupiah(result), // Bank Lainnya
-                                formatRupiah(result)  // FUNDtastic (sementara sama, nanti bisa beda)
+                                formatRupiah(result),
+                                formatRupiah(result)
                             )
                         }
                     } else {
@@ -566,6 +616,7 @@ fun PromoSection(
                 fontWeight = FontWeight.Bold,
                 color = Color.Black
             )
+            Spacer(modifier = Modifier.weight(1f))
             Icon(
                 painter = painterResource(Res.drawable.arrow_forward),
                 contentDescription = "Lihat Semua",

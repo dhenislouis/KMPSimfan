@@ -1,9 +1,14 @@
-package org.kmp.simfan.screen.product.productdeposito
+package org.kmp.simfan.screen.product
 
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -12,27 +17,26 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import coil3.compose.AsyncImage
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.kmp.simfan.Routes
 import org.kmp.simfan.core.Button1
 import org.kmp.simfan.core.navigation.BottomBar
 import simfan.composeapp.generated.resources.Res
-import simfan.composeapp.generated.resources.aro
-import simfan.composeapp.generated.resources.arrow_upward
-import simfan.composeapp.generated.resources.ic_filter
-import simfan.composeapp.generated.resources.ic_more
-import simfan.composeapp.generated.resources.ic_refresh
-import simfan.composeapp.generated.resources.ic_search
-import simfan.composeapp.generated.resources.simfan_websuite
+import simfan.composeapp.generated.resources.*
 
 private val BgSecondary = Color(0xFFF1F2F6)
 private val AppBarBg = Color(0xFFF8F9FE)
@@ -42,41 +46,41 @@ private val PositiveGreen = Color(0xFF22C55E)
 private val LabelOrange = Color(0xFFFF8A00)
 private val StatusBgYellow = Color(0xFFFFF7E0)
 private val StatusText = Color(0xFFF59E0B)
+val Button1 = Color(0xFF668CFF)
 
 @Composable
 fun ProductDepositoScreen(
     navController: NavController,
     currentRoute: Routes?,
     onFilterClick: () -> Unit = {},
-    onDetail: () -> Unit,
-    onAjukanPenempatan: () -> Unit
+    onDetailBPRClick: () -> Unit,
+    onDetailClick: () -> Unit
 ) {
     Column {
         Column(
             modifier = Modifier
                 .background(BgSecondary)
-                .padding(horizontal = 16.dp, vertical = 12.dp)
+                .padding(horizontal = 16.dp, vertical = 16.dp)
         ) {
             var search by remember { mutableStateOf("") }
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(48.dp),
-                shape = RoundedCornerShape(24.dp),
-                elevation = CardDefaults.cardElevation(2.dp)
+                shape = RoundedCornerShape(100.dp),
+                elevation = CardDefaults.cardElevation(1.dp)
             ) {
                 Row(
                     modifier = Modifier
                         .fillMaxSize()
-                        .background(BgSecondary)
+                        .background(Color(0xffFBFBF9))
                         .padding(start = 16.dp, end = 12.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Icon(
-                        painter = painterResource(Res.drawable.ic_search),
-                        contentDescription = null,
-                        tint = Color.Gray,
-                        modifier = Modifier.size(22.dp)
+                    AsyncImage(
+                        model = Res.getUri("files/ic_magnifying.svg") ,
+                        contentDescription = "Search",
+                        modifier = Modifier.size(24.dp),
                     )
                     Spacer(Modifier.width(8.dp))
                     BasicTextField(
@@ -86,27 +90,25 @@ fun ProductDepositoScreen(
                         singleLine = true,
                         decorationBox = { inner ->
                             if (search.isEmpty()) {
-                                Text("Cari produk", color = Color.Gray, fontSize = 16.sp)
+                                Text("Cari produk", color = Color.Gray, fontSize = 14.sp)
                             }
                             inner()
                         }
                     )
-                    Icon(
-                        painter = painterResource(Res.drawable.ic_filter),
+
+                    AsyncImage(
+                        model = Res.getUri("files/ic_filter.svg") ,
                         contentDescription = "Filter",
-                        tint = Color.Gray,
                         modifier = Modifier
-                            .size(22.dp)
-                            .clickable { onFilterClick() }
+                            .size(24.dp)
+                            .clickable { onFilterClick() },
                     )
                 }
             }
         }
 
-        // Daftar produk
         Column(
             modifier = Modifier
-                .weight(1f)
                 .verticalScroll(rememberScrollState())
                 .padding(horizontal = 16.dp, vertical = 18.dp)
         ) {
@@ -117,10 +119,10 @@ fun ProductDepositoScreen(
                 duration = "3 Bulan",
                 nominal = "Rp10.000.000",
                 estimasi = "6%",
-                showBilyet = true,
-                showAro = true,
-                onDetail = onDetail,
-                onAjukanPenempatan = onAjukanPenempatan,
+                showBilyet = false,
+                showAro = false,
+                onDetailBPRClick = onDetailBPRClick,
+                onDetailClick = onDetailClick,
             )
 
             Spacer(Modifier.height(12.dp))
@@ -137,8 +139,8 @@ fun ProductDepositoScreen(
                 showStatusBar = true,
                 statusTitle = "Belum dapat menerima transaksi.",
                 statusSubtitle = "Data sedang diperbarui",
-                onDetail = onDetail,
-                onAjukanPenempatan = onAjukanPenempatan
+                onDetailBPRClick = onDetailBPRClick,
+                onDetailClick = onDetailClick
             )
         }
     }
@@ -157,8 +159,8 @@ fun ProductCard(
     showStatusBar: Boolean = false,
     statusTitle: String = "",
     statusSubtitle: String = "",
-    onDetail: () -> Unit = {},
-    onAjukanPenempatan: () -> Unit = {}
+    onDetailBPRClick: () -> Unit = {},
+    onDetailClick: () -> Unit = {}
 ) {
     Card(
         modifier = Modifier.fillMaxWidth(),
@@ -168,55 +170,72 @@ fun ProductCard(
     ) {
         Column {
             Column(Modifier.padding(top = 18.dp, start = 16.dp, end = 16.dp, bottom = 8.dp)) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
+                Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .clickable {
-                            onDetail()
-                        }
+                        .clickable(onClick = onDetailBPRClick)
                 ) {
-                    Image(
-                        painter = painterResource(Res.drawable.simfan_websuite),
-                        contentDescription = null,
-                        modifier = Modifier
-                            .size(38.dp)
-                            .clip(RoundedCornerShape(8.dp))
-                    )
-                    Column(
-                        Modifier
-                            .weight(1f)
-                            .padding(start = 12.dp)
-                    ) {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Text(
-                                title,
-                                fontSize = 13.sp,
-                                color = Color.Black,
-                                fontWeight = FontWeight.Medium
+                    Column {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                        ) {
+                            Image(
+                                painter = painterResource(Res.drawable.simfan_websuite),
+                                contentDescription = null,
+                                modifier = Modifier
+                                    .size(36.dp)
+                                    .clip(RoundedCornerShape(5.dp)),
+                                contentScale = ContentScale.FillWidth
                             )
-                            Spacer(Modifier.width(8.dp))
-                            if (showBilyet) {
-                                PillLabel(text = "Bilyet Fisik", bg = LabelOrange, fg = Color.White)
-                                Spacer(Modifier.width(6.dp))
+                            Column(
+                                Modifier
+                                    .weight(1f)
+                                    .padding(start = 12.dp)
+                            ) {
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    Text(
+                                        title,
+                                        fontSize = 13.sp,
+                                        color = Color.Black,
+                                        fontWeight = FontWeight.Medium
+                                    )
+                                    Spacer(Modifier.width(8.dp))
+                                    if (showBilyet) {
+                                        PillLabel(
+                                            text = "Bilyet Fisik",
+                                            bg = LabelOrange,
+                                            fg = Color.White
+                                        )
+                                        Spacer(Modifier.width(6.dp))
+                                    }
+                                    if (showAro) {
+                                        AroLabel()
+                                    }
+                                }
+                                Text(subtitle, fontSize = 11.sp, color = Color(0xFF999999))
                             }
-                            if (showAro) {
-                                AroLabel()
-                            }
+                            AsyncImage(
+                                model = Res.getUri("files/ic_arrow_left.svg"),
+                                contentDescription = "Arrow",
+                                modifier = Modifier.size(16.dp),
+                                colorFilter = ColorFilter.tint(Color.Black)
+                            )
                         }
-                        Text(subtitle, fontSize = 11.sp, color = Color(0xFF999999))
+                        Spacer(Modifier.height(14.dp))
+                        HorizontalDivider(
+                            thickness = 1.dp,
+                            color = Color(0xFFE5E7EB)
+                        )
                     }
                 }
-
-                Spacer(Modifier.height(8.dp))
-
+                Spacer(Modifier.height(14.dp))
                 Row {
                     Text(minimumLabel, fontSize = 12.sp, color = Color(0xFF22242F), modifier = Modifier.weight(1f))
                     Text(duration, fontSize = 12.sp, color = Color(0xFF22242F))
                 }
-
                 Spacer(Modifier.height(4.dp))
-
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text(
                         nominal,
@@ -226,11 +245,11 @@ fun ProductCard(
                         modifier = Modifier.weight(1f)
                     )
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        Icon(
-                            painter = painterResource(Res.drawable.arrow_upward),
-                            contentDescription = null,
-                            tint = PositiveGreen,
-                            modifier = Modifier.size(15.dp)
+                        AsyncImage(
+                            model = Res.getUri("files/ic_arrow_up.svg"),
+                            contentDescription = "House",
+                            modifier = Modifier.size(15.dp),
+                            colorFilter = ColorFilter.tint(PositiveGreen)
                         )
                         Spacer(Modifier.width(2.dp))
                         Text(
@@ -241,35 +260,79 @@ fun ProductCard(
                         )
                     }
                 }
+                Spacer(Modifier.height(14.dp))
 
-                Spacer(Modifier.height(8.dp))
-                Box(
-                    Modifier
-                        .fillMaxWidth()
-                        .height(1.dp)
-                        .background(Color(0xFFE0E0E0))
+                // Tombol Detail Produk yang dimodifikasi
+                AnimatedDetailButton(
+                    onClick = onDetailClick,
+                    modifier = Modifier.fillMaxWidth()
                 )
-                Spacer(Modifier.height(8.dp))
-
-                Button(
-                    onClick = onAjukanPenempatan,
-                    enabled = !showStatusBar,
-                    modifier = Modifier.fillMaxWidth(),
-                    colors = ButtonDefaults.buttonColors(containerColor = Button1),
-                    shape = RoundedCornerShape(24.dp)
-                ) {
-                    Text("Ajukan Penempatan", color = Color.White)
-                }
 
                 Spacer(Modifier.height(8.dp))
             }
-
             if (showStatusBar) {
                 StatusInfoBar(
                     title = statusTitle,
                     subtitle = statusSubtitle
                 )
             }
+        }
+    }
+}
+
+@Composable
+fun AnimatedDetailButton(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    // Interaction source untuk mendeteksi status klik
+    val interactionSource = remember { MutableInteractionSource() }
+    val isPressed by interactionSource.collectIsPressedAsState()
+
+    // Animasi untuk elevasi bayangan
+    val elevation by animateFloatAsState(
+        targetValue = if (isPressed) 12.dp.value else 6.dp.value,
+        animationSpec = spring(stiffness = 400f, dampingRatio = 0.6f),
+        label = "elevation"
+    )
+
+    // Animasi skala saat ditekan
+    val scale by animateFloatAsState(
+        targetValue = if (isPressed) 0.98f else 1f,
+        animationSpec = spring(stiffness = 400f, dampingRatio = 0.6f),
+        label = "scale"
+    )
+
+    // Animasi untuk warna background
+    val buttonColor by animateColorAsState(
+        targetValue = if (isPressed) Color(0xFF5578EE) else org.kmp.simfan.core.Button1,
+        animationSpec = spring(stiffness = 400f, dampingRatio = 0.6f),
+        label = "buttonColor"
+    )
+
+    Surface(
+        onClick = onClick,
+        modifier = modifier
+            .scale(scale)
+            .height(40.dp),
+        shape = RoundedCornerShape(15.dp),
+        color = buttonColor,
+        shadowElevation = elevation.dp,
+        interactionSource = interactionSource
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = "Detail Produk",
+                color = Color.White,
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Medium
+            )
         }
     }
 }

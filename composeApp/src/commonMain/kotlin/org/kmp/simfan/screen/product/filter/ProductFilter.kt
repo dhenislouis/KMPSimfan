@@ -12,11 +12,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.kmp.simfan.Routes
 import org.kmp.simfan.core.Button1
 
 @Composable
-fun FilterScreen() {
+fun FilterScreen(
+    navController: NavController,
+    currentRoute: Routes?,
+    onClose: () -> Unit
+) {
     var selectedTenor by remember { mutableStateOf("3 Bulan") }
     var selectedProduct by remember { mutableStateOf("E-Deposito") }
 
@@ -32,7 +38,7 @@ fun FilterScreen() {
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text("✕", fontSize = 20.sp, modifier = Modifier.clickable { })
+            Text("✕", fontSize = 20.sp, modifier = Modifier.clickable { onClose() })
             Text("Filter", fontSize = 18.sp, fontWeight = FontWeight.Bold)
             Spacer(modifier = Modifier.width(20.dp)) // biar simetris
         }
@@ -150,8 +156,8 @@ fun FilterScreen() {
     }
 }
 
-@Preview
-@Composable
-fun FilterScreenPreview() {
-    FilterScreen()
-}
+//@Preview
+//@Composable
+//fun FilterScreenPreview() {
+//    FilterScreen()
+//}

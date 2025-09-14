@@ -38,7 +38,7 @@ private val Secondary = Color(0xFFF59E0B)
 @Preview
 @Composable
 fun SimfankuTabunganScreen(
-    onDetailTabunganSimfanku: () -> Unit = {},
+    onDetailTabunganSimfanku: () -> Unit = {}
 ) {
 
     Column(

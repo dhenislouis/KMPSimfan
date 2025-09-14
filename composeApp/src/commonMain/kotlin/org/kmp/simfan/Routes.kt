@@ -84,6 +84,8 @@ sealed interface Routes {
     data object ProductTabungan : Routes
 
     @Serializable
+    data object DetailBPRProductDeposito : Routes
+    @Serializable
     data object DetailProductDeposito : Routes
 
     @Serializable
@@ -108,9 +110,15 @@ sealed interface Routes {
 
     @Serializable
     data object BerhasilPenempatanProductDeposito : Routes
+    @Serializable
+    data object FilterDeposito : Routes
 
     @Serializable
+    data object FilterTabungan : Routes
+    @Serializable
     data object DetailProductTabungan : Routes
+    @Serializable
+    data object DetailBPRProductTabungan : Routes
 
 
 
@@ -173,7 +181,5 @@ sealed interface Routes {
     @Serializable
     data object KeluarAplikasi : Routes
 
-    @Serializable
-    data object DetailBPRProductDeposito : Routes
 
 }
