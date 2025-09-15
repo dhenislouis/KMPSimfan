@@ -26,6 +26,7 @@ import org.jetbrains.compose.resources.painterResource
 import org.kmp.simfan.Routes
 import org.kmp.simfan.core.Button1
 import org.kmp.simfan.core.Label_Langkah
+import org.kmp.simfan.presentation.profileSubmission.ProfileSubmissionViewModel
 import simfan.composeapp.generated.resources.Res
 import simfan.composeapp.generated.resources.arrow_back
 import simfan.composeapp.generated.resources.backspace
@@ -41,6 +42,10 @@ fun Langkah5InputPinScreen(
     var pin by remember { mutableStateOf("") }
     var showPin by remember { mutableStateOf(false) }
     val haptic = LocalHapticFeedback.current
+    val viewModel = remember { ProfileSubmissionViewModel() }
+    val isLoading by viewModel.isLoading
+    val errorMessage by viewModel.errorMessage
+    val submitResult by viewModel.submitResult
 
     Column(
         modifier = Modifier
@@ -226,7 +231,9 @@ fun Langkah5InputPinScreen(
             Spacer(Modifier.height(16.dp))
 
             Button(
-                onClick = onNext,
+                onClick = {
+                    viewModel.submitPin(pin)
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(48.dp),
@@ -238,6 +245,14 @@ fun Langkah5InputPinScreen(
                     fontWeight = FontWeight.SemiBold,
                     color = Color.White
                 )
+            }
+
+            errorMessage?.let {
+                Text("Error: $it", color = Color.Red)
+            }
+            submitResult?.let {
+                onNext()
+                Text("Sukses: $it", color = Color(0xFF0F9D58))
             }
         }
     }
