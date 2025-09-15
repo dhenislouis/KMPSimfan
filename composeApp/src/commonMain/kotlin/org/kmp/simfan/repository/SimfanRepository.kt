@@ -7,14 +7,18 @@ import org.kmp.simfan.model.BankAccount
 import org.kmp.simfan.model.Deposit
 import org.kmp.simfan.model.DepositRequest
 import org.kmp.simfan.model.FirebaseTokenRequest
+import org.kmp.simfan.model.IdentityStepRequest
 import org.kmp.simfan.model.IndustrialSectorsData
 import org.kmp.simfan.model.InvestmentObjectivesData
 import org.kmp.simfan.model.JobData
 import org.kmp.simfan.model.JobTitlesData
 import org.kmp.simfan.model.MonthlySalariesData
+import org.kmp.simfan.model.NpwpStepRequest
+import org.kmp.simfan.model.PinStepRequest
 import org.kmp.simfan.model.Product
 import org.kmp.simfan.model.Profile
 import org.kmp.simfan.model.ProfileSubmissionRequest
+import org.kmp.simfan.model.ProfileSubmitResponse
 import org.kmp.simfan.model.Promotion
 import org.kmp.simfan.model.RevenueData
 import org.kmp.simfan.model.SaldoResponse
@@ -33,7 +37,11 @@ class SimfanRepository(
     // Auth
     suspend fun signIn(userId: String, password: String, rememberMe: Boolean): Result<SignInResponse> {
         return try {
+            println("====== userId: $userId =======")
+            println("====== password: $password =======")
+
             val request = SignInRequest(userId, password, rememberMe)
+            println("====== request di repo signin: $request =======")
             val response = apiService.signIn(request)
             apiService.setToken(response.data?.accessToken)
             Result.success(response)
@@ -328,12 +336,83 @@ class SimfanRepository(
         }
     }
 
-    suspend fun submitProfile(request: ProfileSubmissionRequest): Result<Profile> {
+//    suspend fun submitProfile(request: ProfileSubmissionRequest): Result<Profile> {
+//        return try {
+//            val response = apiService.submitProfile(request)
+//            Result.success(response)
+//        } catch (e: Exception) {
+//            Result.failure(e)
+//        }
+//    }
+//    suspend fun submitProfileStep(
+//        step: String,
+//        npwpNumber: String? = null,
+//        ktpFile: Pair<String, ByteArray>? = null,
+//        selfieFile: Pair<String, ByteArray>? = null,
+//        npwpFile: Pair<String, ByteArray>? = null,
+//        identity: IdentityStepRequest? = null,
+//        pin: String? = null
+//    ): Result<ApiResponse<Unit>> {
+//        return try {
+//            val response = apiService.submitProfileStep(
+//                step = step,
+//                npwpNumber = npwpNumber,
+//                ktpFile = ktpFile,
+//                selfieFile = selfieFile,
+//                npwpFile = npwpFile,
+//                identity = identity,
+//                pin = pin
+//            )
+//            Result.success(response)
+//        } catch (e: Exception) {
+//            Result.failure(e)
+//        }
+//    }
+
+    suspend fun submitNpwpStep(npwp:String,file: ByteArray?): Result<ProfileSubmitResponse> {
         return try {
-            val response = apiService.submitProfile(request)
+            val response = apiService.submitNpwpStep(npwp, npwpImageBytes = file)
             Result.success(response)
         } catch (e: Exception) {
             Result.failure(e)
         }
     }
+
+    suspend fun submitPrivyStep(ktpFile: ByteArray?, selfieFile: ByteArray?): Result<ProfileSubmitResponse> {
+        return try {
+            val response = apiService.submitPrivyStep(ktpFile, selfieFile)
+            Result.success(response)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    suspend fun submitIdentityStep(identityStepRequest: IdentityStepRequest): Result<ProfileSubmitResponse> {
+        return try {
+            val response = apiService.submitIdentityStep(identityStepRequest)
+            Result.success(response)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    suspend fun submitPinStep(pin: String): Result<ProfileSubmitResponse> {
+        return try {
+            val response = apiService.submitPinStep(pin)
+            Result.success(response)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    // helper buat ngurangin try/catch bolak-balik
+    private suspend fun <T> wrap(block: suspend () -> T): Result<T> {
+        return try {
+            Result.success(block())
+        } catch (e: Exception) {
+            print("error api submit profil $e")
+            Result.failure(e)
+        }
+    }
+
 }

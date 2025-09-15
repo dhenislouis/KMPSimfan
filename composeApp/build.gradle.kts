@@ -41,7 +41,7 @@ kotlin {
             implementation("com.google.firebase:firebase-auth-ktx:22.1.1")
             implementation("com.google.firebase:firebase-firestore-ktx:24.9.1")
             implementation("io.ktor:ktor-client-okhttp:2.3.2")
-            implementation("co.id.privy:privy-android:1.0.0")
+//            implementation("co.id.privy:privy-android:1.0.0")
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -77,9 +77,13 @@ kotlin {
             implementation(libs.coil.network.ktor)
             implementation(libs.coil.compose)
             implementation(libs.coil.svg)
+            implementation(libs.filekit.dialogs)
+            implementation(libs.filekit.dialogs.compose)
+
             implementation("io.ktor:ktor-client-core:2.3.2")
             implementation("io.ktor:ktor-client-content-negotiation:2.3.2")
             implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.2")
+            implementation("com.darkrockstudios:mpfilepicker:3.1.0")
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
