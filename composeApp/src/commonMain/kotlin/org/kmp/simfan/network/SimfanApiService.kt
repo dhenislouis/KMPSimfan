@@ -2,6 +2,9 @@ package org.kmp.simfan.network
 
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
+import io.ktor.client.plugins.auth.Auth
+import io.ktor.client.plugins.auth.providers.BearerTokens
+import io.ktor.client.plugins.auth.providers.bearer
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.plugins.logging.LogLevel
@@ -57,8 +60,8 @@ class SimfanApiService(
     private val tokenProvider: () -> String? = { null }
 ) {
 
-    @Volatile
-    private var authToken: String? = null
+//    @Volatile
+//    private var authToken: String? = null
     private val noAuthClient = HttpClient {
         install(ContentNegotiation) {
             json(Json { ignoreUnknownKeys = true; isLenient = true })
@@ -80,21 +83,36 @@ class SimfanApiService(
             level = LogLevel.ALL
         }
         followRedirects = true
-        print("ini namanya token $authToken")
-        defaultRequest {
-            authToken?.let { token ->
-                header("Authorization", "Bearer $token")
+        install(Auth) {
+            bearer {
+                // Blok ini akan dijalankan SETIAP KALI ada request
+                loadTokens {
+                    // Ambil token terbaru dari penyimpanan Anda
+                    val token = tokenProvider() // <--- GUNAKAN tokenProvider DI SINI
+                    print("ini namanya token $token")
+
+                    // Jika token-nya ada, gunakan sebagai Bearer Token
+                    if (!token.isNullOrBlank()) {
+                        BearerTokens(accessToken = token, refreshToken = "")
+                    } else {
+                        null
+                    }
+
+                }
             }
-        }
+            }
+//        defaultRequest {
+//
+//        }
     }
 
-    fun setToken(token: String?) {
-        authToken = token
-    }
-
-    fun clearToken() {
-        authToken = null
-    }
+//    fun setToken(token: String?) {
+//        authToken = token
+//    }
+//
+//    fun clearToken() {
+//        authToken = null
+//    }
 
 
     // Base URL - sesuaikan dengan konfigurasi backend
@@ -106,7 +124,7 @@ class SimfanApiService(
         val resp: SignInResponse = noAuthClient.post("$baseUrl/sign-in") {
             setBody(request)
         }.body()
-        authToken = resp.data?.accessToken
+//        authToken = resp.data?.accessToken
         return resp
     }
 
@@ -278,7 +296,7 @@ class SimfanApiService(
         }.body()
     }
     suspend fun submitIdentityStep(request: IdentityStepRequest): ProfileSubmitResponse {
-        return noAuthClient.post("$baseUrl/profile-submission/") {
+        return client.post("$baseUrl/profile-submission/") {
             url {
                 parameters.append("step", "identity")
             }
@@ -339,6 +357,16 @@ class SimfanApiService(
         return client.post("$baseUrl/profile-submission/") {
             url {
                 parameters.append("step", "pin")
+            }
+            setBody(FormDataContent(Parameters.build {
+                append("pin", pin)
+            }))
+        }.body()
+    }
+    suspend fun submitPinConfirmStep(pin: String): ProfileSubmitResponse {
+        return client.post("$baseUrl/profile-submission/") {
+            url {
+                parameters.append("step", "confirm-pin")
             }
             setBody(FormDataContent(Parameters.build {
                 append("pin", pin)

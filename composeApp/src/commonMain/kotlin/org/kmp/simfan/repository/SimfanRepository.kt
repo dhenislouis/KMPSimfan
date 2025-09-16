@@ -13,11 +13,8 @@ import org.kmp.simfan.model.InvestmentObjectivesData
 import org.kmp.simfan.model.JobData
 import org.kmp.simfan.model.JobTitlesData
 import org.kmp.simfan.model.MonthlySalariesData
-import org.kmp.simfan.model.NpwpStepRequest
-import org.kmp.simfan.model.PinStepRequest
 import org.kmp.simfan.model.Product
 import org.kmp.simfan.model.Profile
-import org.kmp.simfan.model.ProfileSubmissionRequest
 import org.kmp.simfan.model.ProfileSubmitResponse
 import org.kmp.simfan.model.Promotion
 import org.kmp.simfan.model.RevenueData
@@ -43,7 +40,11 @@ class SimfanRepository(
             val request = SignInRequest(userId, password, rememberMe)
             println("====== request di repo signin: $request =======")
             val response = apiService.signIn(request)
-            apiService.setToken(response.data?.accessToken)
+            response.data?.accessToken?.let { token ->
+                if (token.isNotBlank()) { // Cek agar token tidak kosong
+                    authManager.saveToken(token)
+                }
+            }
             Result.success(response)
         } catch (e: Exception) {
             Result.failure(e)
@@ -54,7 +55,11 @@ class SimfanRepository(
         return try {
             val request = SignUpRequest(name, email, phone, password)
             val response = apiService.signUp(request)
-            apiService.setToken(response.data?.accessToken)
+            response.data?.accessToken?.let { token ->
+                if (token.isNotBlank()) { // Cek agar token tidak kosong
+                    authManager.saveToken(token)
+                }
+            }
             Result.success(response)
         } catch (e: Exception) {
             Result.failure(e)
@@ -65,7 +70,11 @@ class SimfanRepository(
         return try {
             val request = FirebaseTokenRequest(token, name)
             val response = apiService.firebaseLogin(request)
-            apiService.setToken(response.data?.accessToken)
+            response.data?.accessToken?.let { token ->
+                if (token.isNotBlank()) { // Cek agar token tidak kosong
+                    authManager.saveToken(token)
+                }
+            }
             Result.success(response)
         } catch (e: Exception) {
             Result.failure(e)
@@ -372,7 +381,11 @@ class SimfanRepository(
     suspend fun submitNpwpStep(npwp:String,file: ByteArray?): Result<ProfileSubmitResponse> {
         return try {
             val response = apiService.submitNpwpStep(npwp, npwpImageBytes = file)
-            Result.success(response)
+            if (response.status) {
+                Result.success(response)
+            } else {
+                Result.failure(Exception(response.message))
+            }
         } catch (e: Exception) {
             Result.failure(e)
         }
@@ -381,7 +394,11 @@ class SimfanRepository(
     suspend fun submitPrivyStep(ktpFile: ByteArray?, selfieFile: ByteArray?): Result<ProfileSubmitResponse> {
         return try {
             val response = apiService.submitPrivyStep(ktpFile, selfieFile)
-            Result.success(response)
+            if (response.status) {
+                Result.success(response)
+            } else {
+                Result.failure(Exception(response.message))
+            }
         } catch (e: Exception) {
             Result.failure(e)
         }
@@ -390,7 +407,11 @@ class SimfanRepository(
     suspend fun submitIdentityStep(identityStepRequest: IdentityStepRequest): Result<ProfileSubmitResponse> {
         return try {
             val response = apiService.submitIdentityStep(identityStepRequest)
-            Result.success(response)
+            if (response.status) {
+                Result.success(response)
+            } else {
+                Result.failure(Exception(response.message))
+            }
         } catch (e: Exception) {
             Result.failure(e)
         }
@@ -399,7 +420,23 @@ class SimfanRepository(
     suspend fun submitPinStep(pin: String): Result<ProfileSubmitResponse> {
         return try {
             val response = apiService.submitPinStep(pin)
-            Result.success(response)
+            if (response.status) {
+                Result.success(response)
+            } else {
+                Result.failure(Exception(response.message))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+    suspend fun submitPinConfirmStep(pin: String): Result<ProfileSubmitResponse> {
+        return try {
+            val response = apiService.submitPinConfirmStep(pin)
+            if (response.status) {
+                Result.success(response)
+            } else {
+                Result.failure(Exception(response.message))
+            }
         } catch (e: Exception) {
             Result.failure(e)
         }

@@ -135,10 +135,12 @@ class ProfileSubmissionViewModel : ViewModel() {
             _isLoading.value = true
             _errorMessage.value = null
             _submitResult.value = null
+            println(">>> IdentityStepRequest: $identityStepRequest")
 
             val result = repository.submitIdentityStep(identityStepRequest)
 
             result.onSuccess {
+
                 _submitResult.value = "Pengajuan Berhasil"
             }.onFailure { e ->
                 _errorMessage.value = e.message ?: "Gagal submit Pengajuan"
@@ -164,6 +166,23 @@ class ProfileSubmissionViewModel : ViewModel() {
             _isLoading.value = false
         }
     }
+    fun submitConfirmPin(pin: String) {
+        viewModelScope.launch {
+            _isLoading.value = true
+            _errorMessage.value = null
+            _submitResult.value = null
+
+            val result = repository.submitPinConfirmStep(pin)
+
+            result.onSuccess {
+                _submitResult.value = "Pembuatan pin berhasil"
+            }.onFailure { e ->
+                _errorMessage.value = e.message ?: "Gagal submit Pengajuan"
+            }
+
+            _isLoading.value = false
+        }
+    }
     fun submitPrivy(ktpFile: ByteArray?,selfieFile: ByteArray?) {
         viewModelScope.launch {
             _isLoading.value = true
@@ -179,6 +198,39 @@ class ProfileSubmissionViewModel : ViewModel() {
             }
 
             _isLoading.value = false
+        }
+    }
+
+    fun submitPinAndConfirmpin(pin: String){
+        viewModelScope.launch {
+            _isLoading.value = true
+            _errorMessage.value = null
+            _submitResult.value = null
+
+
+           try {
+               val pinResult = repository.submitPinStep(pin)
+
+               pinResult.onSuccess {
+                   _submitResult.value = "pin berhaasil"
+                   println(">>>>>>pengajuan pin berhasil")
+                   val confirmPinResult =  repository.submitPinConfirmStep(pin)
+                   confirmPinResult.onSuccess {
+                       println(">>>>>>pengajuan confirm pin berhasil")
+
+                       _submitResult.value = "Pengajuan  berhasil!"
+
+                   }.onFailure {
+                       _submitResult.value = "Pengajuan  gagal!"
+
+                   }
+               }
+           } catch (e: Exception) {
+               _errorMessage.value = "Terjadi error: ${e.message}"
+           } finally {
+               // 6. Pastikan loading selalu berhenti di akhir, apa pun hasilnya
+               _isLoading.value = false
+           }
         }
     }
     fun submitPrivyAndNpwp(ktpFile: ByteArray?, selfieFile: ByteArray?, npwpNumber: String, npwpFile: ByteArray?) {

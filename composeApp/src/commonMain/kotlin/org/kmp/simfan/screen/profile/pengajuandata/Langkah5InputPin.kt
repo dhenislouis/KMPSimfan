@@ -232,7 +232,7 @@ fun Langkah5InputPinScreen(
 
             Button(
                 onClick = {
-                    viewModel.submitPin(pin)
+                    viewModel.submitPinAndConfirmpin(pin)
                 },
                 modifier = Modifier
                     .fillMaxWidth()
