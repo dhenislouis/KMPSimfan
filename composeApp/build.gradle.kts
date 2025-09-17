@@ -8,6 +8,7 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.jetbrains.kotlin.serialization)
+    alias(libs.plugins.googleServices)
 }
 
 kotlin {
@@ -38,9 +39,12 @@ kotlin {
             implementation(libs.ktor.client.okhttp)
             implementation(libs.core.splashscreen)
 //            implementation("com.airbnb.android:lottie:6.4.0")
+            implementation("androidx.compose.ui:ui-android:1.8.2")
             implementation("com.google.firebase:firebase-auth-ktx:22.1.1")
             implementation("com.google.firebase:firebase-firestore-ktx:24.9.1")
             implementation("io.ktor:ktor-client-okhttp:2.3.2")
+            implementation(libs.play.services.auth)
+            implementation(libs.bundles.credential.manager)
 
         }
         commonMain.dependencies {

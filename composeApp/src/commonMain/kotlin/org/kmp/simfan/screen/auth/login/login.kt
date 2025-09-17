@@ -35,7 +35,7 @@ fun LoginScreenUI(
     currentRoute: Routes?,
     onBackClick: () -> Unit = {},
     onLoginClick: () -> Unit = {},
-    onGoogleLoginClick: () -> Unit = {},
+    onGoogleLoginClick: () -> Unit,
     onForgotPasswordClick: () -> Unit = {},
     onRegisterClick: () -> Unit = {}
 ) {
