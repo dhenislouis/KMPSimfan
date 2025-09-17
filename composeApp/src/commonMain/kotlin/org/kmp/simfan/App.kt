@@ -6,6 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.kmp.simfan.auth.AuthManager
 import org.kmp.simfan.core.Theme
 import org.kmp.simfan.navigation.*
 
@@ -40,11 +41,14 @@ import org.kmp.simfan.navigation.*
 
 @Composable
 @Preview
-fun App(onGoogleLoginClick: () -> Unit) {
+fun App(onGoogleLoginClick: () -> Unit, authManager: AuthManager) {
     val navController = rememberNavController()
 
     val currentRoute = navController
         .currentBackStackEntryAsState().value?.destination?.route
+    val startDestination = remember {
+        if (authManager.isLoggedIn()) Routes.Home else Routes.Onboard
+    }
     Theme {
 
         Scaffold(
@@ -52,7 +56,7 @@ fun App(onGoogleLoginClick: () -> Unit) {
         ) { innerPadding ->
             NavHost(
                 navController = navController,
-                startDestination = Routes.Onboard,
+                startDestination = startDestination,
 
                 ) {
 
@@ -61,7 +65,7 @@ fun App(onGoogleLoginClick: () -> Unit) {
                 homeGraph(navController)
                 productGraph(navController)
                 simpanankuGraph(navController)
-                profileGraph(navController)
+                profileGraph(navController, authManager)
 
                 // ONBOARDING
 //                composable<Routes.Onboard1> {

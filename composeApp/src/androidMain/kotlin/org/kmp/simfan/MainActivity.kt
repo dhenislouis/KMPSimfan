@@ -13,6 +13,7 @@ import org.kmp.simfan.presentation.auth.LoginViewModel
 
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
+import org.kmp.simfan.auth.AuthManager
 
 class MainActivity : ComponentActivity() {
     private val loginViewModel = LoginViewModel()
@@ -24,8 +25,10 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         googleAuthClient = GoogleAuthClient(this)
         setContent {
+            val authManager = AuthManager()
             App(
-                onGoogleLoginClick = { startGoogleSignIn() }
+                onGoogleLoginClick = { startGoogleSignIn() },
+                authManager = authManager
             )
         }
     }
@@ -47,5 +50,5 @@ class MainActivity : ComponentActivity() {
 @Preview
 @Composable
 fun AppAndroidPreview() {
-    App(onGoogleLoginClick = {})
+    App(onGoogleLoginClick = {}, authManager = AuthManager())
 }
