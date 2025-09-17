@@ -13,13 +13,13 @@ import org.kmp.simfan.presentation.auth.LoginViewModel
 
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
-import org.kmp.simfan.model.FirebaseTokenRequest
 
 class MainActivity : ComponentActivity() {
     private val loginViewModel = LoginViewModel()
     private lateinit var googleAuthClient: GoogleAuthClient
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
         val splashScreen = installSplashScreen() // jangan kasih "this"!
         super.onCreate(savedInstanceState)
         googleAuthClient = GoogleAuthClient(this)
@@ -32,7 +32,6 @@ class MainActivity : ComponentActivity() {
     private fun startGoogleSignIn() {
         lifecycleScope.launch {
             try {
-                googleAuthClient.signOut()
                 loginViewModel.googleLogin(googleAuthClient.getGoogleIdToken())
             } catch (e: Exception) {
                 // Handle cancel / error
