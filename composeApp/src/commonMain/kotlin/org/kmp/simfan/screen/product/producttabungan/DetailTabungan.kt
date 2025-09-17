@@ -1,5 +1,8 @@
 package org.kmp.simfan.screen.product.producttabungan
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -16,19 +19,33 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CheckboxDefaults
+import androidx.compose.material3.Divider
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
@@ -38,91 +55,130 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil3.compose.AsyncImage
 import org.jetbrains.compose.resources.painterResource
-import org.kmp.simfan.components.navbar.CustomAppBar
-import org.kmp.simfan.core.BgSecondary
-import org.kmp.simfan.core.Primary
+import org.kmp.simfan.Routes
+import org.kmp.simfan.core.Button1
 import org.kmp.simfan.screen.product.productdeposito.InfoRow
 import simfan.composeapp.generated.resources.Res
+import simfan.composeapp.generated.resources.arrow_back
+import simfan.composeapp.generated.resources.aro
+import simfan.composeapp.generated.resources.arrow_forward
 import simfan.composeapp.generated.resources.simfan_websuite
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailTabunganScreen(
     navController: NavController,
-    onDetailBprClick: (UInt) -> Unit = {},
-    onDetailClick: (UInt) -> Unit = {},
-    onAjukanClick: () -> Unit = {}, // aksi tombol di bottom bar
+    currentRoute: Routes?,
+    onBackClick: () -> Unit,
+    onDetailProdukLainnya: () -> Unit = {},
+    onAjukanClick: () -> Unit = {}
 ) {
+    var showBottomSheet by remember { mutableStateOf(false) }
+
+    if (showBottomSheet) {
+        InputNominalBottomSheetTabungan(
+            navController = navController,
+            currentRoute = Routes.BottomSheetPengajuanProductTabungan,
+            onDismiss = { showBottomSheet = false },
+            onSave = { nominal ->
+                // TODO: proses nominal di sini
+                showBottomSheet = false
+                navController.navigate(Routes.AjukanPenempatanProductTabungan)
+            }
+        )
+    }
+
     Scaffold(
+        modifier = Modifier.fillMaxSize(),
+        topBar = {
+            CenterAlignedTopAppBar(
+                title = {
+                    Text(
+                        text = "Detail Produk",
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        color = Color.Black
+                    )
+                },
+                navigationIcon = {
+                    IconButton(onClick = onBackClick) {
+                        Icon(
+                            painter = painterResource(Res.drawable.arrow_back),
+                            contentDescription = "Kembali",
+                            tint = Color.Black,
+                            modifier = Modifier.size(20.dp)
+                        )
+                    }
+                },
+                actions = {
+                    Spacer(modifier = Modifier.size(48.dp))
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = Color.White
+                )
+            )
+        },
         bottomBar = {
             Box(
                 modifier = Modifier
-                    .fillMaxWidth()
                     .background(Color.White)
-                    .padding(24.dp)
+                    .padding(16.dp)
             ) {
                 Button(
-                    onClick = onAjukanClick,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(50.dp),
-                    shape = RoundedCornerShape(12.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = Primary)
+                    onClick = {
+                        showBottomSheet = true
+                        onAjukanClick()
+                    },
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = ButtonDefaults.buttonColors(containerColor = Button1)
                 ) {
                     Text(
-                        text = "Ajukan Penempatan",
+                        "Ajukan Penempatan",
+                        color = Color.White,
                         fontSize = 16.sp,
-                        fontWeight = FontWeight.SemiBold,
-                        color = Color.White
+                        fontWeight = FontWeight.SemiBold
                     )
                 }
             }
-        },
-        topBar = {
-            CustomAppBar(navController)
         }
-    ) { paddingValues ->
+    ) { innerPadding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(BgSecondary)
-                .verticalScroll(rememberScrollState()) // biar konten bisa discroll
-                .padding(paddingValues) // biar konten gak ketimpa bottom bar
+                .background(Color(0xFFF3F4F6))
+                .padding(innerPadding)
+                .verticalScroll(rememberScrollState())
                 .padding(16.dp)
-            // padding dalam konten
         ) {
-
             MinimumPenempatanCard(
                 minimumLabel = "Minimum Penempatan",
                 nominal = "Rp10.000.000",
                 duration = "3 Bulan",
-                estimasi = "6%"
+                estimasi = "6% p.a"
             )
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            DetailBPRCard()
+
             Spacer(modifier = Modifier.height(16.dp))
-            DetailBprCard(
-                onDetailBprClick = { onDetailBprClick(1u) } // ID dummy
+
+            Text(
+                text = "Produk Lainnya",
+                fontWeight = FontWeight.Bold,
+                fontSize = 16.sp,
+                modifier = Modifier.padding(bottom = 8.dp)
             )
-            Spacer(modifier = Modifier.height(16.dp))
-            Column {
-                Text(
-                    "Product Lainnya",
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.SemiBold
-                )
-                Spacer(modifier = Modifier.height(16.dp))
-                AnotherProductCard(
-                    title = "Simfan WebSuite",
-                    subtitle = "DKI Jakarta - 3 Transaksi",
-                    minimumLabel = "Minimum Penempatan",
-                    duration = "3 Bulan",
-                    nominal = "Rp10.000.000",
-                    estimasi = "6%",
-                    showStatusBar = true,
-                    statusTitle = "Belum dapat menerima transaksi.",
-                    statusSubtitle = "Data sedang diperbarui",
-                    onDetailClick = { onDetailClick(2u) }, // ID dummy
-                    onDetailBprClick = { onDetailBprClick(3u) } // ID dummy
-                )
-            }
+
+            AnotherProductCard(
+                title = "BPR Sejahter",
+                subtitle = "DKI Jakarta - 3 Transaksi",
+                minimumLabel = "Minimum Penempatan",
+                duration = "3 Bulan",
+                nominal = "Rp10.000.000",
+                estimasi = "6%",
+                onDetailClick = onDetailProdukLainnya
+            )
         }
     }
 }
@@ -130,14 +186,13 @@ fun DetailTabunganScreen(
 @Composable
 fun MinimumPenempatanCard(
     minimumLabel: String,
-    duration: String,
     nominal: String,
-    estimasi: String,
+    duration: String,
+    estimasi: String
 ) {
     Card(
-        modifier = Modifier
-            .fillMaxWidth(),
         shape = RoundedCornerShape(8.dp),
+        modifier = Modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(containerColor = Color.White),
         border = BorderStroke(1.dp, Color(0xFFDADADA)),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
@@ -151,12 +206,13 @@ fun MinimumPenempatanCard(
                 }
                 Spacer(Modifier.height(4.dp))
                 // Nominal | Estimasi (dengan ikon panah hijau)
-                Row(verticalAlignment = Alignment.CenterVertically) {
+                Row {
                     Text(
                         nominal,
                         fontSize = 15.sp,
                         color = Color(0xFF22242F),
                         fontWeight = FontWeight.Bold,
+                        modifier = Modifier.weight(1f)
                     )
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         AsyncImage(
@@ -184,96 +240,86 @@ fun MinimumPenempatanCard(
                     fontSize = 12.sp, color = Color(0xFF22242F),
                 )
             }
-
         }
     }
 }
 
 @Composable
-fun DetailBprCard(
-    title: String = "BPR Simfan",
-    subtitle: String = "Bank Perkreditan Rakyat",
-    onDetailBprClick: () -> Unit = {},
-) {
-    Column {
-        //app bar
-        Card(
-            modifier = Modifier
-                .fillMaxWidth(),
-            shape = RoundedCornerShape(8.dp),
-            colors = CardDefaults.cardColors(containerColor = Color.White),
-            border = BorderStroke(1.dp, Color(0xFFDADADA)),
-            elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
-        ) {
-            Column(
-                modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)
-            ) {
+fun DetailBPRCard() {
+    var expanded by remember { mutableStateOf(false) }
 
-                // Section 1 - Header
-                Box(
+    Card(
+        modifier = Modifier
+            .fillMaxWidth(),
+        shape = RoundedCornerShape(8.dp),
+        elevation = CardDefaults.cardElevation(0.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White),
+        border = BorderStroke(1.dp, Color(0xFFDADADA))
+    ) {
+        Column(modifier = Modifier.padding(16.dp)) {
+            // Header yang dapat diklik untuk toggle dropdown
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable { expanded = !expanded },
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Image(
+                    painter = painterResource(Res.drawable.simfan_websuite),
+                    contentDescription = null,
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable(onClick = onDetailBprClick)
-                ) {
-                    Column {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                        ) {
-                            Image(
-                                painter = painterResource(Res.drawable.simfan_websuite),
-                                contentDescription = null,
-                                modifier = Modifier
-                                    .size(36.dp)
-                                    .clip(RoundedCornerShape(5.dp)),
-                                contentScale = ContentScale.FillWidth
-                            )
-                            Column(
-                                Modifier
-                                    .weight(1f)
-                                    .padding(start = 12.dp)
-                            ) {
-                                Text(
-                                    title,
-                                    fontSize = 13.sp,
-                                    color = Color.Black,
-                                    fontWeight = FontWeight.Medium
-                                )
-                                Spacer(Modifier.height(2.dp))
-                                Text(subtitle, fontSize = 11.sp, color = Color(0xFF999999))
-                            }
-                            AsyncImage(
-                                model = Res.getUri("files/ic_arrow_left.svg") ,
-                                contentDescription = "Arrow",
-                                modifier = Modifier.size(16.dp),
-                                colorFilter = ColorFilter.tint(Color.Black)
-                            )
-                        }
-                        Spacer(Modifier.height(14.dp))
-                        HorizontalDivider(
-                            thickness = 1.dp,
-                            color = Color(0xFFE5E7EB)
-                        )
-                    }
-                }
-                // Section 2 - Informasi umum
+                        .size(40.dp)
+                        .clip(RoundedCornerShape(5.dp)),
+                    contentScale = ContentScale.FillWidth
+                )
                 Column(
-                    modifier = Modifier.padding(vertical = 12.dp)
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(start = 12.dp)
                 ) {
+                    Text("BPR Sejahtera", fontSize = 13.sp, fontWeight = FontWeight.Medium)
+                    Text(
+                        "DKI Jakarta - 3 Transaksi",
+                        fontSize = 11.sp,
+                        color = Color(0xFF999999)
+                    )
+                }
+                // Ikon yang berubah berdasarkan state expanded
+                Icon(
+                    painter = painterResource(
+                        if (expanded) Res.drawable.arrow_back else Res.drawable.arrow_forward
+                    ),
+                    contentDescription = if (expanded) "Tutup detail" else "Buka detail",
+                    tint = Color.Gray,
+                    modifier = Modifier.rotate(if (expanded) 45f else 0f)
+                )
+            }
+
+            // Konten detail yang muncul saat card terbuka
+            AnimatedVisibility(
+                visible = expanded,
+                enter = expandVertically(),
+                exit = shrinkVertically()
+            ) {
+                Column {
+                    HorizontalDivider(
+                        thickness = 1.dp,
+                        color = Color(0xFFE5E7EB),
+                        modifier = Modifier.padding(vertical = 15.dp)
+                    )
                     InfoRow("Lokasi", "Jakarta Selatan")
                     InfoRow("Kode Produk / UID", "BPR-250724–105678–0002")
                     InfoRow("Dijamin LPS", "Ya, Sampai dengan 2 Miliar")
-                }
-                HorizontalDivider(thickness = 1.dp, color = Color(0xFFE5E7EB))
-                // Section 3 - Informasi lain
-                Column(
-                    modifier = Modifier.padding(vertical = 12.dp)
-                ) {
-                    InfoRow("Minimum Pembelian", "Rp5.000.000")
-                    InfoRow("Bunga", "2,25%")
+                    HorizontalDivider(
+                        thickness = 1.dp,
+                        color = Color(0xFFE5E7EB),
+                        modifier = Modifier.padding(vertical = 15.dp)
+                    )
+                    InfoRow("Minimum Penempatan", "Rp5.000.000")
+                    InfoRow("Bunga", "6.25%")
                     InfoRow("Tenor", "12 Bulan")
-                    InfoRow("Tipe Pembayaran Bunga", "65%")
+                    InfoRow("Tipe Pembayaran Bunga", "Dibayar Setiap Bulan")
+                    InfoRow("Tipe Dokumen Deposito", "Deposito Fisik")
                 }
             }
         }
@@ -288,105 +334,52 @@ fun AnotherProductCard(
     duration: String,
     nominal: String,
     estimasi: String,
-    showStatusBar: Boolean = false,
-    statusTitle: String = "",
-    statusSubtitle: String = "",
-    onDetailClick: () -> Unit,
-    onDetailBprClick: () -> Unit
+    onDetailClick: () -> Unit = {}
 ) {
     Card(
+        onClick = onDetailClick,
         modifier = Modifier.fillMaxWidth(),
-        elevation = CardDefaults.cardElevation(4.dp),
+        shape = RoundedCornerShape(8.dp),
+        elevation = CardDefaults.cardElevation(2.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White)
     ) {
-        Column {
-            Column(Modifier.padding(top = 18.dp, start = 16.dp, end = 16.dp, bottom = 8.dp)) {
-                // Header: gambar, judul, subjudul + label
-                Box(
+        Column(modifier = Modifier.padding(16.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Image(
+                    painter = painterResource(Res.drawable.simfan_websuite),
+                    contentDescription = null,
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable(onClick = onDetailBprClick)
+                        .size(40.dp)
+                        .clip(RoundedCornerShape(5.dp)),
+                    contentScale = ContentScale.FillWidth
+                )
+                Column(
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(start = 12.dp)
                 ) {
-                    Column {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                        ) {
-                            Image(
-                                painter = painterResource(Res.drawable.simfan_websuite),
-                                contentDescription = null,
-                                modifier = Modifier
-                                    .size(36.dp)
-                                    .clip(RoundedCornerShape(5.dp)),
-                                contentScale = ContentScale.FillWidth
-                            )
-                            Column(
-                                Modifier
-                                    .weight(1f)
-                                    .padding(start = 12.dp)
-                            ) {
-                                Text(
-                                    title,
-                                    fontSize = 13.sp,
-                                    color = Color.Black,
-                                    fontWeight = FontWeight.Medium
-                                )
-                                Spacer(Modifier.height(2.dp))
-                                Text(subtitle, fontSize = 11.sp, color = Color(0xFF999999))
-                            }
-                            AsyncImage(
-                                model = Res.getUri("files/ic_arrow_left.svg"),
-                                contentDescription = "Arrow",
-                                modifier = Modifier.size(16.dp),
-                                colorFilter = ColorFilter.tint(Color.Black)
-                            )
-                        }
-                        Spacer(Modifier.height(14.dp))
-                        HorizontalDivider(
-                            thickness = 1.dp,
-                            color = Color(0xFFE5E7EB)
-                        )
-                    }
-                }
-                Spacer(Modifier.height(14.dp))
-                // Minimum Penempatan | Durasi
-                Row {
+                    Text(title, fontSize = 13.sp, fontWeight = FontWeight.Medium)
                     Text(
-                        minimumLabel,
-                        fontSize = 12.sp,
-                        color = Color(0xFF22242F),
-                        modifier = Modifier.weight(1f)
+                        subtitle,
+                        fontSize = 11.sp,
+                        color = Color(0xFF999999)
                     )
-                    Text(duration, fontSize = 12.sp, color = Color(0xFF22242F),)
                 }
-                Spacer(Modifier.height(4.dp))
-                // Nominal | Estimasi (dengan ikon panah hijau)
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(
-                        nominal,
-                        fontSize = 15.sp,
-                        color = Color(0xFF22242F),
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.weight(1f)
-                    )
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        AsyncImage(
-                            model = Res.getUri("files/ic_arrow_up.svg"),
-                            contentDescription = "House",
-                            modifier = Modifier.size(15.dp),
-                            colorFilter = ColorFilter.tint(org.kmp.simfan.core.PositiveGreen)
-                        )
-                        Spacer(Modifier.width(2.dp))
-                        Text(
-                            estimasi,
-                            fontSize = 15.sp,
-                            color = org.kmp.simfan.core.PositiveGreen,
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
-                }
-
+            }
+            HorizontalDivider(
+                thickness = 1.dp,
+                color = Color(0xFFE5E7EB),
+                modifier = Modifier.padding(vertical = 14.dp)
+            )
+            InfoRow(minimumLabel, duration)
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 4.dp),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(nominal, fontSize = 15.sp, fontWeight = FontWeight.Bold)
+                Text(estimasi, fontSize = 15.sp, fontWeight = FontWeight.Bold, color = Color(0xFF22C55E))
             }
         }
     }

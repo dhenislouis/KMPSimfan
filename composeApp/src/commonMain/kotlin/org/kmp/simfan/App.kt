@@ -40,7 +40,7 @@ import org.kmp.simfan.navigation.*
 
 @Composable
 @Preview
-fun App() {
+fun App(onGoogleLoginClick: () -> Unit) {
     val navController = rememberNavController()
 
     val currentRoute = navController
@@ -57,7 +57,7 @@ fun App() {
                 ) {
 
                 onboardingGraph(navController)
-                authGraph(navController)
+                authGraph(navController, onGoogleLoginClick)
                 homeGraph(navController)
                 productGraph(navController)
                 simpanankuGraph(navController)

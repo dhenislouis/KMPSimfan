@@ -1,4 +1,4 @@
-package org.kmp.simfan.screen.simfananku.depositosimpananku
+package org.kmp.simfan.screen.simfananku.tabungansimpfananku
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -31,7 +31,7 @@ data class TrackingStatusDetailStatus(
 )
 
 @Composable
-fun TrackingTimelineDetailStatus(statusList: List<TrackingStatusDetailStatus>) {
+fun TrackingDetailStatusTabungan(statusList: List<TrackingStatusDetailStatus>) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -135,7 +135,7 @@ fun TrackingTimelineDetailStatus(statusList: List<TrackingStatusDetailStatus>) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TrackingDetailStatusDeposito(
+fun TrackingDetailStatusTabungan(
     navController: NavController,
     currentRoute: Routes?,
     onClose: () -> Unit = {}
@@ -254,7 +254,7 @@ fun TrackingDetailStatusDeposito(
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
         ) {
-            TrackingTimelineDetailStatus(statusList = trackingDataDetailStatus)
+            TrackingDetailStatusTabungan(statusList = trackingDataDetailStatus)
         }
     }
 }

@@ -5,8 +5,8 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import org.kmp.simfan.Routes
 import org.kmp.simfan.screen.simfananku.*
-import org.kmp.simfan.screen.simfananku.detail.detailtabungan.*
 import org.kmp.simfan.screen.simfananku.depositosimpananku.*
+import org.kmp.simfan.screen.simfananku.tabungansimpfananku.*
 
 fun NavGraphBuilder.simpanankuGraph(navController: NavController) {
     //DEPOSITO
@@ -15,7 +15,7 @@ fun NavGraphBuilder.simpanankuGraph(navController: NavController) {
             navController = navController,
             currentRoute = Routes.Simfanku,
             onDetailDepositoSimfanku = { navController.navigate(Routes.DetailDepositoSimpananku) },
-            onDetailTabunganSimfanku = { navController.navigate(Routes.SimpanankuTabungan) }
+            onDetailTabunganSimfanku = { navController.navigate(Routes.DetailTabunganSimpananku) }
         )
     }
     composable<Routes.DetailDepositoSimpananku> {
@@ -38,14 +38,14 @@ fun NavGraphBuilder.simpanankuGraph(navController: NavController) {
     }
 
     composable<Routes.TrackingDetailStatusDepositoSimpananku> {
-        TrackingDetailStatusScreen(
+        TrackingDetailStatusDeposito(
             navController = navController,
             currentRoute = Routes.TrackingDetailStatusDepositoSimpananku,
             onClose = { navController.navigate(Routes.DetailDepositoSimpananku) }
         )
     }
     composable<Routes.TrackingBilyetFisikDepositoSimpananku> {
-        TrackingBilyetFisikScreen(
+        TrackingBilyetFisikDeposito(
             navController = navController,
             currentRoute = Routes.TrackingBilyetFisikDepositoSimpananku,
             onClose = { navController.navigate(Routes.DetailDepositoSimpananku) }
@@ -53,17 +53,53 @@ fun NavGraphBuilder.simpanankuGraph(navController: NavController) {
     }
 
     //TABUNGAN
-    composable<Routes.SimpanankuTabungan> {
-        SimfankuTabunganScreen(
-            onDetailTabunganSimfanku = { navController.navigate(Routes.DetailTabunganSimpananku) }
-        )
-    }
     composable<Routes.DetailTabunganSimpananku> {
-        DetailTabunganScreen(
+        val trackingDataDetailTabungan = listOf(
+            TrackingStatusDetailDeposito("Pengiriman Billyet", "Tandatangani dokumen untuk persetujuan BPR"),
+            TrackingStatusDetailDeposito("Penyetoran Dana", "Dana sudah diterima oleh BPR"),
+            TrackingStatusDetailDeposito("Menandatangani Dokumen", "Dokumen sudah ditandatangani"),
+            TrackingStatusDetailDeposito("Menunggu persetujuan BPR", "Proses validasi oleh BPR")
+        )
+
+        DetailTabunganSimpanankuScreen(
             navController = navController,
             currentRoute = Routes.DetailTabunganSimpananku,
-            onBackClick = { navController.navigate(Routes.SimpanankuTabungan) },
-            onTandaTangan = { navController.navigate(Routes.DetailTabunganSimpananku) }
+            onBackClick = { navController.navigate(Routes.Simfanku) },
+            onLihatDetail = { navController.navigate(Routes.TrackingDetailStatusTabunganSimpananku) },
+            onTambahPenempatan = { navController.navigate(Routes.Product) },
+            onAjukanPencairan = { navController.navigate(Routes.InputPinTabunganSimpananku) },
+            statusList = trackingDataDetailTabungan,
+            currentStep = 0
+        )
+    }
+    composable<Routes.TrackingDetailStatusTabunganSimpananku> {
+        TrackingDetailStatusTabungan(
+            navController = navController,
+            currentRoute = Routes.TrackingDetailStatusTabunganSimpananku,
+            onClose = { navController.navigate(Routes.DetailTabunganSimpananku) }
+        )
+    }
+    composable<Routes.InputPinTabunganSimpananku> {
+        InputPinTabunganSimpanankuScreen(
+            navController = navController,
+            currentRoute = Routes.InputPinTabunganSimpananku,
+            onBackClick = { navController.navigate(Routes.DetailTabunganSimpananku) },
+            onLanjutClick = { navController.navigate(Routes.PenempatanTabunganBerhasil) }
+        )
+    }
+    composable<Routes.PenempatanTabunganBerhasil> {
+        PenempatanTabunganSimpanankuBerhasilScreen(
+            navController = navController,
+            currentRoute = Routes.InputPinTabunganSimpananku,
+            onKembaliBeranda = { navController.navigate(Routes.Home) },
+            onDetail = { navController.navigate(Routes.TrackingStatusPencairanTabungan) }
+        )
+    }
+    composable<Routes.TrackingStatusPencairanTabungan> {
+        TrackingPencairanTabungan(
+            navController = navController,
+            currentRoute = Routes.InputPinTabunganSimpananku,
+            onClose = { navController.navigate(Routes.Simfanku) }
         )
     }
 }

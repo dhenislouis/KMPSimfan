@@ -1,77 +1,85 @@
-    package org.kmp.simfan.presentation.auth
+package org.kmp.simfan.presentation.auth
 
-    import androidx.compose.runtime.*
-    import androidx.lifecycle.ViewModel
-    import androidx.lifecycle.viewModelScope
-    import kotlinx.coroutines.launch
-    import org.kmp.simfan.auth.AuthManager
-    import org.kmp.simfan.model.SignInResponse
-    import org.kmp.simfan.network.SimfanApiService
-    import org.kmp.simfan.repository.SimfanRepository
+import androidx.compose.runtime.*
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
+import org.kmp.simfan.auth.AuthManager
+import org.kmp.simfan.model.FirebaseTokenRequest
+import org.kmp.simfan.model.SignInResponse
+import org.kmp.simfan.network.SimfanApiService
+import org.kmp.simfan.repository.SimfanRepository
 
-    class LoginViewModel : ViewModel() {
-        private val authManager = AuthManager()
-        private val repository = SimfanRepository(
-            apiService = SimfanApiService { authManager.getToken() },
-            authManager = authManager
-        )
 
-        private val _isLoading = mutableStateOf(false)
-        val isLoading: State<Boolean> = _isLoading
 
-        private val _loginResult = mutableStateOf<SignInResponse?>(null)
-        val loginResult: State<SignInResponse?> = _loginResult
+class LoginViewModel : ViewModel() {
+    private val authManager = AuthManager()
+    private val repository = SimfanRepository(
+        apiService = SimfanApiService { authManager.getToken() },
+        authManager = authManager
+    )
 
-        private val _errorMessage = mutableStateOf<String?>(null)
-        val errorMessage: State<String?> = _errorMessage
+    private val _isLoading = mutableStateOf(false)
+    val isLoading: State<Boolean> = _isLoading
 
-        fun login(identifier: String, password: String, rememberMe: Boolean) {
-            viewModelScope.launch {
-                _isLoading.value = true
-                _errorMessage.value = null
-                println("identifier: $identifier\n password:$password")
+    private val _loginResult = mutableStateOf<SignInResponse?>(null)
+    val loginResult: State<SignInResponse?> = _loginResult
 
-                try {
-                    val result = repository.signIn(identifier, password, rememberMe)
-                    if (result.isSuccess) {
-                        _loginResult.value = result.getOrNull()
-                        println("logins success $_loginResult")
-                    } else {
-                        _errorMessage.value = result.exceptionOrNull()?.message ?: "Login failed"
-                        println("logins failed $_errorMessage")
+    private val _errorMessage = mutableStateOf<String?>(null)
+    val errorMessage: State<String?> = _errorMessage
 
-                    }
-                } catch (e: Exception) {
-                    _errorMessage.value = e.message ?: "Login failed"
+    fun login(identifier: String, password: String, rememberMe: Boolean) {
+        viewModelScope.launch {
+            _isLoading.value = true
+            _errorMessage.value = null
+            println("identifier: $identifier\n password:$password")
+
+            try {
+                val result = repository.signIn(identifier, password, rememberMe)
+                if (result.isSuccess) {
+                    _loginResult.value = result.getOrNull()
+                    println("logins success $_loginResult")
+                } else {
+                    _errorMessage.value = result.exceptionOrNull()?.message ?: "Login failed"
                     println("logins failed $_errorMessage")
 
-                } finally {
-                    _isLoading.value = false
                 }
+            } catch (e: Exception) {
+                _errorMessage.value = e.message ?: "Login failed"
+                println("logins failed $_errorMessage")
+
+            } finally {
+                _isLoading.value = false
             }
-        }
-
-        fun googleLogin(token: String, name: String) {
-            viewModelScope.launch {
-                _isLoading.value = true
-                _errorMessage.value = null
-
-                try {
-                    val result = repository.firebaseLogin(token, name)
-                    if (result.isSuccess) {
-                        _loginResult.value = result.getOrNull()
-                    } else {
-                        _errorMessage.value = result.exceptionOrNull()?.message ?: "Google login failed"
-                    }
-                } catch (e: Exception) {
-                    _errorMessage.value = e.message ?: "Google login failed"
-                } finally {
-                    _isLoading.value = false
-                }
-            }
-        }
-
-        fun clearLoginResult() {
-            _loginResult.value = null
         }
     }
+
+    fun googleLogin(user: FirebaseTokenRequest?) {
+        if (user == null) {
+            _errorMessage.value = "Google login failed"
+            return
+        }
+
+        viewModelScope.launch {
+            _isLoading.value = true
+            _errorMessage.value = null
+
+            try {
+                val result = repository.firebaseLogin(user.token, user.name)
+                if (result.isSuccess) {
+                    _loginResult.value = result.getOrNull()
+                } else {
+                    _errorMessage.value = result.exceptionOrNull()?.message ?: "Google login failed"
+                }
+            } catch (e: Exception) {
+                _errorMessage.value = e.message ?: "Google login failed"
+            } finally {
+                _isLoading.value = false
+            }
+        }
+    }
+
+    fun clearLoginResult() {
+        _loginResult.value = null
+    }
+}

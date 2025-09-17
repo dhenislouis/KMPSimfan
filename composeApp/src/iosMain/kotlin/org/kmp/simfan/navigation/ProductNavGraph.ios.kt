@@ -4,6 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import kotlinx.cinterop.ExperimentalForeignApi
 import org.kmp.simfan.Routes
+import org.kmp.simfan.screen.product.productdeposito.SyaratKetentuanProdukDepositoScreen
+import org.kmp.simfan.screen.product.producttabungan.SyaratKetentuanProdukTabunganScreen
 import org.kmp.simfan.screen.profile.tandatangan.TandaTanganScreen
 import org.kmp.simfan.utils.savePlatformBitmapToFile
 import org.kmp.simfan.utils.toPlatformBitmap
@@ -43,8 +45,8 @@ actual fun SyaratKetentuanProductDepositoRoute(navController: NavHostController)
 actual fun TandaTanganProductDepositoRoute(navController: NavHostController) {
     TandaTanganScreen(
         navController = navController,
-        currentRoute = Routes.TambahAkunBank,
-        onBackClick = { navController.navigate(Routes.AkunBank) },
+        currentRoute = Routes.TandaTanganProductDeposito,
+        onBackClick = { navController.navigate(Routes.SyaratKetentuanProductDeposito) },
         onSave = { imageBitmap ->
             val platformBitmap = imageBitmap.toPlatformBitmap()
             val path = savePlatformBitmapToFile(platformBitmap, "signature.png")
@@ -52,6 +54,42 @@ actual fun TandaTanganProductDepositoRoute(navController: NavHostController) {
 
             navController.navigate(Routes.InputPinAjukanPenempatanProductDeposito) {
                 popUpTo(Routes.SyaratKetentuanProductDeposito) { inclusive = true }
+            }
+        }
+    )
+}
+
+@Composable
+actual fun SyaratKetentuanProductTabunganRoute(navController: NavHostController) {
+    SyaratKetentuanProdukTabunganScreen(
+        navController = navController,
+        currentRoute = Routes.SyaratKetentuanProductTabungan,
+        onBack = { navController.navigate(Routes.AjukanPenempatanProductTabungan) },
+        onContinue = {
+            if (isSignatureSaved()) {
+                // ✅ jika tanda tangan sudah ada
+                navController.navigate(Routes.InputPinAjukanPenempatanProductTabungan)
+            } else {
+                // ❌ jika tanda tangan belum ada
+                navController.navigate(Routes.TandaTanganProductTabungan)
+            }
+        }
+    )
+}
+
+@Composable
+actual fun TandaTanganProductTabunganRoute(navController: NavHostController) {
+    TandaTanganScreen(
+        navController = navController,
+        currentRoute = Routes.TandaTanganProductTabungan,
+        onBackClick = { navController.navigate(Routes.SyaratKetentuanProductTabungan) },
+        onSave = { imageBitmap ->
+            val platformBitmap = imageBitmap.toPlatformBitmap()
+            val path = savePlatformBitmapToFile(platformBitmap, "signature.png")
+            println("✅ iOS: File tanda tangan tersimpan di: $path")
+
+            navController.navigate(Routes.InputPinAjukanPenempatanProductTabungan) {
+                popUpTo(Routes.SyaratKetentuanProductTabungan) { inclusive = true }
             }
         }
     )

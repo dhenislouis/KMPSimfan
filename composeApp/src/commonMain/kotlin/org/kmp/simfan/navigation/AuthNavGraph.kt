@@ -8,14 +8,15 @@ import org.kmp.simfan.screen.auth.login.*
 import org.kmp.simfan.screen.auth.password.*
 import org.kmp.simfan.screen.auth.register.*
 
-fun NavGraphBuilder.authGraph(navController: NavController) {
+fun NavGraphBuilder.authGraph(navController: NavController,onGoogleLoginClick: () -> Unit) {
     composable<Routes.Login> {
         LoginScreenUI(
             navController = navController,
             currentRoute = Routes.Login,
             onBackClick = { navController.popBackStack() },
             onForgotPasswordClick = { navController.navigate(Routes.LupaPassword) },
-            onRegisterClick = { navController.navigate(Routes.Register) }
+            onRegisterClick = { navController.navigate(Routes.Register) },
+            onGoogleLoginClick = onGoogleLoginClick
         )
     }
     composable<Routes.LoginSuccess> {

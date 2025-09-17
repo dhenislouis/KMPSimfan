@@ -55,6 +55,7 @@ import org.kmp.simfan.model.SignUpRequest
 import org.kmp.simfan.model.SimulasiDepositoResponse
 import org.kmp.simfan.model.UserProfile
 import kotlin.concurrent.Volatile
+import org.kmp.simfan.getAppEnvironment
 
 class SimfanApiService(
     private val tokenProvider: () -> String? = { null }
@@ -116,7 +117,7 @@ class SimfanApiService(
 
 
     // Base URL - sesuaikan dengan konfigurasi backend
-    private val baseUrl = "https://api-simfan.staging.prosesin.easydemo.monster/v1/mobile"
+    private val baseUrl = "${getAppEnvironment().baseUrl}/v1/mobile"
 
     // Auth
     suspend fun signIn(request: SignInRequest): SignInResponse {
