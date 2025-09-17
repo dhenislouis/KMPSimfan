@@ -126,3 +126,10 @@ data class  RevenueData(
 )
 
 
+@Serializable
+data class ProfileSubmitResponse(
+    val status: Boolean = false,
+    val message: String? = null
+)
+
+

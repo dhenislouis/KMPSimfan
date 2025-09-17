@@ -52,8 +52,7 @@ fun App(onGoogleLoginClick: () -> Unit) {
         ) { innerPadding ->
             NavHost(
                 navController = navController,
-                startDestination = Routes.Login,
-//                startDestination = Routes.Home,
+                startDestination = Routes.Onboard,
 
                 ) {
 

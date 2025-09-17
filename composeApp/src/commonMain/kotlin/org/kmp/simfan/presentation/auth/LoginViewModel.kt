@@ -32,16 +32,22 @@ class LoginViewModel : ViewModel() {
         viewModelScope.launch {
             _isLoading.value = true
             _errorMessage.value = null
+            println("identifier: $identifier\n password:$password")
 
             try {
                 val result = repository.signIn(identifier, password, rememberMe)
                 if (result.isSuccess) {
                     _loginResult.value = result.getOrNull()
+                    println("logins success $_loginResult")
                 } else {
                     _errorMessage.value = result.exceptionOrNull()?.message ?: "Login failed"
+                    println("logins failed $_errorMessage")
+
                 }
             } catch (e: Exception) {
                 _errorMessage.value = e.message ?: "Login failed"
+                println("logins failed $_errorMessage")
+
             } finally {
                 _isLoading.value = false
             }
