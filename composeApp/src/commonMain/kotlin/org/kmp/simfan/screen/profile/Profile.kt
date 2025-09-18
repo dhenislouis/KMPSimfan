@@ -28,13 +28,14 @@ import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.kmp.simfan.Routes
+import org.kmp.simfan.auth.AuthManager
 import org.kmp.simfan.core.navigation.BottomBar
 import simfan.composeapp.generated.resources.Res
 import simfan.composeapp.generated.resources.*
 
 @Composable
 fun ProfileScreen(
-    navController: NavController, currentRoute: Routes?
+    navController: NavController, currentRoute: Routes?, authManager: AuthManager
 ) {
     Scaffold(
         bottomBar = {
@@ -224,7 +225,12 @@ fun ProfileScreen(
                         icon = Res.drawable.ic_signout,
                         label = "Keluar dari Aplikasi",
                         onClick = {
-                            navController.navigate(Routes.KeluarAplikasi)
+                            authManager.logout()
+                            navController.navigate(Routes.Onboard) {
+                                popUpTo(Routes.Home) { inclusive = true }
+                                launchSingleTop = true
+                            }
+//                            navController.navigate(Routes.KeluarAplikasi)
                         }
                     )
                 }

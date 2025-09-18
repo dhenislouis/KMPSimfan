@@ -9,6 +9,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import org.kmp.simfan.Routes
+import org.kmp.simfan.auth.AuthManager
 import org.kmp.simfan.screen.profile.*
 import org.kmp.simfan.screen.profile.akunbank.*
 import org.kmp.simfan.screen.profile.akunsaya.*
@@ -24,9 +25,9 @@ import kotlin.text.set
 @Composable
 expect fun TandaTanganElektronikRoute(navController: NavHostController)
 
-fun NavGraphBuilder.profileGraph(navController: NavController) {
+fun NavGraphBuilder.profileGraph(navController: NavController,authManager: AuthManager) {
     composable<Routes.Profile> {
-        ProfileScreen(navController, Routes.Profile)
+        ProfileScreen(navController, Routes.Profile, authManager)
     }
     composable<Routes.Langkah> {
         LangkahScreen(

@@ -22,6 +22,7 @@ import org.jetbrains.compose.resources.painterResource
 import org.kmp.simfan.Routes
 import org.kmp.simfan.core.Button1
 import org.kmp.simfan.core.Label_Langkah
+import org.kmp.simfan.model.IdentityStepRequest
 import org.kmp.simfan.model.IndustrialSectorsData
 import org.kmp.simfan.model.InvestmentObjectivesData
 import org.kmp.simfan.model.JobData
@@ -58,13 +59,26 @@ fun Langkah4Screen(
     var selectedJobTitle by remember { mutableStateOf<JobTitlesData?>(null) }
     var selectedSalary by remember { mutableStateOf<MonthlySalariesData?>(null) }
     var selectedSector by remember { mutableStateOf<IndustrialSectorsData?>(null) }
-
+    val submitResult by viewModel.submitResult
 
     var workAddress by remember { mutableStateOf("") }
     var workPhone by remember { mutableStateOf("") }
     var motherName by remember { mutableStateOf("") }
-    var npwp by remember { mutableStateOf("") }
-
+//    var npwp by remember { mutableStateOf("") }
+    val isFormValid by remember {
+        derivedStateOf {
+            selectedObjective != null &&
+                    selectedRevenue != null &&
+                    selectedJob != null &&
+                    selectedJobTitle != null &&
+                    selectedSalary != null &&
+                    selectedSector != null &&
+                    workAddress.isNotBlank() &&
+                    workPhone.isNotBlank() &&
+                    motherName.isNotBlank()
+            // NPWP diasumsikan opsional, jadi tidak masuk validasi utama
+        }
+    }
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -207,7 +221,7 @@ fun Langkah4Screen(
                     InputField("Alamat Tempat Bekerja", "Masukkan alamat tempat kerja", workAddress, { workAddress = it })
                     InputField("Nomor Telepon Tempat Bekerja", "Masukkan Nomor Telepon Tempat Bekerja", workPhone, { workPhone = it }, KeyboardType.Phone)
                     InputField("Nama Ibu Kandung", "Masukkan nama ibu kandung", motherName, { motherName = it })
-                    InputField("NPWP", "Masukkan NPWP", npwp, { npwp = it }, KeyboardType.Number)
+//                    InputField("NPWP", "Masukkan NPWP", npwp, { npwp = it }, KeyboardType.Number)
                 }
             }
         }
@@ -247,14 +261,39 @@ fun Langkah4Screen(
                 .padding(16.dp)
         ) {
             Button(
-                onClick = onNext,
+                onClick = {
+                    val request = IdentityStepRequest(
+                        investmentObjectiveId = selectedObjective!!.id,
+                        revenueId = selectedRevenue!!.id,
+                        jobId = selectedJob!!.id,
+                        jobTitleId = selectedJobTitle!!.id,
+                        monthlySalaryId = selectedSalary!!.id,
+                        industrialSectorId = selectedSector!!.id,
+                        workPhone = workPhone,
+                        workAddress = workAddress,
+                        motherMaidenName = motherName
+                    )
+                    // 2. Panggil fungsi di ViewModel dengan data yang sudah terkumpul
+                    viewModel.submitIdentity(request)
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(48.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = Button1)
+                enabled = isFormValid && !isLoading,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Button1,
+                    disabledContainerColor = Color.Gray
+                ),
             ) {
                 Text("Lanjut", fontSize = 16.sp, fontWeight = FontWeight.SemiBold, color = Color.White)
             }
+        }
+        errorMessage?.let {
+            Text("Error: $it", color = Color.Red)
+        }
+        submitResult?.let {
+            onNext()
+            Text("Sukses: $it", color = Color(0xFF0F9D58))
         }
     }
 }

@@ -8,11 +8,14 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
 import org.kmp.simfan.auth.AuthManager
 import org.kmp.simfan.model.ApiResponse
+import org.kmp.simfan.model.IdentityStepRequest
 import org.kmp.simfan.model.IndustrialSectorsData
 import org.kmp.simfan.model.InvestmentObjectivesData
 import org.kmp.simfan.model.JobData
 import org.kmp.simfan.model.JobTitlesData
 import org.kmp.simfan.model.MonthlySalariesData
+import org.kmp.simfan.model.NpwpStepRequest
+import org.kmp.simfan.model.PinStepRequest
 import org.kmp.simfan.model.RevenueData
 import org.kmp.simfan.network.SimfanApiService
 import org.kmp.simfan.repository.SimfanRepository
@@ -31,6 +34,8 @@ class ProfileSubmissionViewModel : ViewModel() {
     private val _errorMessage = mutableStateOf<String?>(null)
     val errorMessage: State<String?> = _errorMessage
 
+    private val _submitResult = mutableStateOf<String?>(null)
+    val submitResult: State<String?> = _submitResult
     // States untuk menampung list data dari API
     private val _investmentObjectives = mutableStateOf<List<InvestmentObjectivesData>>(emptyList())
     val investmentObjectives: State<List<InvestmentObjectivesData>> = _investmentObjectives
@@ -103,6 +108,169 @@ class ProfileSubmissionViewModel : ViewModel() {
             } catch (e: Exception) {
                 _errorMessage.value = "Terjadi kesalahan: ${e.message}"
             } finally {
+                _isLoading.value = false
+            }
+        }
+    }
+    fun submitNpwp(npwpNumber: String, npwpFile:  ByteArray?) {
+        viewModelScope.launch {
+            _isLoading.value = true
+            _errorMessage.value = null
+            _submitResult.value = null
+
+            val result = repository.submitNpwpStep(npwpNumber,npwpFile)
+            result.onSuccess {
+                _submitResult.value = "NPWP berhasil dikirim"
+            }.onFailure { e ->
+                print(e.message)
+
+                _errorMessage.value = e.message ?: "Gagal submit NPWP"
+            }
+
+            _isLoading.value = false
+        }
+    }
+    fun submitIdentity(identityStepRequest: IdentityStepRequest) {
+        viewModelScope.launch {
+            _isLoading.value = true
+            _errorMessage.value = null
+            _submitResult.value = null
+            println(">>> IdentityStepRequest: $identityStepRequest")
+
+            val result = repository.submitIdentityStep(identityStepRequest)
+
+            result.onSuccess {
+
+                _submitResult.value = "Pengajuan Berhasil"
+            }.onFailure { e ->
+                _errorMessage.value = e.message ?: "Gagal submit Pengajuan"
+            }
+
+            _isLoading.value = false
+        }
+    }
+    fun submitPin(pin: String) {
+        viewModelScope.launch {
+            _isLoading.value = true
+            _errorMessage.value = null
+            _submitResult.value = null
+
+            val result = repository.submitPinStep(pin)
+
+            result.onSuccess {
+                _submitResult.value = "Pembuatan pin berhasil"
+            }.onFailure { e ->
+                _errorMessage.value = e.message ?: "Gagal submit Pengajuan"
+            }
+
+            _isLoading.value = false
+        }
+    }
+    fun submitConfirmPin(pin: String) {
+        viewModelScope.launch {
+            _isLoading.value = true
+            _errorMessage.value = null
+            _submitResult.value = null
+
+            val result = repository.submitPinConfirmStep(pin)
+
+            result.onSuccess {
+                _submitResult.value = "Pembuatan pin berhasil"
+            }.onFailure { e ->
+                _errorMessage.value = e.message ?: "Gagal submit Pengajuan"
+            }
+
+            _isLoading.value = false
+        }
+    }
+    fun submitPrivy(ktpFile: ByteArray?,selfieFile: ByteArray?) {
+        viewModelScope.launch {
+            _isLoading.value = true
+            _errorMessage.value = null
+            _submitResult.value = null
+
+            val result = repository.submitPrivyStep(ktpFile = ktpFile, selfieFile = selfieFile)
+
+            result.onSuccess {
+                _submitResult.value = "Privy berhasil dikirim"
+            }.onFailure { e ->
+                _errorMessage.value = e.message ?: "Gagal submit Privy"
+            }
+
+            _isLoading.value = false
+        }
+    }
+
+    fun submitPinAndConfirmpin(pin: String){
+        viewModelScope.launch {
+            _isLoading.value = true
+            _errorMessage.value = null
+            _submitResult.value = null
+
+
+           try {
+               val pinResult = repository.submitPinStep(pin)
+
+               pinResult.onSuccess {
+                   _submitResult.value = "pin berhaasil"
+                   println(">>>>>>pengajuan pin berhasil")
+                   val confirmPinResult =  repository.submitPinConfirmStep(pin)
+                   confirmPinResult.onSuccess {
+                       println(">>>>>>pengajuan confirm pin berhasil")
+
+                       _submitResult.value = "Pengajuan  berhasil!"
+
+                   }.onFailure {
+                       _submitResult.value = "Pengajuan  gagal!"
+
+                   }
+               }
+           } catch (e: Exception) {
+               _errorMessage.value = "Terjadi error: ${e.message}"
+           } finally {
+               // 6. Pastikan loading selalu berhenti di akhir, apa pun hasilnya
+               _isLoading.value = false
+           }
+        }
+    }
+    fun submitPrivyAndNpwp(ktpFile: ByteArray?, selfieFile: ByteArray?, npwpNumber: String, npwpFile: ByteArray?) {
+        // 1. Mulai keseluruhan proses dalam satu coroutine scope
+        viewModelScope.launch {
+            // 2. Set loading jadi true di awal
+            _isLoading.value = true
+            _errorMessage.value = null
+            _submitResult.value = null
+
+
+            try {
+                // 3. Panggil API pertama (Privy) dan TUNGGU hasilnya
+                val privyResult =
+                    repository.submitPrivyStep(ktpFile = ktpFile, selfieFile = selfieFile)
+
+                // 4. Cek apakah panggilan pertama berhasil
+                privyResult.onSuccess {
+                    // Jika Privy sukses, lanjutkan ke NPWP
+                    _submitResult.value = "Privy berhasil, mengirim NPWP..." // Feedback sementara
+
+                    val npwpResult = repository.submitNpwpStep(npwpNumber, npwpFile)
+
+                    npwpResult.onSuccess {
+                        // Jika NPWP juga sukses, beri pesan final
+                        _submitResult.value = "Pengajuan Privy & NPWP berhasil!"
+                    }.onFailure { e ->
+                        // Jika NPWP gagal setelah Privy sukses
+                        _errorMessage.value = e.message ?: "Gagal submit NPWP"
+                    }
+
+                }.onFailure { e ->
+                    // 5. Jika panggilan pertama (Privy) gagal, set error dan proses berhenti
+                    _errorMessage.value = e.message ?: "Gagal submit Privy"
+                }
+
+            } catch (e: Exception) {
+                _errorMessage.value = "Terjadi error: ${e.message}"
+            } finally {
+                // 6. Pastikan loading selalu berhenti di akhir, apa pun hasilnya
                 _isLoading.value = false
             }
         }
