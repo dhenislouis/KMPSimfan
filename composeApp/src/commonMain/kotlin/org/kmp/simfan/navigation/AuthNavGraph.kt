@@ -4,11 +4,15 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import org.kmp.simfan.Routes
+import org.kmp.simfan.model.FirebaseTokenRequest
 import org.kmp.simfan.screen.auth.login.*
 import org.kmp.simfan.screen.auth.password.*
 import org.kmp.simfan.screen.auth.register.*
 
-fun NavGraphBuilder.authGraph(navController: NavController,onGoogleLoginClick: () -> Unit) {
+fun NavGraphBuilder.authGraph(
+    navController: NavController,
+    loginWithGoogle: suspend () -> FirebaseTokenRequest
+) {
     composable<Routes.Login> {
         LoginScreenUI(
             navController = navController,
@@ -16,7 +20,7 @@ fun NavGraphBuilder.authGraph(navController: NavController,onGoogleLoginClick: (
             onBackClick = { navController.popBackStack() },
             onForgotPasswordClick = { navController.navigate(Routes.LupaPassword) },
             onRegisterClick = { navController.navigate(Routes.Register) },
-            onGoogleLoginClick = onGoogleLoginClick
+            loginWithGoogle = loginWithGoogle
         )
     }
     composable<Routes.LoginSuccess> {

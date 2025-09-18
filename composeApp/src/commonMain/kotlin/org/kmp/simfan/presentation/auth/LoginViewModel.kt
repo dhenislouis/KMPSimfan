@@ -10,8 +10,6 @@ import org.kmp.simfan.model.SignInResponse
 import org.kmp.simfan.network.SimfanApiService
 import org.kmp.simfan.repository.SimfanRepository
 
-
-
 class LoginViewModel : ViewModel() {
     private val authManager = AuthManager()
     private val repository = SimfanRepository(
@@ -54,25 +52,22 @@ class LoginViewModel : ViewModel() {
         }
     }
 
-    fun googleLogin(user: FirebaseTokenRequest?) {
-        if (user == null) {
-            _errorMessage.value = "Google login failed"
-            return
-        }
-
+    var googleAuthProvider: (suspend () -> FirebaseTokenRequest)? = null
+    fun loginWithGoogle() {
         viewModelScope.launch {
             _isLoading.value = true
-            _errorMessage.value = null
-
             try {
-                val result = repository.firebaseLogin(user.token, user.name)
+                val tokenReq = googleAuthProvider?.invoke()
+                    ?: throw IllegalStateException("GoogleAuthProvider not set")
+
+                val result = repository.firebaseLogin(tokenReq.token, tokenReq.name)
                 if (result.isSuccess) {
                     _loginResult.value = result.getOrNull()
                 } else {
                     _errorMessage.value = result.exceptionOrNull()?.message ?: "Google login failed"
                 }
             } catch (e: Exception) {
-                _errorMessage.value = e.message ?: "Google login failed"
+                _errorMessage.value = e.message
             } finally {
                 _isLoading.value = false
             }
