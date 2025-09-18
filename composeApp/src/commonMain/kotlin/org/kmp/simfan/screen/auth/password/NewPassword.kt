@@ -22,6 +22,7 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.kmp.simfan.core.Button1
 import org.kmp.simfan.presentation.auth.LupaPasswordViewModel
 import simfan.composeapp.generated.resources.Res
 import simfan.composeapp.generated.resources.arrow_back
@@ -202,20 +203,33 @@ fun PasswordInputField(
     Column(modifier = Modifier.fillMaxWidth()) {
         Text(
             text = label,
-            fontSize = 14.sp,
-            color = Color(0xFF6B7280),
-            modifier = Modifier.padding(bottom = 4.dp)
+            fontSize = 16.sp,
+            color = Color.Gray
         )
+
+        Spacer(Modifier.height(4.dp))
 
         OutlinedTextField(
             value = value,
             onValueChange = onValueChange,
-            placeholder = { Text(placeholder, fontSize = 13.sp, color = Color(0xFF9CA3AF)) },
+            placeholder = { Text(placeholder, fontSize = 14.sp, color = Color.Gray) },
             visualTransformation = if (visible) VisualTransformation.None else PasswordVisualTransformation(),
+            singleLine = true,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(56.dp),
-            singleLine = true,
+                .defaultMinSize(minHeight = 56.dp),
+            shape = RoundedCornerShape(12.dp),
+            colors = TextFieldDefaults.colors(
+                unfocusedContainerColor = Color.White,
+                focusedContainerColor = Color.White,
+                unfocusedIndicatorColor = Color(0xFFE0E0E0),
+                focusedIndicatorColor = Button1,
+                cursorColor = Color.Black,
+            ),
+            textStyle = LocalTextStyle.current.copy(
+                fontSize = 16.sp,
+                color = Color.Black
+            ),
             trailingIcon = {
                 Icon(
                     painter = painterResource(
