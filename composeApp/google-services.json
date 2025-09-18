@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "550674141157-2eqp3kmr6iqbaauf2o520ma989g7i8t0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "org.kmp.simfan",
+            "certificate_hash": "ffb4d4f23c541887db6bde151f5602745acffa0f"
+          }
+        },
+        {
           "client_id": "550674141157-43n96tcgtr23eumbfkbetsjd6a3ukbcj.apps.googleusercontent.com",
           "client_type": 3
         }

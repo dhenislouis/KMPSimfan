@@ -40,6 +40,7 @@ data class SignInData(
 
 @Serializable
 data class FirebaseTokenRequest(
+    @SerialName("id_token")
     val token: String,
     val name: String
 )
