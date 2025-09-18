@@ -94,6 +94,7 @@ kotlin {
             implementation("io.ktor:ktor-client-content-negotiation:2.3.2")
             implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.2")
             implementation("com.darkrockstudios:mpfilepicker:3.1.0")
+            implementation(libs.camera.k)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

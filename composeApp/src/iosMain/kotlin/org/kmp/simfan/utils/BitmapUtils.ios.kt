@@ -33,3 +33,8 @@ actual fun savePlatformBitmapToFile(
 
     return filePath
 }
+
+actual fun ByteArray.toImageBitmap(): ImageBitmap? {
+    // TODO: nanti bisa pakai UIImage(data: NSData)
+    return null
+}

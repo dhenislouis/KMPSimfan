@@ -2,8 +2,10 @@ package org.kmp.simfan.utils
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asAndroidBitmap
+import androidx.compose.ui.graphics.asImageBitmap
 import java.io.File
 import java.io.FileOutputStream
 
@@ -27,4 +29,9 @@ actual fun savePlatformBitmapToFile(
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, out)
     }
     return file.absolutePath
+}
+
+actual fun ByteArray.toImageBitmap(): ImageBitmap? {
+    val bitmap = BitmapFactory.decodeByteArray(this, 0, this.size)
+    return bitmap?.asImageBitmap()
 }

@@ -1,92 +1,191 @@
 package org.kmp.simfan.screen.profile.pengajuandata
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material3.*
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import org.kmp.simfan.components.camera.CameraView
-import org.kmp.simfan.core.Button1
-import kotlin.experimental.and
+import androidx.navigation.NavController
+import com.kashif.cameraK.controller.CameraController
+import com.kashif.cameraK.enums.CameraLens
+import com.kashif.cameraK.enums.Directory
+import com.kashif.cameraK.enums.FlashMode
+import com.kashif.cameraK.enums.ImageFormat
+import com.kashif.cameraK.permissions.Permissions
+import com.kashif.cameraK.permissions.providePermissions
+import com.kashif.cameraK.result.ImageCaptureResult
+import com.kashif.cameraK.ui.CameraPreview
+import kotlinx.coroutines.launch
+import org.kmp.simfan.Routes
+import org.kmp.simfan.components.button.ButtonCamera
+import org.kmp.simfan.components.button.ButtonFlash
+import org.kmp.simfan.components.dialog.ErrorDialog
+import org.kmp.simfan.components.dialog.InfoDialog
+import org.kmp.simfan.components.dialog.ProgressDialog
+import org.kmp.simfan.components.icon.FrameKtp
+import org.kmp.simfan.screen.profile.pengajuandata.ktp.KtpState
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Langkah1KTPScreen(
-    onBack: () -> Unit = {},
-    onNext: () -> Unit = {}
+    navController: NavController,
+    currentRoute: Routes?,
+    state: KtpState,
+    onBackPressed: () -> Unit = {},
+    onCapture: (ByteArray) -> Unit = {},
+    onClear: () -> Unit = {},
 ) {
-    var photoBytes by remember { mutableStateOf<ByteArray?>(null) }
+    val permissions: Permissions = providePermissions()
+    val hasCameraPermission = remember { mutableStateOf(permissions.hasCameraPermission()) }
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("Pengajuan Data", fontSize = 20.sp, color = Color.Black) },
-                navigationIcon = {
-                    IconButton(onClick = onBack) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Kembali")
+    if (!hasCameraPermission.value) {
+        permissions.RequestCameraPermission(
+            onGranted = { hasCameraPermission.value = true },
+            onDenied = onBackPressed
+        )
+    } else {
+        Scaffold { _ ->
+            CameraScreen(
+                onCapture = { byteArray ->
+                    onCapture(byteArray)
+
+                    navController.navigate(Routes.Langkah2Panduan) {
+                        popUpTo(Routes.Langkah1KTP) { inclusive = true }
+                        launchSingleTop = true
                     }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.White)
+                }
             )
-        },
-        bottomBar = {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(Color.White)
-                    .padding(16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                if (photoBytes != null) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Button(
-                            onClick = { photoBytes = null },
-                            modifier = Modifier
-                                .weight(1f)
-                                .height(48.dp),
-                            colors = ButtonDefaults.buttonColors(containerColor = Color.Gray)
-                        ) {
-                            Text("Ulangi", color = Color.White)
-                        }
 
-                        Spacer(Modifier.width(16.dp))
+            when (state) {
+                is KtpState.Idle -> Unit
+                is KtpState.Loading -> ProgressDialog(isShowing = true)
+                is KtpState.Success -> InfoDialog(
+                    isShowing = true,
+                    data = state.data,
+                    onDismissRequest = onClear,
+                )
+                is KtpState.Error -> ErrorDialog(
+                    isShowing = true,
+                    message = state.message,
+                    onDismissRequest = onClear,
+                )
+            }
+        }
+    }
+}
 
-                        Button(
-                            onClick = onNext,
-                            modifier = Modifier
-                                .weight(1f)
-                                .height(48.dp),
-                            colors = ButtonDefaults.buttonColors(containerColor = Button1)
-                        ) {
-                            Text("Lanjut", color = Color.White)
+@Composable
+fun CameraScreen(
+    onCapture: (ByteArray) -> Unit = {},
+) {
+    val scope = rememberCoroutineScope()
+    val cameraController = remember { mutableStateOf<CameraController?>(null) }
+    val flashCameraState = remember { mutableStateOf(FlashMode.OFF) }
+
+    Box(modifier = Modifier.fillMaxSize()) {
+        CameraPreview(
+            modifier = Modifier.fillMaxSize(),
+            cameraConfiguration = {
+                setCameraLens(CameraLens.BACK)
+                setFlashMode(flashCameraState.value)
+                setImageFormat(ImageFormat.JPEG)
+                setDirectory(Directory.PICTURES)
+            },
+            onCameraControllerReady = { camController ->
+                cameraController.value = camController
+            }
+        )
+
+        // Overlay Frame KTP
+        Image(
+            modifier = Modifier.fillMaxSize(),
+            imageVector = FrameKtp,
+            contentDescription = "Frame KTP",
+        )
+
+        // Instruksi
+        Text(
+            modifier = Modifier
+                .align(Alignment.TopCenter)
+                .padding(top = 100.dp),
+            text = "Posisikan kartu KTP di dalam bingkai",
+            style = MaterialTheme.typography.titleLarge.copy(
+                fontWeight = FontWeight.Bold,
+                fontSize = 20.sp,
+                textAlign = TextAlign.Center,
+                color = Color.White,
+            ),
+        )
+
+        // Tombol bawah
+        Column(
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .navigationBarsPadding()
+                .statusBarsPadding()
+                .padding(bottom = 20.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                modifier = Modifier.padding(bottom = 40.dp),
+                text = "Pastikan KTP terlihat jelas dan semua teks terbaca",
+                style = MaterialTheme.typography.titleMedium.copy(
+                    fontWeight = FontWeight.Normal,
+                    fontSize = 16.sp,
+                    textAlign = TextAlign.Center,
+                    color = Color.White,
+                )
+            )
+
+            Box(modifier = Modifier.fillMaxWidth()) {
+                // Tombol capture
+                ButtonCamera(
+                    modifier = Modifier.align(Alignment.Center),
+                    onClick = {
+                        scope.launch {
+                            when (val result = cameraController.value?.takePicture()) {
+                                is ImageCaptureResult.Success -> {
+                                    val byteArray = result.byteArray
+                                    println("📸 Foto KTP Success: size=${byteArray.size} bytes")
+                                    onCapture(byteArray)
+                                }
+
+                                is ImageCaptureResult.Error -> {
+                                    println("❌ Foto KTP Error: ${result.exception.message}")
+                                }
+
+                                null -> {
+                                    println("⚠️ CameraController is null")
+                                }
+                            }
                         }
+                    },
+                )
+
+                // Tombol flash
+                ButtonFlash(
+                    modifier = Modifier
+                        .align(Alignment.CenterEnd)
+                        .padding(end = 28.dp),
+                    flashMode = flashCameraState.value,
+                ) {
+                    if (flashCameraState.value == FlashMode.OFF) {
+                        flashCameraState.value = FlashMode.ON
+                        cameraController.value?.setFlashMode(FlashMode.ON)
+                    } else {
+                        flashCameraState.value = FlashMode.OFF
+                        cameraController.value?.setFlashMode(FlashMode.OFF)
                     }
                 }
             }
-        }
-    ) { innerPadding ->
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color(0xFFF4F4F4))
-                .padding(innerPadding),
-            contentAlignment = Alignment.Center
-        ) {
-
-
-
         }
     }
 }

@@ -21,16 +21,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.navigator.LocalNavigator
-import cafe.adriel.voyager.navigator.currentOrThrow
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
-import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.kmp.simfan.Routes
 import org.kmp.simfan.core.Button1
 import org.kmp.simfan.presentation.auth.RegisterViewModel
-import org.kmp.simfan.screen.auth.login.LoginSuccessScreen
 import simfan.composeapp.generated.resources.Res
 import simfan.composeapp.generated.resources.arrow_back
 import simfan.composeapp.generated.resources.eye_off
@@ -48,6 +43,7 @@ fun RegisterScreenUI(
 ) {
     val scrollState = rememberScrollState()
     val viewModel = remember { RegisterViewModel() }
+
     var name by remember { mutableStateOf("") }
     var phone by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
@@ -57,9 +53,11 @@ fun RegisterScreenUI(
     var passwordVisible by remember { mutableStateOf(false) }
     var confirmPasswordVisible by remember { mutableStateOf(false) }
     var acceptTerms by remember { mutableStateOf(false) }
+
     val isLoading = viewModel.isLoading
     val registerResult = viewModel.registerResult
     val errorMessage = viewModel.errorMessage
+
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var showSheet by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
@@ -153,7 +151,6 @@ fun RegisterScreenUI(
     }
 }
 
-// ✅ AppBar
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RegisterAppBar(
@@ -193,8 +190,6 @@ fun RegisterAppBar(
     )
 }
 
-// ✅ Konten Register
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RegisterContent(
     navController: NavController,
@@ -222,19 +217,6 @@ fun RegisterContent(
     onRegister: () -> Unit,
     onGoogleLoginClick: () -> Unit
 ) {
-    var name by remember { mutableStateOf("") }
-    var phone by remember { mutableStateOf("") }
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-    var confirmPassword by remember { mutableStateOf("") }
-    var referal by remember { mutableStateOf("") }
-    var passwordVisible by remember { mutableStateOf(false) }
-    var confirmPasswordVisible by remember { mutableStateOf(false) }
-    var acceptTerms by remember { mutableStateOf(false) }
-    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
-    var showSheet by remember { mutableStateOf(false) }
-    val scope = rememberCoroutineScope()
-
     Column(
         modifier = Modifier.fillMaxWidth()
     ) {
@@ -246,18 +228,20 @@ fun RegisterContent(
         InputEmail(email, onEmailChange, "Masukkan email")
         Spacer(Modifier.height(16.dp))
         PasswordField(
-            password,
-            onPasswordChange,
-            "Password",
-            passwordVisible
-        ) { onPasswordVisibleChange(!passwordVisible) }
+            value = password,
+            onValueChange = onPasswordChange,
+            placeholder = "Password",
+            visible = passwordVisible,
+            onToggleVisibility = { onPasswordVisibleChange(!passwordVisible) }
+        )
         Spacer(Modifier.height(16.dp))
         PasswordField(
-            confirmPassword,
-            onConfirmPasswordChange,
-            "Konfirmasi Password",
-            confirmPasswordVisible
-        ) { onConfirmPasswordVisibleChange(!confirmPasswordVisible) }
+            value = confirmPassword,
+            onValueChange = onConfirmPasswordChange,
+            placeholder = "Konfirmasi Password",
+            visible = confirmPasswordVisible,
+            onToggleVisibility = { onConfirmPasswordVisibleChange(!confirmPasswordVisible) }
+        )
         Spacer(Modifier.height(16.dp))
         InputReferal(referal, onReferalChange, "Masukkan Kode Referal")
 
@@ -298,7 +282,7 @@ fun RegisterContent(
                 .fillMaxWidth()
                 .height(50.dp),
             shape = RoundedCornerShape(25.dp),
-            elevation = ButtonDefaults.buttonElevation( // 👈 ada shadow
+            elevation = ButtonDefaults.buttonElevation(
                 defaultElevation = 6.dp,
                 pressedElevation = 10.dp
             ),
@@ -321,7 +305,6 @@ fun RegisterContent(
 
         Spacer(Modifier.height(20.dp))
 
-        // Garis Pembatas
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
@@ -333,7 +316,6 @@ fun RegisterContent(
 
         Spacer(Modifier.height(20.dp))
 
-        // Tombol Google
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -355,40 +337,15 @@ fun RegisterContent(
             Text("Masuk dengan Google", fontSize = 14.sp, color = Color.Black)
         }
     }
-    if (showSheet) {
-        ModalBottomSheet(
-            onDismissRequest = { showSheet = false },
-            sheetState = sheetState,
-            shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)
-        ) {
-            RegisterVerifikasiBottomSheet(
-                navController = navController,
-                currentRoute = Routes.RegisterVerifikasi,
-                onDismiss = { showSheet = false },
-                onSave = {
-                    scope.launch {
-                        sheetState.hide()
-                        showSheet = false
-                        navController.navigate(Routes.BuatPin)
-                    }
-                }
-            )
-        }
-    }
 }
 
-// ✅ Input Components
 @Composable
 fun InputNama(value: String, onValueChange: (String) -> Unit, placeholder: String) {
     Text("Nama Lengkap", fontSize = 14.sp, color = Color.Black)
     OutlinedTextField(
         value = value,
         onValueChange = onValueChange,
-        placeholder = { Text(
-            placeholder,
-            fontSize = 12.sp,
-            color = Color.Gray
-        ) },
+        placeholder = { Text(placeholder, fontSize = 12.sp, color = Color.Gray) },
         singleLine = true,
         modifier = Modifier
             .fillMaxWidth()
@@ -405,11 +362,7 @@ fun InputNoHp(value: String, onValueChange: (String) -> Unit, placeholder: Strin
     OutlinedTextField(
         value = value,
         onValueChange = onValueChange,
-        placeholder = { Text(
-            placeholder,
-            fontSize = 12.sp,
-            color = Color.Gray
-        ) },
+        placeholder = { Text(placeholder, fontSize = 12.sp, color = Color.Gray) },
         singleLine = true,
         modifier = Modifier
             .fillMaxWidth()
@@ -426,11 +379,7 @@ fun InputEmail(value: String, onValueChange: (String) -> Unit, placeholder: Stri
     OutlinedTextField(
         value = value,
         onValueChange = onValueChange,
-        placeholder = { Text(
-            placeholder,
-            fontSize = 12.sp,
-            color = Color.Gray
-        ) },
+        placeholder = { Text(placeholder, fontSize = 12.sp, color = Color.Gray) },
         singleLine = true,
         modifier = Modifier
             .fillMaxWidth()
@@ -447,11 +396,7 @@ fun InputReferal(value: String, onValueChange: (String) -> Unit, placeholder: St
     OutlinedTextField(
         value = value,
         onValueChange = onValueChange,
-        placeholder = { Text(
-            placeholder,
-            fontSize = 12.sp,
-            color = Color.Gray
-        ) },
+        placeholder = { Text(placeholder, fontSize = 12.sp, color = Color.Gray) },
         singleLine = true,
         modifier = Modifier
             .fillMaxWidth()
@@ -470,15 +415,11 @@ fun PasswordField(
     visible: Boolean,
     onToggleVisibility: () -> Unit
 ) {
-    Text("Password", fontSize = 14.sp, color = Color.Black)
+    Text(placeholder, fontSize = 14.sp, color = Color.Black)
     OutlinedTextField(
         value = value,
         onValueChange = onValueChange,
-        placeholder = { Text(
-            placeholder,
-            fontSize = 12.sp,
-            color = Color.Gray
-        ) },
+        placeholder = { Text(placeholder, fontSize = 12.sp, color = Color.Gray) },
         modifier = Modifier
             .fillMaxWidth()
             .height(50.dp)
@@ -502,8 +443,3 @@ fun PasswordField(
     )
 }
 
-//@Preview
-//@Composable
-//fun RegisterPreview() {
-//    RegisterScreenUI()
-//}

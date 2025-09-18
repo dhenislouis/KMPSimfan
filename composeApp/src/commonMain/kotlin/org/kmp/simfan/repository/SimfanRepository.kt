@@ -26,6 +26,9 @@ import org.kmp.simfan.model.SimulasiDepositoResponse
 import org.kmp.simfan.model.UserProfile
 
 import org.kmp.simfan.network.SimfanApiService
+import org.kmp.simfan.network.api.CameraApi
+import org.kmp.simfan.network.entity.CameraResponse
+import org.kmp.simfan.repository.request.CameraRequestBody
 
 class SimfanRepository(
     private val apiService: SimfanApiService,
@@ -194,7 +197,6 @@ class SimfanRepository(
         }
     }
 
-    // Promotion
     suspend fun getPromotions(): Result<List<Promotion>> {
         return try {
             val response = apiService.getPromotions()
@@ -452,4 +454,26 @@ class SimfanRepository(
         }
     }
 
+}
+
+interface SimfanRepo {
+    suspend fun request(prompt: String, image: ByteArray): Result<String>
+}
+
+class SimfanRepositoryImpl(
+    private val api: CameraApi
+) : SimfanRepo {
+    override suspend fun request(prompt: String, image: ByteArray): Result<String> {
+        val reqBody = CameraRequestBody.create(prompt, image)
+        return api.extractInfo(reqBody).map(::extractFirstPromptResult)
+    }
+
+    private fun extractFirstPromptResult(response: CameraResponse) =
+        response.candidates
+            .firstOrNull()
+            ?.content
+            ?.parts
+            ?.firstOrNull()
+            ?.text
+            .orEmpty()
 }

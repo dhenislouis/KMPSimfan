@@ -11,3 +11,6 @@ expect fun savePlatformBitmapToFile(
     fileName: String = "signature.png",
     context: Any? = null
 ): String?
+
+
+expect fun ByteArray.toImageBitmap(): ImageBitmap?

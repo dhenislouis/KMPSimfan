@@ -27,7 +27,6 @@ import io.github.vinceglb.filekit.dialogs.compose.rememberFilePickerLauncher
 import io.github.vinceglb.filekit.name
 import io.github.vinceglb.filekit.readBytes
 import org.jetbrains.compose.resources.painterResource
-import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.kmp.simfan.Routes
 import org.kmp.simfan.core.Button1
 import org.kmp.simfan.core.Label_Langkah
@@ -389,6 +388,8 @@ fun Langkah3Screen(
 //        }
 //    }
 //}
+
+
 
 //@Preview
 //@Composable
