@@ -52,7 +52,7 @@ fun App() {
         ) { innerPadding ->
             NavHost(
                 navController = navController,
-                startDestination = Routes.Register,
+                startDestination = Routes.Login,
 
                 ) {
 

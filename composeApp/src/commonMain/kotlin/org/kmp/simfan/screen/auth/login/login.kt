@@ -106,45 +106,65 @@ fun LoginScreenUI(
             Spacer(Modifier.height(24.dp))
 
             // Email / HP
-            Text("Email/Nomor Handphone", fontSize = 14.sp, color = Color.Black)
+            Text("Email/Nomor Handphone", fontSize = 16.sp, color = Color.Black)
             Spacer(Modifier.height(4.dp))
+
             OutlinedTextField(
                 value = identifier,
                 onValueChange = { identifier = it },
-                placeholder = { Text(
-                    "Masukkan Email/Nomor Handphone",
-                    fontSize = 12.sp,
-                    color = Color.Gray
+                placeholder = {
+                    Text(
+                        "Masukkan Email/Nomor Handphone",
+                        fontSize = 14.sp,
+                        color = Color.Gray
                     ) },
                 singleLine = true,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(50.dp)
-                    .background(Color.White, RoundedCornerShape(12.dp))
-                    .border(1.dp, Color(0xFFE0E0E0), RoundedCornerShape(12.dp)),
-                shape = RoundedCornerShape(12.dp)
+                    .defaultMinSize(minHeight = 56.dp),
+                shape = RoundedCornerShape(12.dp),
+                colors = TextFieldDefaults.colors(
+                    unfocusedContainerColor = Color.White,
+                    focusedContainerColor = Color.White,
+                    unfocusedIndicatorColor = Color(0xFFE0E0E0),
+                    focusedIndicatorColor = Button1,
+                    cursorColor = Color.Black,
+                ),
+                textStyle = LocalTextStyle.current.copy(
+                    fontSize = 16.sp,
+                    color = Color.Black
+                )
             )
 
             Spacer(Modifier.height(16.dp))
 
             // Password
-            Text("Password", fontSize = 14.sp, color = Color.Black)
+            Text("Password", fontSize = 16.sp, color = Color.Black)
             Spacer(Modifier.height(4.dp))
             OutlinedTextField(
                 value = password,
                 onValueChange = { password = it },
                 placeholder = { Text(
                     "Masukkan Password",
-                    fontSize = 12.sp,
+                    fontSize = 14.sp,
                     color = Color.Gray
                 ) },
                 singleLine = true,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(50.dp)
-                    .background(Color.White, RoundedCornerShape(12.dp))
-                    .border(1.dp, Color(0xFFE0E0E0), RoundedCornerShape(12.dp)),
+                    .defaultMinSize(minHeight = 56.dp),
                 shape = RoundedCornerShape(12.dp),
+                colors = TextFieldDefaults.colors(
+                    unfocusedContainerColor = Color.White,
+                    focusedContainerColor = Color.White,
+                    unfocusedIndicatorColor = Color(0xFFE0E0E0),
+                    focusedIndicatorColor = Button1,
+                    cursorColor = Color.Black,
+                ),
+                textStyle = LocalTextStyle.current.copy(
+                    fontSize = 16.sp,
+                    color = Color.Black
+                ),
                 visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                 trailingIcon = {
                     IconButton(onClick = { passwordVisible = !passwordVisible }) {
