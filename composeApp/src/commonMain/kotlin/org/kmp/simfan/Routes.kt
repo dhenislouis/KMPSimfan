@@ -56,10 +56,6 @@ sealed interface Routes {
     @Serializable
     data object Simfanku : Routes
     @Serializable
-    data object SimpanankuDeposito : Routes
-    @Serializable
-    data object SimpanankuTabungan : Routes
-    @Serializable
     data object Profile : Routes
 
 
@@ -166,15 +162,23 @@ sealed interface Routes {
     @Serializable
     data object Langkah1KTP : Routes
     @Serializable
+    object Langkah1KTPPreview : Routes
+    @Serializable
     data object Langkah2Panduan : Routes
     @Serializable
     data object Langkah2Verifikasi : Routes
     @Serializable
+    data object Langkah2VerifikasiPreview : Routes
+    @Serializable
     data object Langkah3 : Routes
+    @Serializable
+    data object Langkah3NPWP : Routes
+    @Serializable
+    data object Langkah3NPWPPreview : Routes
     @Serializable
     data object Langkah4 : Routes
     @Serializable
-    data object Langkah5BuatPin : Routes
+    data object Langkah5InputPin : Routes
     @Serializable
     data object Langkah5KonfirmasiPin : Routes
     @Serializable

@@ -1,0 +1,6 @@
+Ekstrak informasi berikut dari gambar NPWP:
+- npwp_number: Nomor NPWP
+- nama: Nama pemilik NPWP
+- alamat: Alamat pemilik NPWP
+
+Kembalikan hasil dalam format JSON dengan field-field di atas.
