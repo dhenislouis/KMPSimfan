@@ -237,7 +237,7 @@ fun PasswordInputField(
                     ),
                     contentDescription = "Toggle Password Visibility",
                     modifier = Modifier
-                        .size(24.dp)
+                        .size(18.dp)
                         .clickable { onToggleVisibility() },
                     tint = Color.Gray
                 )
