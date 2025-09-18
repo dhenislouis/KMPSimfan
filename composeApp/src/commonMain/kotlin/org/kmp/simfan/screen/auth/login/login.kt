@@ -213,12 +213,7 @@ fun LoginScreenUI(
                 Spacer(Modifier.height(12.dp))
                 Text("Login gagal: $it", color = Color.Red, fontSize = 14.sp)
             }
-            // Jika berhasil login → tampilkan bottom sheet
-            if (showSheet) {
-                LaunchedEffect(Unit) {
-                    showSheet = true
-                }
-            }
+
 
             Spacer(Modifier.height(20.dp))
 

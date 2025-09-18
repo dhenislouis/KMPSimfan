@@ -14,6 +14,7 @@ import org.kmp.simfan.presentation.auth.LoginViewModel
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
 import org.kmp.simfan.auth.AuthManager
+import org.kmp.simfan.model.FirebaseTokenRequest
 
 class MainActivity : ComponentActivity() {
     private val loginViewModel = LoginViewModel()
@@ -35,7 +36,7 @@ class MainActivity : ComponentActivity() {
     private fun startGoogleSignIn() {
         lifecycleScope.launch {
             try {
-                loginViewModel.googleLogin(googleAuthClient.getGoogleIdToken())
+                loginViewModel.googleLogin(googleAuthClient.signInAndGetFirebaseIdToken())
             } catch (e: Exception) {
                 // Handle cancel / error
                 Toast.makeText(this@MainActivity, "Login dibatalkan atau gagal.", Toast.LENGTH_SHORT).show()
