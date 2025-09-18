@@ -136,7 +136,7 @@ class SimfanApiService(
     }
 
     suspend fun firebaseLogin(request: FirebaseTokenRequest): SignInResponse {
-        return client.post("$baseUrl/auth/verify") {
+        return noAuthClient.post("$baseUrl/auth/verify") {
             setBody(request)
         }.body()
     }
