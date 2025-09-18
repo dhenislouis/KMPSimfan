@@ -341,69 +341,105 @@ fun RegisterContent(
 
 @Composable
 fun InputNama(value: String, onValueChange: (String) -> Unit, placeholder: String) {
-    Text("Nama Lengkap", fontSize = 14.sp, color = Color.Black)
+    Text("Nama Lengkap", fontSize = 16.sp, color = Color.Black)
     OutlinedTextField(
         value = value,
         onValueChange = onValueChange,
-        placeholder = { Text(placeholder, fontSize = 12.sp, color = Color.Gray) },
+        placeholder = { Text(placeholder, fontSize = 14.sp, color = Color.Gray) },
         singleLine = true,
         modifier = Modifier
             .fillMaxWidth()
-            .height(50.dp)
-            .background(Color.White, RoundedCornerShape(12.dp))
-            .border(1.dp, Color(0xFFE0E0E0), RoundedCornerShape(12.dp)),
-        shape = RoundedCornerShape(12.dp)
+            .defaultMinSize(minHeight = 56.dp),
+        shape = RoundedCornerShape(12.dp),
+        colors = TextFieldDefaults.colors(
+            unfocusedContainerColor = Color.White,
+            focusedContainerColor = Color.White,
+            unfocusedIndicatorColor = Color(0xFFE0E0E0),
+            focusedIndicatorColor = Button1,
+            cursorColor = Color.Black,
+        ),
+        textStyle = LocalTextStyle.current.copy(
+            fontSize = 16.sp,
+            color = Color.Black
+        )
     )
 }
 
 @Composable
 fun InputNoHp(value: String, onValueChange: (String) -> Unit, placeholder: String) {
-    Text("Nomor Handphone", fontSize = 14.sp, color = Color.Black)
+    Text("Nomor Handphone", fontSize = 16.sp, color = Color.Black)
     OutlinedTextField(
         value = value,
         onValueChange = onValueChange,
-        placeholder = { Text(placeholder, fontSize = 12.sp, color = Color.Gray) },
+        placeholder = { Text(placeholder, fontSize = 14.sp, color = Color.Gray) },
         singleLine = true,
         modifier = Modifier
             .fillMaxWidth()
-            .height(50.dp)
-            .background(Color.White, RoundedCornerShape(12.dp))
-            .border(1.dp, Color(0xFFE0E0E0), RoundedCornerShape(12.dp)),
-        shape = RoundedCornerShape(12.dp)
+            .defaultMinSize(minHeight = 56.dp),
+        shape = RoundedCornerShape(12.dp),
+        colors = TextFieldDefaults.colors(
+            unfocusedContainerColor = Color.White,
+            focusedContainerColor = Color.White,
+            unfocusedIndicatorColor = Color(0xFFE0E0E0),
+            focusedIndicatorColor = Button1,
+            cursorColor = Color.Black,
+        ),
+        textStyle = LocalTextStyle.current.copy(
+            fontSize = 16.sp,
+            color = Color.Black
+        )
     )
 }
 
 @Composable
 fun InputEmail(value: String, onValueChange: (String) -> Unit, placeholder: String) {
-    Text("Email", fontSize = 14.sp, color = Color.Black)
+    Text("Email", fontSize = 16.sp, color = Color.Black)
     OutlinedTextField(
         value = value,
         onValueChange = onValueChange,
-        placeholder = { Text(placeholder, fontSize = 12.sp, color = Color.Gray) },
+        placeholder = { Text(placeholder, fontSize = 14.sp, color = Color.Gray) },
         singleLine = true,
         modifier = Modifier
             .fillMaxWidth()
-            .height(50.dp)
-            .background(Color.White, RoundedCornerShape(12.dp))
-            .border(1.dp, Color(0xFFE0E0E0), RoundedCornerShape(12.dp)),
-        shape = RoundedCornerShape(12.dp)
+            .defaultMinSize(minHeight = 56.dp),
+        shape = RoundedCornerShape(12.dp),
+        colors = TextFieldDefaults.colors(
+            unfocusedContainerColor = Color.White,
+            focusedContainerColor = Color.White,
+            unfocusedIndicatorColor = Color(0xFFE0E0E0),
+            focusedIndicatorColor = Button1,
+            cursorColor = Color.Black,
+        ),
+        textStyle = LocalTextStyle.current.copy(
+            fontSize = 16.sp,
+            color = Color.Black
+        )
     )
 }
 
 @Composable
 fun InputReferal(value: String, onValueChange: (String) -> Unit, placeholder: String) {
-    Text("Kode Referal", fontSize = 14.sp, color = Color.Black)
+    Text("Kode Referal", fontSize = 16.sp, color = Color.Black)
     OutlinedTextField(
         value = value,
         onValueChange = onValueChange,
-        placeholder = { Text(placeholder, fontSize = 12.sp, color = Color.Gray) },
+        placeholder = { Text(placeholder, fontSize = 14.sp, color = Color.Gray) },
         singleLine = true,
         modifier = Modifier
             .fillMaxWidth()
-            .height(50.dp)
-            .background(Color.White, RoundedCornerShape(12.dp))
-            .border(1.dp, Color(0xFFE0E0E0), RoundedCornerShape(12.dp)),
-        shape = RoundedCornerShape(12.dp)
+            .defaultMinSize(minHeight = 56.dp),
+        shape = RoundedCornerShape(12.dp),
+        colors = TextFieldDefaults.colors(
+            unfocusedContainerColor = Color.White,
+            focusedContainerColor = Color.White,
+            unfocusedIndicatorColor = Color(0xFFE0E0E0),
+            focusedIndicatorColor = Button1,
+            cursorColor = Color.Black,
+        ),
+        textStyle = LocalTextStyle.current.copy(
+            fontSize = 16.sp,
+            color = Color.Black
+        )
     )
 }
 
@@ -415,17 +451,26 @@ fun PasswordField(
     visible: Boolean,
     onToggleVisibility: () -> Unit
 ) {
-    Text(placeholder, fontSize = 14.sp, color = Color.Black)
+    Text(placeholder, fontSize = 16.sp, color = Color.Black)
     OutlinedTextField(
         value = value,
         onValueChange = onValueChange,
-        placeholder = { Text(placeholder, fontSize = 12.sp, color = Color.Gray) },
+        placeholder = { Text(placeholder, fontSize = 14.sp, color = Color.Gray) },
         modifier = Modifier
             .fillMaxWidth()
-            .height(50.dp)
-            .background(Color.White, RoundedCornerShape(12.dp))
-            .border(1.dp, Color(0xFFE0E0E0), RoundedCornerShape(12.dp)),
+            .defaultMinSize(minHeight = 56.dp),
         shape = RoundedCornerShape(12.dp),
+        colors = TextFieldDefaults.colors(
+            unfocusedContainerColor = Color.White,
+            focusedContainerColor = Color.White,
+            unfocusedIndicatorColor = Color(0xFFE0E0E0),
+            focusedIndicatorColor = Button1,
+            cursorColor = Color.Black,
+        ),
+        textStyle = LocalTextStyle.current.copy(
+            fontSize = 16.sp,
+            color = Color.Black
+        ),
         visualTransformation = if (visible) VisualTransformation.None else PasswordVisualTransformation(),
         trailingIcon = {
             IconButton(onClick = onToggleVisibility) {

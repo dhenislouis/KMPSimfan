@@ -18,6 +18,7 @@ import androidx.navigation.NavController
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.kmp.simfan.Routes
+import org.kmp.simfan.core.Button1
 import simfan.composeapp.generated.resources.Res
 import simfan.composeapp.generated.resources.email_illustration
 
@@ -95,12 +96,21 @@ fun RegisterVerifikasiBottomSheet(
             OutlinedTextField(
                 value = kodeVerifikasi,
                 onValueChange = { kodeVerifikasi = it },
-                modifier = Modifier.fillMaxWidth(),
                 singleLine = true,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .defaultMinSize(minHeight = 56.dp),
                 shape = RoundedCornerShape(12.dp),
+                textStyle = LocalTextStyle.current.copy(
+                    fontSize = 16.sp,
+                    color = Color.Black
+                ),
                 colors = OutlinedTextFieldDefaults.colors(
                     unfocusedBorderColor = Color(0xFFE5E7EB),
-                    focusedBorderColor = Color(0xFF4F7DF3)
+                    focusedBorderColor = Color(0xFF4F7DF3),
+                    unfocusedContainerColor = Color.White,
+                    focusedContainerColor = Color.White,
+                    cursorColor = Color.Black
                 ),
                 trailingIcon = {
                     TextButton(onClick = { /* TODO: resend code */ }) {
@@ -112,6 +122,7 @@ fun RegisterVerifikasiBottomSheet(
                     }
                 }
             )
+
 
             Spacer(Modifier.height(28.dp))
 
