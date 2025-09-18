@@ -85,7 +85,7 @@ fun RegisterVerifikasiBottomSheet(
             // Label
             Text(
                 text = "Email",
-                fontSize = 14.sp,
+                fontSize = 16.sp,
                 color = Color(0xFF6B7280),
                 modifier = Modifier
                     .align(Alignment.Start)
