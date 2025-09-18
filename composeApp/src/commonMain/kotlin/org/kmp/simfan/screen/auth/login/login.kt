@@ -24,6 +24,7 @@ import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 import org.kmp.simfan.Routes
 import org.kmp.simfan.core.Button1
+import org.kmp.simfan.model.FirebaseTokenRequest
 import org.kmp.simfan.presentation.auth.LoginViewModel
 import simfan.composeapp.generated.resources.Res
 import simfan.composeapp.generated.resources.*
@@ -35,9 +36,9 @@ fun LoginScreenUI(
     currentRoute: Routes?,
     onBackClick: () -> Unit = {},
     onLoginClick: () -> Unit = {},
-    onGoogleLoginClick: () -> Unit,
     onForgotPasswordClick: () -> Unit = {},
-    onRegisterClick: () -> Unit = {}
+    onRegisterClick: () -> Unit = {},
+    loginWithGoogle: suspend () -> FirebaseTokenRequest
 ) {
     val viewModel = remember { LoginViewModel() }
     var identifier by remember { mutableStateOf("") } // email/nomor HP
@@ -236,7 +237,10 @@ fun LoginScreenUI(
                     .height(48.dp)
                     .background(Color.White, RoundedCornerShape(12.dp))
                     .border(1.dp, Color(0xFFE0E0E0), RoundedCornerShape(12.dp))
-                    .clickable { onGoogleLoginClick() }
+                    .clickable {
+                        viewModel.googleAuthProvider = { loginWithGoogle() }
+                        viewModel.loginWithGoogle()
+                    }
                     .padding(horizontal = 16.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center

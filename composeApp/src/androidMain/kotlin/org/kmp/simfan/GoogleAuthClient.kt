@@ -82,20 +82,4 @@ class GoogleAuthClient(
         return user.getIdToken(true).await().token ?: error("Firebase ID token null")
     }
 
-    private fun parseCredential(credential: Credential): FirebaseTokenRequest {
-        if (credential is CustomCredential &&
-            credential.type == GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL
-        ) {
-            try {
-                val googleCred = GoogleIdTokenCredential.createFrom(credential.data)
-                return FirebaseTokenRequest(
-                    token = googleCred.idToken,
-                    name = googleCred.displayName ?: ""
-                )
-            } catch (e: GoogleIdTokenParsingException) {
-                throw e
-            }
-        }
-        error("Unsupported credential type: ${credential::class.java.simpleName}")
-    }
 }

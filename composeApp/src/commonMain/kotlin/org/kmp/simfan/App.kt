@@ -8,6 +8,7 @@ import androidx.navigation.compose.rememberNavController
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.kmp.simfan.auth.AuthManager
 import org.kmp.simfan.core.Theme
+import org.kmp.simfan.model.FirebaseTokenRequest
 import org.kmp.simfan.navigation.*
 
 //@Composable
@@ -41,7 +42,10 @@ import org.kmp.simfan.navigation.*
 
 @Composable
 @Preview
-fun App(onGoogleLoginClick: () -> Unit, authManager: AuthManager) {
+fun App(
+    loginWithGoogle: suspend () -> FirebaseTokenRequest,
+    authManager: AuthManager
+) {
     val navController = rememberNavController()
 
     val currentRoute = navController
@@ -61,7 +65,7 @@ fun App(onGoogleLoginClick: () -> Unit, authManager: AuthManager) {
                 ) {
 
                 onboardingGraph(navController)
-                authGraph(navController, onGoogleLoginClick)
+                authGraph(navController, loginWithGoogle)
                 homeGraph(navController)
                 productGraph(navController)
                 simpanankuGraph(navController)
