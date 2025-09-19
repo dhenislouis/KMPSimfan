@@ -23,7 +23,8 @@ import org.kmp.simfan.core.Button1
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TambahBankScreen(
-    navController: NavController, currentRoute: Routes?,
+    navController: NavController,
+    currentRoute: Routes?,
     onBackClick: () -> Unit = {},
     onTambahBank: () -> Unit = {}
 ) {
@@ -75,7 +76,8 @@ fun TambahBankScreen(
                     .height(40.dp),
                 shape = RoundedCornerShape(25.dp),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = if (isFormValid) Color(0xFF6E8BFE) else Button1
+                    containerColor = if (isFormValid) Color(0xFF6E8BFE) else Color.Gray,
+                    disabledContainerColor = Color.Gray
                 ),
                 enabled = isFormValid
             ) {
@@ -93,35 +95,40 @@ fun TambahBankScreen(
                 .padding(innerPadding)
                 .padding(16.dp)
                 .fillMaxSize()
-                .background(Color(0xFFF9F9F9))
+                .background(Color(0xFFF6F6F6))
         ) {
-            Text("Pilih Bank", fontSize = 16.sp, color = Color.Gray)
+            Spacer(Modifier.height(24.dp))
+
+            // Dropdown Bank
+            Text("Pilih Bank", fontSize = 14.sp, color = Color.Black)
+            Spacer(Modifier.height(4.dp))
+
             ExposedDropdownMenuBox(
                 expanded = expanded,
                 onExpandedChange = { expanded = !expanded }
             ) {
                 OutlinedTextField(
-                    value = selectedBank,
+                    value = selectedBank.ifEmpty { "" },
                     onValueChange = { },
                     placeholder = {
                         Text(
                             "Pilih Bank",
-                            fontSize = 16.sp,
+                            fontSize = 14.sp,
                             color = Color.Gray
-                        ) },
+                        )
+                    },
                     readOnly = true,
                     trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
                     modifier = Modifier
                         .menuAnchor()
                         .fillMaxWidth()
-                        .padding(vertical = 8.dp)
                         .defaultMinSize(minHeight = 56.dp),
                     shape = RoundedCornerShape(12.dp),
                     colors = TextFieldDefaults.colors(
                         unfocusedContainerColor = Color.White,
                         focusedContainerColor = Color.White,
                         unfocusedIndicatorColor = Color(0xFFE0E0E0),
-                        focusedIndicatorColor = Button1,
+                        focusedIndicatorColor = Color(0xFF6E8BFE),
                         cursorColor = Color.Black
                     ),
                 )
@@ -142,16 +149,21 @@ fun TambahBankScreen(
             }
 
             Spacer(modifier = Modifier.height(16.dp))
-            Text("Nomor Rekening", fontSize = 16.sp, color = Color.Gray)
+
+            // Nomor Rekening
+            Text("Nomor Rekening", fontSize = 14.sp, color = Color.Black)
+            Spacer(Modifier.height(4.dp))
+
             OutlinedTextField(
                 value = nomorRekening,
                 onValueChange = { nomorRekening = it },
                 placeholder = {
                     Text(
                         "Masukkan nomor rekening",
-                        fontSize = 16.sp,
+                        fontSize = 14.sp,
                         color = Color.Gray
-                    ) },
+                    )
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .defaultMinSize(minHeight = 56.dp),
@@ -160,7 +172,7 @@ fun TambahBankScreen(
                     unfocusedContainerColor = Color.White,
                     focusedContainerColor = Color.White,
                     unfocusedIndicatorColor = Color(0xFFE0E0E0),
-                    focusedIndicatorColor = Button1,
+                    focusedIndicatorColor = Color(0xFF6E8BFE),
                     cursorColor = Color.Black,
                 ),
                 textStyle = LocalTextStyle.current.copy(
@@ -170,14 +182,17 @@ fun TambahBankScreen(
             )
 
             Spacer(modifier = Modifier.height(16.dp))
-            Text("Nama Pemilik Rekening", fontSize = 16.sp, color = Color.Gray)
+
+            // Nama Pemilik Rekening
+            Text("Nama Pemilik Rekening", fontSize = 14.sp, color = Color.Black)
             Spacer(Modifier.height(4.dp))
+
             OutlinedTextField(
                 value = namaPemilik,
                 onValueChange = { namaPemilik = it },
                 placeholder = { Text(
                     "Nama Lengkap",
-                    fontSize = 16.sp,
+                    fontSize = 14.sp,
                     color = Color.Gray
                 ) },
                 modifier = Modifier
@@ -188,7 +203,7 @@ fun TambahBankScreen(
                     unfocusedContainerColor = Color.White,
                     focusedContainerColor = Color.White,
                     unfocusedIndicatorColor = Color(0xFFE0E0E0),
-                    focusedIndicatorColor = Button1,
+                    focusedIndicatorColor = Color(0xFF6E8BFE),
                     cursorColor = Color.Black,
                 ),
                 textStyle = LocalTextStyle.current.copy(
@@ -227,7 +242,12 @@ fun TambahBankScreen(
                 ) {
                     Checkbox(
                         checked = agreed,
-                        onCheckedChange = { agreed = it }
+                        onCheckedChange = { agreed = it },
+                        colors = CheckboxDefaults.colors(
+                            checkedColor = Color(0xFF6E8BFE),
+                            uncheckedColor = Color.Gray,
+                            checkmarkColor = Color.White
+                        )
                     )
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
@@ -240,10 +260,12 @@ fun TambahBankScreen(
                         fontSize = 13.sp,
                         color = Color(0xFF6E8BFE),
                         fontWeight = FontWeight.SemiBold,
-                        modifier = Modifier.clickable { }
+                        modifier = Modifier.clickable {
+                            // Tambahkan aksi saat teks diklik
+                        }
                     )
                     Text(
-                        text = " berlaku.",
+                        text = "berlaku.",
                         fontSize = 13.sp,
                         color = Color.Black
                     )
@@ -252,9 +274,3 @@ fun TambahBankScreen(
         }
     }
 }
-
-//@Preview
-//@Composable
-//fun PreviewTambahBankScreen() {
-//    TambahBankScreen()
-//}
