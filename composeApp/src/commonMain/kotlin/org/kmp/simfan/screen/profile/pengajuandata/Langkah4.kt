@@ -315,7 +315,7 @@ fun DropdownField(
             .fillMaxWidth()
             .padding(bottom = 16.dp)
     ) {
-        Text(label, fontSize = 14.sp, color = Color(0xFF505559))
+        Text(label, fontSize = 16.sp, color = Color(0xFF505559))
         Spacer(Modifier.height(4.dp))
 
         ExposedDropdownMenuBox(
@@ -328,11 +328,11 @@ fun DropdownField(
                 readOnly = true, // Penting agar tidak bisa diketik
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(48.dp)
+                    .defaultMinSize(minHeight = 56.dp)
                     .menuAnchor(),
-                placeholder = { Text(hint, fontSize = 13.sp, color = Color(0xFF9CA3AF)) },
+                placeholder = { Text(hint, fontSize = 14.sp, color = Color(0xFF9CA3AF)) },
                 trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
-                shape = RoundedCornerShape(8.dp),
+                shape = RoundedCornerShape(12.dp),
                 textStyle = LocalTextStyle.current.copy(fontSize = 13.sp),
                 singleLine = true,
                 colors = ExposedDropdownMenuDefaults.outlinedTextFieldColors()
@@ -370,17 +370,27 @@ fun InputField(
             .fillMaxWidth()
             .padding(bottom = 16.dp)
     ) {
-        Text(label, fontSize = 14.sp, color = Color(0xFF505559))
+        Text(label, fontSize = 16.sp, color = Color.Gray)
         Spacer(Modifier.height(4.dp))
         OutlinedTextField(
             value = value,
             onValueChange = onValueChange,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(48.dp),
-            placeholder = { Text(hint, fontSize = 13.sp, color = Color(0xFF9CA3AF)) },
-            shape = RoundedCornerShape(8.dp),
-            textStyle = LocalTextStyle.current.copy(fontSize = 13.sp),
+                .defaultMinSize(minHeight = 56.dp),
+            placeholder = { Text(hint, fontSize = 14.sp, color = Color.Gray) },
+            shape = RoundedCornerShape(12.dp),
+            colors = TextFieldDefaults.colors(
+                unfocusedContainerColor = Color.White,
+                focusedContainerColor = Color.White,
+                unfocusedIndicatorColor = Color(0xFFE0E0E0),
+                focusedIndicatorColor = Button1,
+                cursorColor = Color.Black,
+            ),
+            textStyle = LocalTextStyle.current.copy(
+                fontSize = 16.sp,
+                color = Color.Black
+            ),
             singleLine = true,
             keyboardOptions = KeyboardOptions(keyboardType = keyboardType)
         )

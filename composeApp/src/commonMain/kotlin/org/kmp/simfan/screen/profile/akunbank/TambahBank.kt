@@ -56,6 +56,9 @@ fun TambahBankScreen(
                         )
                     }
                 },
+                actions = {
+                    Spacer(Modifier.size(48.dp))
+                },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = Color.White,
                     titleContentColor = Color.Black,
@@ -92,22 +95,30 @@ fun TambahBankScreen(
                 .fillMaxSize()
                 .background(Color(0xFFF9F9F9))
         ) {
-            // Pilih bank (Dropdown)
+            Text("Pilih Bank", fontSize = 16.sp, color = Color.Gray)
+            Spacer(Modifier.height(4.dp))
             ExposedDropdownMenuBox(
                 expanded = expanded,
                 onExpandedChange = { expanded = !expanded }
             ) {
-                Text("Pilih Bank", fontSize = 14.sp, color = Color(0xFF6B7280))
                 OutlinedTextField(
                     value = selectedBank,
                     onValueChange = { },
                     readOnly = true,
-                    label = { Text("Pilih bank") },
                     trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
                     modifier = Modifier
                         .menuAnchor()
                         .fillMaxWidth()
                         .padding(vertical = 8.dp)
+                        .defaultMinSize(minHeight = 56.dp),
+                    shape = RoundedCornerShape(12.dp),
+                    colors = TextFieldDefaults.colors(
+                        unfocusedContainerColor = Color.White,
+                        focusedContainerColor = Color.White,
+                        unfocusedIndicatorColor = Color(0xFFE0E0E0),
+                        focusedIndicatorColor = Button1,
+                        cursorColor = Color.Black
+                    ),
                 )
                 ExposedDropdownMenu(
                     expanded = expanded,
@@ -125,25 +136,60 @@ fun TambahBankScreen(
                 }
             }
 
-            Spacer(modifier = Modifier.height(8.dp))
-            Text("Nomor Rekening", fontSize = 14.sp, color = Color(0xFF6B7280))
+            Spacer(modifier = Modifier.height(16.dp))
+            Text("Nomor Rekening", fontSize = 16.sp, color = Color.Gray)
             OutlinedTextField(
                 value = nomorRekening,
                 onValueChange = { nomorRekening = it },
-                label = { Text("Nomor Rekening") },
-                placeholder = { Text("Masukkan nomor rekening") },
+                placeholder = {
+                    Text(
+                        "Masukkan nomor rekening",
+                        fontSize = 16.sp,
+                        color = Color.Gray
+                    ) },
                 modifier = Modifier
                     .fillMaxWidth()
+                    .defaultMinSize(minHeight = 56.dp),
+                shape = RoundedCornerShape(12.dp),
+                colors = TextFieldDefaults.colors(
+                    unfocusedContainerColor = Color.White,
+                    focusedContainerColor = Color.White,
+                    unfocusedIndicatorColor = Color(0xFFE0E0E0),
+                    focusedIndicatorColor = Button1,
+                    cursorColor = Color.Black,
+                ),
+                textStyle = LocalTextStyle.current.copy(
+                    fontSize = 16.sp,
+                    color = Color.Black
+                ),
             )
 
-            Spacer(modifier = Modifier.height(8.dp))
-            Text("Nama Pemilik Rekening", fontSize = 14.sp, color = Color(0xFF6B7280))
+            Spacer(modifier = Modifier.height(16.dp))
+            Text("Nama Pemilik Rekening", fontSize = 16.sp, color = Color.Gray)
+            Spacer(Modifier.height(4.dp))
             OutlinedTextField(
                 value = namaPemilik,
                 onValueChange = { namaPemilik = it },
-                label = { Text("Nama Lengkap") },
+                placeholder = { Text(
+                    "Nama Lengkap",
+                    fontSize = 16.sp,
+                    color = Color.Gray
+                ) },
                 modifier = Modifier
                     .fillMaxWidth()
+                    .defaultMinSize(minHeight = 56.dp),
+                shape = RoundedCornerShape(12.dp),
+                colors = TextFieldDefaults.colors(
+                    unfocusedContainerColor = Color.White,
+                    focusedContainerColor = Color.White,
+                    unfocusedIndicatorColor = Color(0xFFE0E0E0),
+                    focusedIndicatorColor = Button1,
+                    cursorColor = Color.Black,
+                ),
+                textStyle = LocalTextStyle.current.copy(
+                    fontSize = 16.sp,
+                    color = Color.Black
+                ),
             )
 
             Spacer(modifier = Modifier.height(16.dp))

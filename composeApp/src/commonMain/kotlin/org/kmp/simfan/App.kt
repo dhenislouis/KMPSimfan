@@ -60,7 +60,7 @@ fun App(
         ) { innerPadding ->
             NavHost(
                 navController = navController,
-                startDestination = startDestination,
+                startDestination = Routes.Langkah4,
 
                 ) {
 

@@ -171,7 +171,15 @@ fun Langkah3Screen(
                 .padding(16.dp)
         ) {
             // ==== FORM ====
-            Text("Langkah 3 dari 5", /* ... sama persis ... */)
+            Text(
+                "Langkah 3 dari 5",
+                fontSize = 12.sp,
+                color = Color.Black,
+                modifier = Modifier
+                    .clip(RoundedCornerShape(24.dp))
+                    .background(Label_Langkah)
+                    .padding(horizontal = 12.dp, vertical = 3.dp)
+            )
 
             Spacer(Modifier.height(16.dp))
 
@@ -180,9 +188,23 @@ fun Langkah3Screen(
                 onValueChange = { npwp = it },
                 label = { Text("Nomor NPWP") },
                 placeholder = { Text("00.000.000.0-000.000") },
-                modifier = Modifier.fillMaxWidth(),
-                enabled = !noNpwpChecked,
-                singleLine = true
+                singleLine = true,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .defaultMinSize(minHeight = 56.dp),
+                shape = RoundedCornerShape(12.dp),
+                colors = TextFieldDefaults.colors(
+                    unfocusedContainerColor = Color.White,
+                    focusedContainerColor = Color.White,
+                    unfocusedIndicatorColor = Color(0xFFE0E0E0),
+                    focusedIndicatorColor = Button1,
+                    cursorColor = Color.Black,
+                ),
+                textStyle = LocalTextStyle.current.copy(
+                    fontSize = 16.sp,
+                    color = Color.Black
+                ),
+                enabled = !noNpwpChecked
             )
 
             Spacer(Modifier.height(20.dp))
