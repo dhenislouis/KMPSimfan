@@ -96,7 +96,6 @@ fun TambahBankScreen(
                 .background(Color(0xFFF9F9F9))
         ) {
             Text("Pilih Bank", fontSize = 16.sp, color = Color.Gray)
-            Spacer(Modifier.height(4.dp))
             ExposedDropdownMenuBox(
                 expanded = expanded,
                 onExpandedChange = { expanded = !expanded }
@@ -104,6 +103,12 @@ fun TambahBankScreen(
                 OutlinedTextField(
                     value = selectedBank,
                     onValueChange = { },
+                    placeholder = {
+                        Text(
+                            "Pilih Bank",
+                            fontSize = 16.sp,
+                            color = Color.Gray
+                        ) },
                     readOnly = true,
                     trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
                     modifier = Modifier
